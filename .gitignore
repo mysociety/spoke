@@ -1,1 +1,4 @@
 .DS_Store
+phonegap/android/bin
+phonegap/android/gen
+project.properties
