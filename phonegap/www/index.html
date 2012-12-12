@@ -33,9 +33,13 @@
 
             <div data-role="content">
                 <h2>Record a speech</h2>
-                <a href="#" id="record-button" data-role="button" data-icon="plus">Record</a>
-                <!-- TODO - add a progress bar and all that -->
-                <a href="#" id="stop-button" data-role="button" data-icon="delete" style="display:none">Stop</a>
+                <p>
+                    <a href="#" id="record-button" data-role="button" data-icon="plus">Record</a>
+                    <h3 id="timer" style="display:none">
+                        <span id="hours">00</span>:<span id="minutes">00</span>:<span id="seconds">00</span>
+                    </h3>
+                    <a href="#" id="stop-button" data-role="button" data-icon="delete" style="display:none">Stop</a>
+                </p>
 
                 <h2>Speeches</h2>
                 <ul data-role="listview" id="recorded-speeches"></ul>
