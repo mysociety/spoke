@@ -3,14 +3,16 @@
  * See individual javascript files like recordings.js and files.js
  * for specific functionality
  */
- ;( function ($, SPOKE) {
+ var SPOKE = ( function ($) {
 
     // Use jQuery Deffered to track when both jquery mobile, phonegap, 
 	// and the first page are ready
-    var pgReady = $.Deferred(),
+    var my = {},
+        pgReady = $.Deferred(),
         jqmReady = $.Deferred(),
-        firstPageReady = $.Deferred(),
-        EMPTY_MESSAGE = 'There are no recordings yet';
+        firstPageReady = $.Deferred();
+
+    my.EMPTY_MESSAGE = 'There are no recordings yet';
 
     /**
      * Setup & Bindings
@@ -35,27 +37,25 @@
 
         console.log('Device platform is: ' + device.platform);
 
-        // Globals
-        $.extend(SPOKE, {
-            // Details for audio capture
-            audioDirectory: 'spoke',
-            audioFilenameExtension: (device.platform.match(/(iPhone|iPod|iPad)/)) ? '.wav' : '.amr',
-            recordings: Array(),
-            apiUrl: "http://localhost:8000"
-        });
+        my.audioDirectory = 'spoke';
+        my.audioFilenameExtension = (device.platform.match(/(iPhone|iPod|iPad)/)) ? '.wav' : '.amr';
+        my.recordings = Array();
+        my.apiUrl = "http://localhost:8000";
     	
     	// Fire up the record page manually, because a pageinit will have already
     	// happened for it, but before everything else was ready
-    	recordPage();
+    	SPOKE.recordingPage.recordPage();
     	
     	// Bind further page initialisation events to do the right stuff for those pages
     	$(document).on('pageinit', function(event) {
 	    	switch(event.target.id) {
 	            case 'record-page':
-	                recordPage();
+	                SPOKE.recordingPage.recordPage();
 	                break;
 	        }
         });
     });
 
-})($, SPOKE);
+    return my;
+
+})($);

@@ -1,9 +1,11 @@
 /**
  * Recordings page functionality
  */
-;(function ($) {
+SPOKE.recordingPage = (function ($, SPOKE) {
 
-    function recordPage () {
+    var my = {};
+
+    my.recordPage = function () {
 
         console.log('Doing record page things');
         
@@ -11,7 +13,7 @@
         // First add a default message to show no current recordings
         emptyRecordingsList();
         // Then get a promise for the real entries
-        var gettingEntries = getDirectoryEntries(SPOKE.audioDirectory);
+        var gettingEntries = SPOKE.files.getDirectoryEntries(SPOKE.audioDirectory);
 
         gettingEntries.done(function (entries) {
             var i;
@@ -110,15 +112,18 @@
             $.map(SPOKE.recordings, function(recording, index) {
 
                 // uploadingFiles is, you guessed it, a Promise
-                var uploadingFile = uploadFile(recording);
+                var uploadingFile = SPOKE.files.uploadFile(recording);
 
-                uploadingFile.done(function () {
+                uploadingFile.done(function (result) {
+
+                    // result.response contains the server response if we want
+                    // to do anything with it
                     
                     console.log('File: ' + recording + ' successfully uploaded.');
                     
                     // Delete the file from local disk
                     // Another async process, so another Promise
-                    deletingFile = deleteFile(recording);
+                    deletingFile = SPOKE.files.deleteFile(recording);
                     
                     deletingFile.done(function () {
 
@@ -155,7 +160,7 @@
 
         // creatingFile and recordingAudio are promises because the Phonegap filesystem
         // apis are asynchronous
-        var creatingFile = createFile(),
+        var creatingFile = SPOKE.files.createFile(),
             recordingAudio = $.Deferred();
 
         creatingFile.done( function (file) {
@@ -214,7 +219,7 @@
 
         // Remove the empty message if we're adding the first non-empty
         // recording to the list
-        if($list.hasClass('empty') && text !== EMPTY_MESSAGE) {
+        if($list.hasClass('empty') && text !== SPOKE.EMPTY_MESSAGE) {
             $list.empty();
             $list.removeClass('empty');
         }
@@ -230,7 +235,7 @@
 
         console.log("Removing recording: " + text + " from recordings list");
         // Remove the file from the list on the page
-        $('ul#recorded-speeches li:contains(' text ')').remove();
+        $('ul#recorded-speeches li:contains(' + text + ')').remove();
 
     }
 
@@ -240,7 +245,7 @@
         console.log('Emptying recordings');
 
         $('ul#recorded-speeches').empty().addClass('empty');
-        addRecordingToList(EMPTY_MESSAGE);
+        addRecordingToList(SPOKE.EMPTY_MESSAGE);
 
         // Hide the upload button too
         $('#upload-button').hide();
@@ -285,4 +290,6 @@
         return val > 9 ? val : '0' + val; 
     }
 
-})($);
+    return my;
+
+})($, SPOKE);

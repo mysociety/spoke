@@ -3,12 +3,14 @@
  * Mainly wrappers around their async functions to return Promises
  */ 
 
-;(function($){
+SPOKE.files = ( function($, SPOKE) {
+
+    var my = {};
 
 	// Create a new file to put our recording's into. This requires
     // calling several async api functions, so we use .pipe() to 
     // connect them all up, and return the resulting promise object
-    function createFile () {
+    my.createFile = function () {
     	
     	console.log('Creating a file');
     	
@@ -33,8 +35,82 @@
             });
     }
 
+    // Delete a file from the filesystem
+    my.deleteFile = function (folder, filename) {
+
+        console.log("Deleting file: " + filename + " in folder: " + folder);
+
+        return getFileSystem()
+            .pipe(function (filesystem) {
+                return getDirectory(filesystem.root, folder);
+            })
+            .pipe(function (directory) {
+                return getFile(directory, filename, {});
+            })
+            .pipe(function (file) {
+                var deletingFile = $.Deferred();
+                file.remove(deletingFile.resolve, deletingFile.reject);
+                return deletingFile;
+            });
+
+    }
+
+    // Upload a file to the Spoke server
+    my.uploadFile = function (path, params) {
+
+        console.log("Uploading file: " + path);
+
+        var uploadingFile = $.Deferred(),
+            options = new FileUploadOptions(),
+            transfer;
+        
+        options.fileKey = "file"; // Form element name that'll be given to the server
+        options.fileName = ""; // Filename on server, I think the server should decide this
+        try {
+           options.mimeType = getMimeType(path);
+        }
+        catch(error) {
+            // Something went wrong getting the mime type, so just return
+            // a broken promise immediately
+            uploadingFile.reject(error);
+            return uploadingFile;
+        }
+        options:params = params // Other data to send (object of Key/Value pairs)
+
+        transfer = new FileTransfer();
+        //transfer.upload(path, SPOKE.apiUrl, uploadingFile.resolve, uploadingFile.reject, options);
+
+        // For testing
+        uploadingFile.resolve({});
+
+        return uploadingFile;
+    }
+
+    // Get a list of files in a directory and return a promise which
+    // wraps the appropriate asynchronous phonegap api call
+    my.getDirectoryEntries = function (dirName) {
+
+        console.log('Getting directory entries for directory: ' + dirName);
+
+        // Get the list of recordings currently on the device, we
+        // need to make several async calls to do this, so we use
+        // .pipe() to connect them up and return the resulting promise
+        return getFileSystem()
+            .pipe(function (filesystem) {
+                return getDirectory(filesystem.root, dirName);
+            })
+            .pipe(function (directory) {
+                var directoryReader = directory.createReader();
+                var gettingEntries = $.Deferred();
+
+                directoryReader.readEntries(gettingEntries.resolve, gettingEntries.reject);
+                
+                return gettingEntries.promise();
+            });
+    }
+
     // Wrap the async Phonegap way of getting a filesystem in a promise
-    function getFileSystem () {
+    function getFileSystem() {
     	
     	console.log('Getting the file system');
     	
@@ -74,78 +150,8 @@
         return file.promise();
     }
 
-    // Get a list of files in a directory and return a promise which
-    // wraps the appropriate asynchronous phonegap api call
-    function getDirectoryEntries(dirName) {
-
-        console.log('Getting directory entries for directory: ' + dirName);
-
-        // Get the list of recordings currently on the device, we
-        // need to make several async calls to do this, so we use
-        // .pipe() to connect them up and return the resulting promise
-        return getFileSystem()
-            .pipe(function (filesystem) {
-                return getDirectory(filesystem.root, dirName);
-            })
-            .pipe(function (directory) {
-                var directoryReader = directory.createReader();
-                var gettingEntries = $.Deferred();
-
-                directoryReader.readEntries(gettingEntries.resolve, gettingEntries.reject);
-                
-                return gettingEntries.promise();
-            });
-    }
-
-    // Delete a file from the filesystem
-    function deleteFile(folder, filename) {
-
-    	console.log("Deleting file: " + filename + " in folder: " + folder);
-
-    	return getFileSystem()
-    		.pipe(function (filesystem) {
-    			return getDirectory(filesystem.root, folder);
-    		})
-    		.pipe(function (directory) {
-    			return getFile(directory, filename, {});
-    		})
-    		.pipe(function (file) {
-    			var deletingFile = $.Deferred();
-    			file.remove(deletingFile.resolve, deletingFile.reject);
-    			return deletingFile;
-    		});
-
-    }
-
-    // Upload a file to the Spoke server
-    function uploadFile(path, params) {
-
-        console.log("Uploading file: " + path);
-
-    	var uploadingFile = $.Deferred(),
-    		options = FileUploadOptions(),
-    		transfer;
-    	options.fileKey = "file"; // Form element name that'll be given to the server
-    	options.fileName = ""; // Filename on server, I think the server should decide this
-        try {
-    	   options.mimeType = getMimeType(path);
-        }
-        catch(error) {
-            // Something went wrong getting the mime type, so just return
-            // a broken promise immediately
-            uploadingFile.reject(error);
-            return uploadingFile;
-        }
-    	options:params = params // Other data to send (object of Key/Value pairs)
-
-    	transfer = new FileTransfer();
-    	transfer.upload(path, SPOKE.apiUrl, uploadingFile.resolve, uploadingFile.reject, options);
-
-    	return uploadingFile;
-    }
-
     // Get the mimetype for a file
-    function getMimeType(path) {
+    function getMimeType (path) {
         var extension = path.substr(path.lastIndexOf('.'));
 
         if(extension.length > 0) {
@@ -156,4 +162,6 @@
         }
     }
 
-})($);
+    return my;
+
+})($, SPOKE);
