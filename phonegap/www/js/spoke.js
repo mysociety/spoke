@@ -18,9 +18,6 @@
     function recordPage () {
 
     	console.log('Doing record page things');
-
-        // Show loading message
-        $.mobile.loading('show');
     	
         // Populate the list of existing recordings (if there are any)
         // First add a default message to show no current recordings
@@ -40,8 +37,7 @@
         });
 
         gettingEntries.always(function () {
-            // Remove the loading message
-            $.mobile.loading('hide');
+            
         });
 
         $('#record-button').on('tap', function(e) {
@@ -104,9 +100,6 @@
     function startRecordingAudio () {
     	
     	console.log('Recording Audio');
-
-        // Show a loading spinner
-        $.mobile.loading('show');
         
         // Get a file to record to - iOS needs this, others don't care so much
 
@@ -147,8 +140,7 @@
         });
 
         creatingFile.always(function (){
-            // Hide the loading spinner
-            $.mobile.loading('hide');
+            
         });
 
         return recordingAudio;
@@ -160,9 +152,6 @@
 
         console.log('Stopping recording');
 
-        // Show a loading spinner
-        $.mobile.loading('show');
-
         var media = SPOKE.currentRecording;
 
         media.stopRecord();
@@ -170,9 +159,6 @@
         clearInterval(SPOKE.timer);
 
         toggleRecordingControls();
-
-        // Hide the loading spinner
-        $.mobile.loading('hide');
 
     }
 
