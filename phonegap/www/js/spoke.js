@@ -40,7 +40,8 @@
             // Details for audio capture
             audioDirectory: 'spoke',
             audioFilenameExtension: (device.platform.match(/(iPhone|iPod|iPad)/)) ? '.wav' : '.amr',
-            recordings: Array()
+            recordings: Array(),
+            apiUrl: "http://localhost:8000"
         });
     	
     	// Fire up the record page manually, because a pageinit will have already
