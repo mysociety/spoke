@@ -123,7 +123,7 @@
             // Create a media object to actually do the recording
             // iOS wants the file path to be full, ie: start with file://
             // Android just wants it to be relative to the sdcard folder
-            var src = (device.platform === 'iPhone') ? file.fullPath : SPOKE.audioDirectory + "/" + file.name;
+            var src = (device.platform.match(/(iPhone|iPod|iPad)/)) ? file.fullPath : SPOKE.audioDirectory + "/" + file.name;
             var media = new Media(src, recordingAudio.resolve, recordingAudio.reject);
             // Start the recording
             media.startRecord();
@@ -355,11 +355,13 @@
         // Everything is ready now
     	console.log('Initialising the SayIt app');
 
+        console.log('Device platform is: ' + device.platform);
+
         // Globals
         $.extend(SPOKE, {
             // Details for audio capture
             audioDirectory: 'spoke',
-            audioFilenameExtension: (device.platform === 'iPhone') ? '.wav' : '.amr',
+            audioFilenameExtension: (device.platform.match(/(iPhone|iPod|iPad)/)) ? '.wav' : '.amr',
             recordings: Array()
         });
     	
