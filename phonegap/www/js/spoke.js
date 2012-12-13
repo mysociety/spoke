@@ -34,10 +34,10 @@
                     SPOKE.recordings.push(entries[i].fullPath);
                 }
             }
-        });
-
-        gettingEntries.always(function () {
-            
+            // Show the upload button too if there are some recordings
+            if(entries.length > 0) {
+                $('#upload-button').show();
+            }
         });
 
         $('#record-button').on('tap', function(e) {
@@ -73,6 +73,9 @@
                     // TODO - what will we do with this eventually?
                     // For now, just show the filename in a list
                     addRecordingToList(SPOKE.currentRecording.src.split('/').pop());
+
+                    // Show the upload button
+                    $('#upload-button').show();
 
                 });
 
@@ -289,6 +292,9 @@
 
         $('ul#recorded-speeches').empty().addClass('empty');
         addRecordingToList(EMPTY_MESSAGE);
+
+        // Hide the upload button too
+        $('#upload-button').hide();
     }
 
     // Start a HH:MM:SS timer which updates three <span> elements and
