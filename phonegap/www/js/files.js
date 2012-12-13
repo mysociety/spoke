@@ -119,18 +119,41 @@
 
     // Upload a file to the Spoke server
     function uploadFile(path, params) {
+
+        console.log("Uploading file: " + path);
+
     	var uploadingFile = $.Deferred(),
     		options = FileUploadOptions(),
     		transfer;
     	options.fileKey = "file"; // Form element name that'll be given to the server
     	options.fileName = ""; // Filename on server, I think the server should decide this
-    	options.mimeType = getMimeType(path);
+        try {
+    	   options.mimeType = getMimeType(path);
+        }
+        catch(error) {
+            // Something went wrong getting the mime type, so just return
+            // a broken promise immediately
+            uploadingFile.reject(error);
+            return uploadingFile;
+        }
     	options:params = params // Other data to send (object of Key/Value pairs)
 
     	transfer = new FileTransfer();
     	transfer.upload(path, SPOKE.apiUrl, uploadingFile.resolve, uploadingFile.reject, options);
 
     	return uploadingFile;
+    }
+
+    // Get the mimetype for a file
+    function getMimeType(path) {
+        var extension = path.substr(path.lastIndexOf('.'));
+
+        if(extension.length > 0) {
+            return "audio/" + extension;
+        }
+        else {
+            throw "Could not get file extension to determine mime type";
+        }
     }
 
 })($);
