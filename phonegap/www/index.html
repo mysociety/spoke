@@ -23,6 +23,7 @@
         <meta name="format-detection" content="telephone=no" />
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
         <link rel="stylesheet" href="css/jquery.mobile-1.2.0/jquery.mobile-1.2.0.min.css" />
+        <link rel="stylesheet" href="css/spoke.css" />
         <title>Spoke</title>
     </head>
     <body>
@@ -40,16 +41,17 @@
                     </h3>
                     <a href="#" id="stop-button" data-role="button" data-icon="delete" style="display:none">Stop</a>
                 </p>
-
                 <h2>Speeches</h2>
-                <ul data-role="listview" id="recorded-speeches"></ul>
-
+                <ul data-role="listview" data-inset="true" id="recorded-speeches"></ul>
+                <p>
+                    <a href="#" id="upload-button" data-role="button" data-icon="check" style="display:none">Upload</a>
+                </p>
             </div>
         </div>
 
         <!-- Scripts -->
         <script type="text/javascript" src="js/jquery-1.8.3.js"></script>
-        
+
         <!-- This file chooses which platform's version of Cordova to load (iOS or Android) -->
         <script type="text/javascript" src="cordova-2.2.0-independent.js"></script>
 
