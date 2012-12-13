@@ -51,8 +51,15 @@
             // slow phones and angry users
             if(typeof SPOKE.currentRecording === 'undefined') {
                 // startRecordingAudio wraps the phonegap media creation api in
-                // a promise and returns it
+                // a promise and returns it, it also saves a global reference to
+                // the current recording in SPOKE.currentRecording
                 var recordingAudio = startRecordingAudio();
+
+                // Start a timer to show a rough idea of how much is being recorded
+                SPOKE.timer = startTimer();
+
+                // Show a recording interface so people can start/stop the recording
+                toggleRecordingControls();
 
                 // Success - save the filename of the file we created
                 recordingAudio.done(function() {
@@ -75,9 +82,18 @@
                 });
 
                 // Whatever - delete the global which kept track of the recording
+                // and put the interface back
                 recordingAudio.always(function () {
+                    
                     // Clear the current recording
                     delete SPOKE.currentRecording;
+                    
+                    // Stop any timer
+                    stopTimer();
+
+                    // Toggle the controls
+                    toggleRecordingControls();
+
                 });
             }
         });
@@ -103,8 +119,8 @@
         
         // Get a file to record to - iOS needs this, others don't care so much
 
-        // creatingFile and recordingAudio are promises because the Phonegap filesystem apis are
-        // asynchronous
+        // creatingFile and recordingAudio are promises because the Phonegap filesystem
+        // apis are asynchronous
     	var creatingFile = createFile(),
             recordingAudio = $.Deferred();
 
@@ -120,15 +136,8 @@
             var media = new Media(src, recordingAudio.resolve, recordingAudio.reject);
             // Start the recording
             media.startRecord();
-            // Start a timer to show a rough idea of how much is being recorded
-            if(typeof SPOKE.timer !== 'undefined') {
-                stopTimer();
-            }
-            SPOKE.timer = startTimer();
             // Save the media object so that we can stop it later
             SPOKE.currentRecording = media;
-            // Show a recording interface so people can start/stop the recording
-            toggleRecordingControls();
 
         });
 
@@ -137,10 +146,6 @@
             // Something went wrong creating the file, and they only give us a code, great.
             console.log('Something went wrong creating a file, error code: ' + error.code);
 
-        });
-
-        creatingFile.always(function (){
-            
         });
 
         return recordingAudio;
@@ -153,20 +158,17 @@
         console.log('Stopping recording');
 
         var media = SPOKE.currentRecording;
-
         media.stopRecord();
-
-        clearInterval(SPOKE.timer);
-
-        toggleRecordingControls();
 
     }
 
     // Toggle the 'recording/stop recording' and timer controls
     function toggleRecordingControls() {
+
         $('#record-button').toggle();
         $('#stop-button').toggle();
         $('#timer').toggle();
+
     }
     
     // Create a new file to put our recording's into. This requires
@@ -295,6 +297,9 @@
 
         console.log('Starting recording timer');
 
+        // Stop any old one, just in case
+        stopTimer();
+
         var sec = 0;
         return setInterval( function(){
             $('#seconds').html(pad(++sec % 60));
@@ -308,7 +313,9 @@
         
         console.log('Stopping recording timer');
 
-        clearInterval(SPOKE.timer);
+        if(typeof SPOKE.timer !== 'undefined') {
+            clearInterval(SPOKE.timer);
+        }
 
         $('#seconds').html('00');
         $('#minutes').html('00');
