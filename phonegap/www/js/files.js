@@ -55,7 +55,7 @@
     	
     	console.log('Getting a directory');
     	
-        directory = $.Deferred();
+        var directory = $.Deferred();
 
         rootDirectory.getDirectory(path, options, directory.resolve, directory.reject);
 
@@ -67,7 +67,7 @@
     	
     	console.log('Getting a file with path: ' + path + ' in directory: ' + directory.fullPath);
     	
-        file = $.Deferred();
+        var file = $.Deferred();
 
         directory.getFile(path, options, file.resolve, file.reject);
 
@@ -96,5 +96,41 @@
                 return gettingEntries.promise();
             });
     }
-    
+
+    // Delete a file from the filesystem
+    function deleteFile(folder, filename) {
+
+    	console.log("Deleting file: " + filename + " in folder: " + folder);
+
+    	return getFileSystem()
+    		.pipe(function (filesystem) {
+    			return getDirectory(filesystem.root, folder);
+    		})
+    		.pipe(function (directory) {
+    			return getFile(directory, filename, {});
+    		})
+    		.pipe(function (file) {
+    			var deletingFile = $.Deferred();
+    			file.remove(deletingFile.resolve, deletingFile.reject);
+    			return deletingFile;
+    		});
+
+    }
+
+    // Upload a file to the Spoke server
+    function uploadFile(path, params) {
+    	var uploadingFile = $.Deferred(),
+    		options = FileUploadOptions(),
+    		transfer;
+    	options.fileKey = "file"; // Form element name that'll be given to the server
+    	options.fileName = ""; // Filename on server, I think the server should decide this
+    	options.mimeType = getMimeType(path);
+    	options:params = params // Other data to send (object of Key/Value pairs)
+
+    	transfer = new FileTransfer();
+    	transfer.upload(path, SPOKE.apiUrl, uploadingFile.resolve, uploadingFile.reject, options);
+
+    	return uploadingFile;
+    }
+
 })($);
