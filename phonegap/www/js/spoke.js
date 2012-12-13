@@ -72,7 +72,7 @@
 
                     // TODO - what will we do with this eventually?
                     // For now, just show the filename in a list
-                    addRecordingToList(SPOKE.currentRecording.src.replace(SPOKE.audioDirectory + '/', ''));
+                    addRecordingToList(SPOKE.currentRecording.src.split('/').pop());
 
                 });
 
