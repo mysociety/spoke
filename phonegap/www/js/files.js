@@ -36,13 +36,16 @@ SPOKE.files = ( function($, SPOKE) {
     }
 
     // Delete a file from the filesystem
-    my.deleteFile = function (folder, filename) {
+    my.deleteFile = function (path) {
 
-        console.log("Deleting file: " + filename + " in folder: " + folder);
+        console.log("Deleting file: " + path);
+
+        // Turn path into a filename
+        var filename = path.split("/").pop();
 
         return getFileSystem()
             .pipe(function (filesystem) {
-                return getDirectory(filesystem.root, folder);
+                return getDirectory(filesystem.root, SPOKE.audioDirectory);
             })
             .pipe(function (directory) {
                 return getFile(directory, filename, {});

@@ -236,6 +236,10 @@ SPOKE.recordingPage = (function ($, SPOKE) {
         console.log("Removing recording: " + text + " from recordings list");
         // Remove the file from the list on the page
         $('ul#recorded-speeches li:contains(' + text + ')').remove();
+        // If there's nothing left now, show the empty message
+        if($('ul#recorded-speeches li').length == 0) {
+            emptyRecordingsList();
+        }
 
     }
 
