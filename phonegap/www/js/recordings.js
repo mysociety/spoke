@@ -107,7 +107,7 @@
             console.log('Upload button clicked');
 
             // Do the uploading, looping over each recording in our list
-            $.map(SPOKE.recordings, function(recording, i) {
+            $.map(SPOKE.recordings, function(recording, index) {
 
                 // uploadingFiles is, you guessed it, a Promise
                 var uploadingFile = uploadFile(recording);
@@ -125,6 +125,9 @@
                         console.log('File removed successfully');
 
                         removeRecordingFromList(recording.split("/").pop());
+
+                        // and remove the one in memory
+                        SPOKE.recordings.splice(index, 1);
 
                     });
 
@@ -225,11 +228,9 @@
     // Remove a specific recording from the list on the recordings page
     function removeRecordingFromList(text) {
 
+        console.log("Removing recording: " + text + " from recordings list");
         // Remove the file from the list on the page
-        $('ul#recorded-speeches li:contains(' + recording.split("/").pop() + ')').remove();
-        
-        // and remove the one in memory
-        SPOKE.recordings.splice(i, 1);
+        $('ul#recorded-speeches li:contains(' text ')').remove();
 
     }
 
@@ -276,7 +277,7 @@
         $('#seconds').html('00');
         $('#minutes').html('00');
         $('#hours').html('00');
-        
+
     }
 
     // Simple function to pad a number to two digits
