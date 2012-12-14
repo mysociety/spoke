@@ -81,10 +81,7 @@ SPOKE.files = ( function($, SPOKE) {
         options:params = params // Other data to send (object of Key/Value pairs)
 
         transfer = new FileTransfer();
-        //transfer.upload(path, SPOKE.apiUrl, uploadingFile.resolve, uploadingFile.reject, options);
-
-        // For testing
-        uploadingFile.resolve({});
+        transfer.upload(path, SPOKE.apiUrl, uploadingFile.resolve, uploadingFile.reject, options);
 
         return uploadingFile;
     }
@@ -110,6 +107,16 @@ SPOKE.files = ( function($, SPOKE) {
                 
                 return gettingEntries.promise();
             });
+    }
+
+    // Work around the fact that Android returns different paths than iOS
+    // sometimes
+    my.getFullFilePath = function (path) {
+        if (device.platform.match(/Android/)) {
+            return "file:///sdcard/" + SPOKE.currentRecording.src
+        } else  {
+            return path;
+        }
     }
 
     // Wrap the async Phonegap way of getting a filesystem in a promise
@@ -155,7 +162,7 @@ SPOKE.files = ( function($, SPOKE) {
 
     // Get the mimetype for a file
     function getMimeType (path) {
-        var extension = path.substr(path.lastIndexOf('.'));
+        var extension = path.substr(path.lastIndexOf('.') + 1);
 
         if(extension.length > 0) {
             return "audio/" + extension;
