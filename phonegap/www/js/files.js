@@ -67,7 +67,7 @@ SPOKE.files = ( function($, SPOKE) {
             options = new FileUploadOptions(),
             transfer;
         
-        options.fileKey = "file"; // Form element name that'll be given to the server
+        options.fileKey = "audio"; // Form element name that'll be given to the server
         options.fileName = ""; // Filename on server, I think the server should decide this
         try {
            options.mimeType = getMimeType(path);
