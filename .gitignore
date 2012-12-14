@@ -19,3 +19,4 @@ profile
 *.moved-aside
 DerivedData
 .idea/
+/phonegap/www/js/config.js

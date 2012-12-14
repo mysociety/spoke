@@ -40,7 +40,6 @@
         my.audioDirectory = 'spoke';
         my.audioFilenameExtension = (device.platform.match(/(iPhone|iPod|iPad)/)) ? '.wav' : '.amr';
         my.recordings = Array();
-        my.apiUrl = "http://localhost:8000";
     	
     	// Fire up the record page manually, because a pageinit will have already
     	// happened for it, but before everything else was ready

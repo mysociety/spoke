@@ -1,0 +1,8 @@
+/**
+ * Config for App
+ * Things you don't want to check in like server urls and 
+ * secret keys can go here
+ */
+(function(SPOKE) {
+	SPOKE.apiUrl = "http://www.example.org/speech/add";
+})(SPOKE);
