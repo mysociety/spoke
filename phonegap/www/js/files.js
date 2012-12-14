@@ -61,14 +61,15 @@ SPOKE.files = ( function($, SPOKE) {
     // Upload a file to the Spoke server
     my.uploadFile = function (path, params) {
 
-        console.log("Uploading file: " + path);
+        console.log('Uploading file: ' + path);
 
         var uploadingFile = $.Deferred(),
             options = new FileUploadOptions(),
             transfer;
         
-        options.fileKey = "audio"; // Form element name that'll be given to the server
-        options.fileName = ""; // Filename on server, I think the server should decide this
+        options.fileKey = 'audio'; // Form element name that'll be given to the server
+        options.fileName = path.split('/').pop(); // Filename on server, I think the server should decide this
+        options.chunkedMode = false;
         try {
            options.mimeType = getMimeType(path);
         }
@@ -78,7 +79,11 @@ SPOKE.files = ( function($, SPOKE) {
             uploadingFile.reject(error);
             return uploadingFile;
         }
-        options:params = params // Other data to send (object of Key/Value pairs)
+
+        // Other data to send (object of Key/Value pairs)
+        if(params) { 
+            options.params = params;
+        }
 
         transfer = new FileTransfer();
         transfer.upload(path, SPOKE.apiUrl, uploadingFile.resolve, uploadingFile.reject, options);
