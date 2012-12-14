@@ -108,8 +108,16 @@ SPOKE.recordingPage = (function ($, SPOKE) {
 
             console.log('Upload button clicked');
 
+            console.log('Trying to upload the recordings in: ' + SPOKE.recordings);
+
             // Do the uploading, looping over each recording in our list
-            $.map(SPOKE.recordings, function(recording, index) {
+            // Clone the recordings list so that we can operate on the real
+            // one whilst iterating over each recording
+            var recordingsClone = SPOKE.recordings.slice();
+
+            $.each(recordingsClone, function(index, recording) {
+
+                console.log('Uploading file: ' + recording + " at index " + index);
 
                 // uploadingFiles is, you guessed it, a Promise
                 var uploadingFile = SPOKE.files.uploadFile(recording);
@@ -129,6 +137,7 @@ SPOKE.recordingPage = (function ($, SPOKE) {
 
                         console.log('File removed successfully');
 
+                        // Update the dom
                         removeRecordingFromList(recording.split("/").pop());
 
                         // and remove the one in memory
