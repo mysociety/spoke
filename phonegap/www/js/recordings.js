@@ -57,8 +57,10 @@ SPOKE.recordingPage = (function ($, SPOKE) {
                     console.log('Recording audio has finished');
                     console.log('Filename: ' + SPOKE.currentRecording.src + ' Duration: ' + SPOKE.currentRecording.getDuration());
 
-                    // Save the filename of the recording in our global list
-                    SPOKE.recordings.push(SPOKE.currentRecording.src);
+                    // Save the path to the recording in our global list
+                    // If we're on android we need to add some stuff to it
+                    var filePath = SPOKE.files.getFullFilePath(SPOKE.currentRecording.src);
+                    SPOKE.recordings.push(filePath);
 
                     // TODO - what will we do with this eventually?
                     // For now, just show the filename in a list
