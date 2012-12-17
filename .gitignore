@@ -20,3 +20,4 @@ profile
 DerivedData
 .idea/
 /phonegap/www/js/config.js
+*.xcuserstate
