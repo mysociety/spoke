@@ -117,11 +117,33 @@ SPOKE.files = ( function($, SPOKE) {
     // Work around the fact that Android returns different paths than iOS
     // sometimes
     my.getFullFilePath = function (path) {
+
+        console.log("Getting full path for file at: " + path);
+
+        var gettingFilesystem,
+            gettingFullFilePath = $.Deferred();
+
         if (device.platform.match(/Android/)) {
-            return "file:///sdcard/" + path
+
+            console.log("Platform detected as Android, so getting root filesystem");
+
+            // Resolve when we have the root filesystem folder
+            gettingFilesystem = getFileSystem();
+            gettingFilesystem.done(function (filesystem) {
+
+                console.log("Returning full filepath: " + filesystem.root.fullPath + '/' + path);
+
+                gettingFullFilePath.resolve(filesystem.root.fullPath + '/' + path);
+            });
         } else  {
-            return path;
+            // Resolve immediately with the path because it is the full path
+
+            console.log("Platform detected as not Android, so returning path as it is: " + path);
+
+            gettingFullFilePath.resolve(path);
         }
+
+        return gettingFullFilePath.promise();
     }
 
     // Wrap the async Phonegap way of getting a filesystem in a promise
