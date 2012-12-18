@@ -1,5 +1,5 @@
 /**
- * Spoke/SayIt javascript main setup
+ * Spoke javascript main setup
  * See individual javascript files like recordings.js and files.js
  * for specific functionality
  */
@@ -38,7 +38,7 @@
         console.log('Device platform is: ' + device.platform);
 
         my.audioDirectory = 'spoke';
-        my.audioFilenameExtension = (device.platform.match(/(iPhone|iPod|iPad)/)) ? '.wav' : '.amr';
+        my.audioFilenameExtension = (device.platform.match(/(iPhone|iPod|iPad)/)) ? '.wav' : '.3gp';
         my.recordings = Array();
     	
     	// Fire up the record page manually, because a pageinit will have already
