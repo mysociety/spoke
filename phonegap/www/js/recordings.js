@@ -74,6 +74,7 @@ SPOKE.recordingPage = (function ($, SPOKE) {
                 // Failure - nothing specific to do, except tell the user
                 recordingAudio.fail(function(error) {
                     console.log('Something went wrong recording the audio: ' + error.message);
+                    navigator.notification.alert('Something went wrong recording the audio: ' + error.message);
                 });
 
                 // Whatever - delete the global which kept track of the recording
@@ -149,12 +150,14 @@ SPOKE.recordingPage = (function ($, SPOKE) {
 
                     deletingFile.fail(function (error) {
                         console.log('An error occured deleting the file: ' + error.code);
+                        navigator.notification.alert('An error occured deleting the file: ' + error.code);
                     });
 
                 });
 
                 uploadingFile.fail(function (error) {
                     console.log('Failed to upload the file: ' + recording + ' error code was: ' + error.code);
+                    navigator.notification.alert('Failed to upload the file: ' + recording + ' error code was: ' + error.code);
                 });
 
             });          
@@ -195,6 +198,7 @@ SPOKE.recordingPage = (function ($, SPOKE) {
 
             // Something went wrong creating the file, and they only give us a code, great.
             console.log('Something went wrong creating a file, error code: ' + error.code);
+            navigator.notification.alert('Failed to upload the file: ' + recording + ' error code was: ' + error.code);
 
         });
 
