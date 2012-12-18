@@ -58,16 +58,21 @@ SPOKE.recordingPage = (function ($, SPOKE) {
                     console.log('Filename: ' + SPOKE.currentRecording.src + ' Duration: ' + SPOKE.currentRecording.getDuration());
 
                     // Save the path to the recording in our global list
+
                     // If we're on android we need to add some stuff to it
-                    var filePath = SPOKE.files.getFullFilePath(SPOKE.currentRecording.src);
-                    SPOKE.recordings.push(filePath);
+                    // because we don't get the full filepath from the media
+                    // api, so this is asynchronous again
+                    var gettingFilePath = SPOKE.files.getFullFilePath(SPOKE.currentRecording.src);
 
-                    // TODO - what will we do with this eventually?
-                    // For now, just show the filename in a list
-                    addRecordingToList(SPOKE.currentRecording.src.split('/').pop());
+                    gettingFilePath.done(function (filePath) {
+                        SPOKE.recordings.push(filePath);
 
-                    // Show the upload button
-                    $('#upload-button').show();
+                        // Add the filename to the list in the app
+                        addRecordingToList(SPOKE.currentRecording.src.split('/').pop());
+
+                        // Show the upload button
+                        $('#upload-button').show();
+                    });
 
                 });
 
@@ -184,7 +189,7 @@ SPOKE.recordingPage = (function ($, SPOKE) {
 
             // Create a media object to actually do the recording
             // iOS wants the file path to be full, ie: start with file://
-            // Android just wants it to be relative to the sdcard folder
+            // Android just wants it to be relative
             var src = (device.platform.match(/(iPhone|iPod|iPad)/)) ? file.fullPath : SPOKE.audioDirectory + "/" + file.name;
             var media = new Media(src, recordingAudio.resolve, recordingAudio.reject);
             // Start the recording
