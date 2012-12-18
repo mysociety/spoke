@@ -118,7 +118,7 @@ SPOKE.files = ( function($, SPOKE) {
     // sometimes
     my.getFullFilePath = function (path) {
         if (device.platform.match(/Android/)) {
-            return "file:///sdcard/" + SPOKE.currentRecording.src
+            return "file:///sdcard/" + path
         } else  {
             return path;
         }
