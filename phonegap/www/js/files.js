@@ -167,10 +167,21 @@ SPOKE.files = ( function($, SPOKE) {
 
     // Get the mimetype for a file
     function getMimeType (path) {
+
+        console.log("Getting mimetype for file at: " + path);
+
         var extension = path.substr(path.lastIndexOf('.') + 1);
 
+        console.log("File extension parsed as: " + extension);
+
         if(extension.length > 0) {
-            return "audio/" + extension;
+            // Some mimetypes don't map exactly to extensions
+            switch(extension) {
+                case "3gp":
+                    return "audio/3gpp";
+                default:
+                    return "audio/"  + extension;
+            }
         }
         else {
             throw "Could not get file extension to determine mime type";
