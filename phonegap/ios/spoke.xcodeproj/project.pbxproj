@@ -465,6 +465,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = NO;
 				CLANG_WARN_OBJCPP_ARC_ABI = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Steven Day (KXN6JX98DY)";
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -475,7 +476,8 @@
 				INFOPLIST_FILE = "spoke/spoke-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				PRODUCT_NAME = spoke;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				PROVISIONING_PROFILE = "36567F74-7D51-4653-B0D3-E63117DAAC5A";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -485,6 +487,8 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ENABLE_OBJC_ARC = NO;
 				CLANG_WARN_OBJCPP_ARC_ABI = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: UK Citizens Online Democracy";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: UK Citizens Online Democracy";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "spoke/spoke-Prefix.pch";
@@ -493,7 +497,9 @@
 				INFOPLIST_FILE = "spoke/spoke-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
 				PRODUCT_NAME = spoke;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				PROVISIONING_PROFILE = "E9BEF618-FC86-4D50-A91B-54DF7226F33E";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "E9BEF618-FC86-4D50-A91B-54DF7226F33E";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -526,6 +532,7 @@
 					"-all_load",
 					"-Obj-C",
 				);
+				PRODUCT_NAME = Spoke;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = NO;
 				USER_HEADER_SEARCH_PATHS = "";
@@ -561,6 +568,7 @@
 					"-all_load",
 					"-Obj-C",
 				);
+				PRODUCT_NAME = Spoke;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = NO;
 				USER_HEADER_SEARCH_PATHS = "";
