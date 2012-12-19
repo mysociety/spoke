@@ -12,160 +12,166 @@ SPOKE.recordingPage = (function ($, SPOKE) {
         // Populate the list of existing recordings (if there are any)
         var populatingRecordingList = populateRecordingList();
 
-        $('#record-button').on('tap', function(e) {
+        $('#record-button').on('tap', recordButton);
 
-            e.preventDefault();
+        $('#stop-button').on('tap', stopButton);
 
-            console.log('Record Audio button clicked');           
-
-            // We only want to record if we're not already, this
-            // could happen with dodgy click/tap/vlick handling or
-            // slow phones and angry users
-            if(typeof SPOKE.currentRecording === 'undefined') {
-                // startRecordingAudio wraps the phonegap media creation api in
-                // a promise and returns it, it also saves a global reference to
-                // the current recording in SPOKE.currentRecording
-                var recordingAudio = startRecordingAudio();
-
-                // Start a timer to show a rough idea of how much is being recorded
-                SPOKE.timer = startTimer();
-
-                // Show a recording interface so people can start/stop the recording
-                toggleRecordingControls();
-
-                // Success - save the filename of the file we created
-                recordingAudio.done(function() {
-
-                    console.log('Recording audio has finished');
-                    console.log('Filename: ' + SPOKE.currentRecording.src + ' Duration: ' + SPOKE.currentRecording.getDuration());
-
-                    // Save the path to the recording in our global list
-
-                    // If we're on android we need to add some stuff to it
-                    // because we don't get the full filepath from the media
-                    // api, so this is asynchronous again
-                    var gettingFilePath = SPOKE.files.getFullFilePath(SPOKE.currentRecording.src);
-
-                    gettingFilePath.done(function (filePath) {
-                        SPOKE.recordings.push(filePath);
-
-                        // Add the filename to the list in the app
-                        addRecordingToList(SPOKE.currentRecording.src.split('/').pop());
-
-                        // Show the upload button
-                        $('#upload-button').show();
-                    });
-
-                });
-
-                // Failure - nothing specific to do, except tell the user
-                recordingAudio.fail(function(error) {
-                    console.log('Something went wrong recording the audio: ' + error.message);
-                    navigator.notification.alert('Something went wrong recording the audio: ' + error.message);
-                });
-
-                // Whatever - delete the global which kept track of the recording
-                // and put the interface back
-                recordingAudio.always(function () {
-                    
-                    // Clear the current recording
-                    delete SPOKE.currentRecording;
-                    
-                    // Stop any timer
-                    stopTimer();
-
-                    // Toggle the controls
-                    toggleRecordingControls();
-
-                });
-            }
-        });
-
-        $('#stop-button').on('tap', function(e) {
-            e.preventDefault();
-
-            console.log('Stop audio button clicked');
-
-            // We can only stop if there's something to stop
-            if(typeof SPOKE.currentRecording !== 'undefined') {
-                stopRecordingAudio();
-            }
-                        
-        });
-
-        $('#upload-button').on('tap', function(e) {
-            e.preventDefault();
-
-            SPOKE.showLoading("Uploading...");
-
-            var uploadingPromises = new Array();
-
-            console.log('Upload button clicked');
-
-            console.log('Trying to upload the recordings in: ' + SPOKE.recordings);
-
-            // Do the uploading, looping over each recording in our list
-            // Clone the recordings list so that we can operate on the real
-            // one whilst iterating over each recording
-            var recordingsClone = SPOKE.recordings.slice();
-
-            $.each(recordingsClone, function(index, recording) {
-
-                console.log('Uploading file: ' + recording + " at index " + index);
-
-                // uploadingFiles is, you guessed it, a Promise
-                var uploadingFile = SPOKE.files.uploadFile(recording);
-
-                uploadingPromises.push(uploadingFile);
-
-                uploadingFile.done(function (result) {
-
-                    // result.response contains the server response if we want
-                    // to do anything with it
-                    
-                    console.log('File: ' + recording + ' successfully uploaded.');
-                    
-                    // Delete the file from local disk
-                    // Another async process, so another Promise
-                    deletingFile = SPOKE.files.deleteFile(recording);
-                    
-                    deletingFile.done(function () {
-
-                        console.log('File removed successfully');
-
-                        // Update the dom
-                        removeRecordingFromList(recording.split("/").pop());
-
-                        // and remove the one in memory
-                        SPOKE.recordings.splice(index, 1);
-
-                    });
-
-                    deletingFile.fail(function (error) {
-                        var message = 'An error occured deleting the file: ' + recording + ' error was: ' + error.code;
-                        console.log(message);
-                        navigator.notification.alert(message);
-                    });
-
-                });
-
-                uploadingFile.fail(function (error) {
-                    console.log('Failed to upload the file: ' + recording + ' error code was: ' + error.code);
-                    navigator.notification.alert('Failed to upload the file: ' + recording + ' error code was: ' + error.code);
-                });
-
-            });    
-
-            // When all the promises have completed in some way or another
-            $.when.apply(null, uploadingPromises).then(function() {
-                SPOKE.hideLoading();
-            });
-        });
+        $('#upload-button').on('tap', uploadButton);
 
         // Bind to resume event to redo list of files
         $(document).on('resume', function() {
             console.log("App resuming, repopulating the recording list");
             var populatingRecordings = populateRecordingList();
+        });
+    }
+
+    // Record button click handler
+    function recordButton(e) {
+        e.preventDefault();
+
+        console.log('Record Audio button clicked');           
+
+        // We only want to record if we're not already, this
+        // could happen with dodgy click/tap/vlick handling or
+        // slow phones and angry users
+        if(typeof SPOKE.currentRecording === 'undefined') {
+            // startRecordingAudio wraps the phonegap media creation api in
+            // a promise and returns it, it also saves a global reference to
+            // the current recording in SPOKE.currentRecording
+            var recordingAudio = startRecordingAudio();
+
+            // Start a timer to show a rough idea of how much is being recorded
+            SPOKE.timer = startTimer();
+
+            // Show a recording interface so people can start/stop the recording
+            toggleRecordingControls();
+
+            // Success - save the filename of the file we created
+            recordingAudio.done(function() {
+
+                console.log('Recording audio has finished');
+                console.log('Filename: ' + SPOKE.currentRecording.src + ' Duration: ' + SPOKE.currentRecording.getDuration());
+
+                // Save the path to the recording in our global list
+
+                // If we're on android we need to add some stuff to it
+                // because we don't get the full filepath from the media
+                // api, so this is asynchronous again
+                var gettingFilePath = SPOKE.files.getFullFilePath(SPOKE.currentRecording.src);
+
+                gettingFilePath.done(function (filePath) {
+                    SPOKE.recordings.push(filePath);
+
+                    // Add the filename to the list in the app
+                    addRecordingToList(SPOKE.currentRecording.src.split('/').pop());
+
+                    // Show the upload button
+                    $('#upload-button').show();
+                });
+
+            });
+
+            // Failure - nothing specific to do, except tell the user
+            recordingAudio.fail(function(error) {
+                console.log('Something went wrong recording the audio: ' + error.message);
+                navigator.notification.alert('Something went wrong recording the audio: ' + error.message);
+            });
+
+            // Whatever - delete the global which kept track of the recording
+            // and put the interface back
+            recordingAudio.always(function () {
+                
+                // Clear the current recording
+                delete SPOKE.currentRecording;
+                
+                // Stop any timer
+                stopTimer();
+
+                // Toggle the controls
+                toggleRecordingControls();
+
+            });
+        }
+    }
+
+    // Stop button click handler
+    function stopButton(e) {
+        e.preventDefault();
+
+        console.log('Stop audio button clicked');
+
+        // We can only stop if there's something to stop
+        if(typeof SPOKE.currentRecording !== 'undefined') {
+            stopRecordingAudio();
+        }
+    }
+
+    function uploadButton(e) {
+        e.preventDefault();
+
+        SPOKE.showLoading("Uploading...");
+
+        var uploadingPromises = new Array();
+
+        console.log('Upload button clicked');
+
+        console.log('Trying to upload the recordings in: ' + SPOKE.recordings);
+
+        // Do the uploading, looping over each recording in our list
+        // Clone the recordings list so that we can operate on the real
+        // one whilst iterating over each recording
+        var recordingsClone = SPOKE.recordings.slice();
+
+        $.each(recordingsClone, function(index, recording) {
+
+            console.log('Uploading file: ' + recording + " at index " + index);
+
+            // uploadingFiles is, you guessed it, a Promise
+            var uploadingFile = SPOKE.files.uploadFile(recording);
+
+            uploadingPromises.push(uploadingFile);
+
+            uploadingFile.done(function (result) {
+
+                // result.response contains the server response if we want
+                // to do anything with it
+                
+                console.log('File: ' + recording + ' successfully uploaded.');
+                
+                // Delete the file from local disk
+                // Another async process, so another Promise
+                deletingFile = SPOKE.files.deleteFile(recording);
+                
+                deletingFile.done(function () {
+
+                    console.log('File removed successfully');
+
+                    // Update the dom
+                    removeRecordingFromList(recording.split("/").pop());
+
+                    // and remove the one in memory
+                    SPOKE.recordings.splice(index, 1);
+
+                });
+
+                deletingFile.fail(function (error) {
+                    var message = 'An error occured deleting the file: ' + recording + ' error was: ' + error.code;
+                    console.log(message);
+                    navigator.notification.alert(message);
+                });
+
+            });
+
+            uploadingFile.fail(function (error) {
+                console.log('Failed to upload the file: ' + recording + ' error code was: ' + error.code);
+                navigator.notification.alert('Failed to upload the file: ' + recording + ' error code was: ' + error.code);
+            });
+
+        });    
+
+        // When all the promises have completed in some way or another
+        $.when.apply(null, uploadingPromises).then(function() {
+            SPOKE.hideLoading();
         });
     }
     
