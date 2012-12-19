@@ -223,8 +223,6 @@ SPOKE.recordingPage = (function ($, SPOKE) {
     function startRecordingAudio () {
         
         console.log('Recording Audio');
-
-        SPOKE.showLoading("Starting...");
         
         // Get a file to record to - iOS needs this, others don't care so much
 
@@ -258,10 +256,6 @@ SPOKE.recordingPage = (function ($, SPOKE) {
 
         });
 
-        creatingFile.always(function () {
-            SPOKE.hideLoading();
-        })
-
         return recordingAudio;
 
     }
@@ -271,12 +265,8 @@ SPOKE.recordingPage = (function ($, SPOKE) {
 
         console.log('Stopping recording');
 
-        SPOKE.showLoading("Stopping...");
-
         var media = SPOKE.currentRecording;
         media.stopRecord();
-
-        SPOKE.hideLoading();
 
     }
 
