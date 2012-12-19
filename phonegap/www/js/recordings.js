@@ -10,25 +10,7 @@ SPOKE.recordingPage = (function ($, SPOKE) {
         console.log('Doing record page things');
         
         // Populate the list of existing recordings (if there are any)
-        // First add a default message to show no current recordings
-        emptyRecordingsList();
-        // Then get a promise for the real entries
-        var gettingEntries = SPOKE.files.getDirectoryEntries(SPOKE.audioDirectory);
-
-        gettingEntries.done(function (entries) {
-            var i;
-            for(i=0; i<entries.length; i++) {
-                // We only care about files, not sub directories
-                if(entries[i].isFile) {
-                    addRecordingToList(entries[i].name);
-                    SPOKE.recordings.push(entries[i].fullPath);
-                }
-            }
-            // Show the upload button too if there are some recordings
-            if(entries.length > 0) {
-                $('#upload-button').show();
-            }
-        });
+        var populatingRecordingList = populateRecordingList();
 
         $('#record-button').on('tap', function(e) {
 
@@ -160,8 +142,9 @@ SPOKE.recordingPage = (function ($, SPOKE) {
                     });
 
                     deletingFile.fail(function (error) {
-                        console.log('An error occured deleting the file: ' + error.code);
-                        navigator.notification.alert('An error occured deleting the file: ' + error.code);
+                        var message = 'An error occured deleting the file: ' + recording + ' error was: ' + error.code;
+                        console.log(message);
+                        navigator.notification.alert(message);
                     });
 
                 });
@@ -177,6 +160,12 @@ SPOKE.recordingPage = (function ($, SPOKE) {
             $.when.apply(null, uploadingPromises).then(function() {
                 SPOKE.hideLoading();
             });
+        });
+
+        // Bind to resume event to redo list of files
+        $(document).on('resume', function() {
+            console.log("App resuming, repopulating the recording list");
+            var populatingRecordings = populateRecordingList();
         });
     }
     
@@ -239,6 +228,40 @@ SPOKE.recordingPage = (function ($, SPOKE) {
         $('#stop-button').toggle();
         $('#timer').toggle();
 
+    }
+
+    // Populate the list of recordings by scanning the filesystem
+    function populateRecordingList() {
+
+        console.log("Populating existing recordings list");
+
+        var gettingEntries;
+
+        // Blank the in-memory list
+        SPOKE.recordings = new Array();
+
+        // First add a default message to show no current recordings
+        emptyRecordingsList();
+
+        // Then get a promise for the real entries
+        gettingEntries = SPOKE.files.getDirectoryEntries(SPOKE.audioDirectory);
+
+        gettingEntries.done(function (entries) {
+            var i;
+            for(i=0; i<entries.length; i++) {
+                // We only care about files, not sub directories
+                if(entries[i].isFile) {
+                    addRecordingToList(entries[i].name);
+                    SPOKE.recordings.push(entries[i].fullPath);
+                }
+            }
+            // Show the upload button too if there are some recordings
+            if(entries.length > 0) {
+                $('#upload-button').show();
+            }
+        });
+
+        return gettingEntries.promise();
     }
 
     // Add a recording to the html list on the recordings page
