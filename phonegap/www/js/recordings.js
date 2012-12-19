@@ -8,6 +8,8 @@ SPOKE.recordingPage = (function ($, SPOKE) {
     my.recordPage = function () {
 
         console.log('Doing record page things');
+
+        SPOKE.showLoading("Loading");
         
         // Populate the list of existing recordings (if there are any)
         // First add a default message to show no current recordings
@@ -30,11 +32,16 @@ SPOKE.recordingPage = (function ($, SPOKE) {
             }
         });
 
+        // Hide the loading message when everything is finished
+        $.when(gettingEntries).then(function() {
+            SPOKE.hideLoading();
+        });
+
         $('#record-button').on('tap', function(e) {
 
             e.preventDefault();
 
-            console.log('Record Audio button clicked');
+            console.log('Record Audio button clicked');            
 
             // We only want to record if we're not already, this
             // could happen with dodgy click/tap/vlick handling or
@@ -112,11 +119,15 @@ SPOKE.recordingPage = (function ($, SPOKE) {
         });
 
         $('#upload-button').on('tap', function(e) {
+            var uploadingPromises = new Array();
+
             e.preventDefault();
 
             console.log('Upload button clicked');
 
             console.log('Trying to upload the recordings in: ' + SPOKE.recordings);
+
+            SPOKE.showLoading("Uploading...");
 
             // Do the uploading, looping over each recording in our list
             // Clone the recordings list so that we can operate on the real
@@ -129,6 +140,8 @@ SPOKE.recordingPage = (function ($, SPOKE) {
 
                 // uploadingFiles is, you guessed it, a Promise
                 var uploadingFile = SPOKE.files.uploadFile(recording);
+
+                uploadingPromises.push(uploadingFile);
 
                 uploadingFile.done(function (result) {
 
@@ -165,7 +178,12 @@ SPOKE.recordingPage = (function ($, SPOKE) {
                     navigator.notification.alert('Failed to upload the file: ' + recording + ' error code was: ' + error.code);
                 });
 
-            });          
+            });    
+
+            // When all the promises have completed in some way or another
+            $.when.apply(null, uploadingPromises).then(function() {
+                SPOKE.hideLoading();
+            });
         });
     }
     
@@ -174,6 +192,8 @@ SPOKE.recordingPage = (function ($, SPOKE) {
     function startRecordingAudio () {
         
         console.log('Recording Audio');
+
+        SPOKE.showLoading("Starting...");
         
         // Get a file to record to - iOS needs this, others don't care so much
 
@@ -207,6 +227,10 @@ SPOKE.recordingPage = (function ($, SPOKE) {
 
         });
 
+        creatingFile.always(function () {
+            SPOKE.hideLoading();
+        })
+
         return recordingAudio;
 
     }
@@ -216,8 +240,12 @@ SPOKE.recordingPage = (function ($, SPOKE) {
 
         console.log('Stopping recording');
 
+        SPOKE.showLoading("Stopping...");
+
         var media = SPOKE.currentRecording;
         media.stopRecord();
+
+        SPOKE.hideLoading();
 
     }
 
