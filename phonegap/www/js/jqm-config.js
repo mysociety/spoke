@@ -6,6 +6,7 @@
         $.mobile.allowCrossDomains = true;
         $.mobile.pushStateEnabled = false;
         $.mobile.defaultPageTransition = "none";
+        $.mobile.buttonMarkup.hoverDelay = 0;
     });
     
 })($);
