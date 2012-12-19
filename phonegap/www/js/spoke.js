@@ -25,7 +25,7 @@
         console.log("Showing loading message");
 
         $("#loading-popup-message").html(message);
-        $("#loading-popup").popup('open');
+        $("#loading-popup").show();
     }
 
     // Hide the loading popup again
@@ -33,7 +33,7 @@
 
         console.log("Hiding loading message");
 
-        $("#loading-popup").popup('close');
+        $("#loading-popup").hide();
     }
 
     /**
@@ -62,13 +62,6 @@
         my.audioDirectory = 'spoke';
         my.audioFilenameExtension = (device.platform.match(/(iPhone|iPod|iPad)/)) ? '.wav' : '.3gp';
         my.recordings = new Array();
-
-        // Init the loading popup
-        $("#loading-popup").popup({
-            dismissible: false,
-            overlayTheme: 'a',
-            positionTo: 'window'
-        });
     	
     	// Fire up the record page manually, because a pageinit will have already
     	// happened for it, but before everything else was ready
