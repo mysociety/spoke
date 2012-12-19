@@ -112,15 +112,15 @@ SPOKE.recordingPage = (function ($, SPOKE) {
         });
 
         $('#upload-button').on('tap', function(e) {
-            var uploadingPromises = new Array();
-
             e.preventDefault();
+
+            SPOKE.showLoading("Uploading...");
+
+            var uploadingPromises = new Array();
 
             console.log('Upload button clicked');
 
             console.log('Trying to upload the recordings in: ' + SPOKE.recordings);
-
-            SPOKE.showLoading("Uploading...");
 
             // Do the uploading, looping over each recording in our list
             // Clone the recordings list so that we can operate on the real
