@@ -9,8 +9,6 @@ SPOKE.recordingPage = (function ($, SPOKE) {
 
         console.log('Doing record page things');
 
-        SPOKE.showLoading("Loading");
-
         // Populate the list of speakers from PopIt
         console.log("Getting list of speakers")
         
@@ -63,16 +61,11 @@ SPOKE.recordingPage = (function ($, SPOKE) {
             }
         });
 
-        // Hide the loading message when everything is finished
-        $.when(gettingEntries).then(function() {
-            SPOKE.hideLoading();
-        });
-
         $('#record-button').on('tap', function(e) {
 
             e.preventDefault();
 
-            console.log('Record Audio button clicked');            
+            console.log('Record Audio button clicked');           
 
             // We only want to record if we're not already, this
             // could happen with dodgy click/tap/vlick handling or
