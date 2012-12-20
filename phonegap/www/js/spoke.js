@@ -22,18 +22,18 @@
     // Needed because $.mobile.loading() does nothing
     my.showLoading = function (message) {
 
-        console.log("Showing loading message");
+        console.log('Showing loading message');
 
-        $("#loading-popup-message").html(message);
-        $("#loading-popup").show();
+        $('#loading-popup-message').html(message);
+        $('#loading-popup').show();
     }
 
     // Hide the loading popup again
     my.hideLoading = function () {
 
-        console.log("Hiding loading message");
+        console.log('Hiding loading message');
 
-        $("#loading-popup").hide();
+        $('#loading-popup').hide();
     }
 
     /**

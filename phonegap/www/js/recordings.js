@@ -51,7 +51,7 @@ SPOKE.recordingPage = (function ($, SPOKE) {
 
         // Bind to resume event to redo list of files
         $(document).on('resume', function() {
-            console.log("App resuming, repopulating the recording list");
+            console.log('App resuming, repopulating the recording list');
             var populatingRecordings = populateRecordingList();
         });
     }
@@ -137,10 +137,11 @@ SPOKE.recordingPage = (function ($, SPOKE) {
         }
     }
 
+    // Upload button click handler
     function uploadButton(e) {
         e.preventDefault();
 
-        SPOKE.showLoading("Uploading...");
+        SPOKE.showLoading('Uploading...');
 
         var uploadingPromises = new Array();
 
@@ -155,7 +156,7 @@ SPOKE.recordingPage = (function ($, SPOKE) {
 
         $.each(recordingsClone, function(index, recording) {
 
-            console.log('Uploading file: ' + recording + " at index " + index);
+            console.log('Uploading file: ' + recording + ' at index ' + index);
 
             // uploadingFiles is, you guessed it, a Promise
             var uploadingFile = SPOKE.files.uploadFile(recording);
@@ -178,7 +179,7 @@ SPOKE.recordingPage = (function ($, SPOKE) {
                     console.log('File removed successfully');
 
                     // Update the dom
-                    removeRecordingFromList(recording.split("/").pop());
+                    removeRecordingFromList(recording.split('/').pop());
 
                     // and remove the one in memory
                     SPOKE.recordings.splice(index, 1);
@@ -231,7 +232,7 @@ SPOKE.recordingPage = (function ($, SPOKE) {
             // Create a media object to actually do the recording
             // iOS wants the file path to be full, ie: start with file://
             // Android just wants it to be relative
-            var src = (device.platform.match(/(iPhone|iPod|iPad)/)) ? file.fullPath : SPOKE.audioDirectory + "/" + file.name;
+            var src = (device.platform.match(/(iPhone|iPod|iPad)/)) ? file.fullPath : SPOKE.audioDirectory + '/' + file.name;
             var media = new Media(src, recordingAudio.resolve, recordingAudio.reject);
             // Start the recording
             media.startRecord();
@@ -274,7 +275,7 @@ SPOKE.recordingPage = (function ($, SPOKE) {
     // Populate the list of recordings by scanning the filesystem
     function populateRecordingList() {
 
-        console.log("Populating existing recordings list");
+        console.log('Populating existing recordings list');
 
         var gettingEntries;
 
@@ -328,7 +329,7 @@ SPOKE.recordingPage = (function ($, SPOKE) {
     // Remove a specific recording from the list on the recordings page
     function removeRecordingFromList(text) {
 
-        console.log("Removing recording: " + text + " from recordings list");
+        console.log('Removing recording: ' + text + ' from recordings list');
         // Remove the file from the list on the page
         $('ul#recorded-speeches li:contains(' + text + ')').remove();
         // If there's nothing left now, show the empty message
