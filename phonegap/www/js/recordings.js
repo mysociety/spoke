@@ -381,7 +381,7 @@ SPOKE.recordingPage = (function ($, SPOKE) {
                 
                 $.each(data['results'], function (index, speaker) {
                     console.log('Adding speaker: ' + speaker['name'] + ' with id: ' + speaker['_id'] + ' to select');
-                    $('#speaker').append('<option value="' + speaker['_id'] + '">' + speaker['name'] + '</option>');
+                    $('#speaker').append('<option value="' + speaker['meta']['api_url'] + '">' + speaker['name'] + '</option>');
                 });
                 $('#speaker').selectmenu('refresh');
             }
