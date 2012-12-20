@@ -38,10 +38,10 @@ SPOKE.files = ( function($, SPOKE) {
     // Delete a file from the filesystem
     my.deleteFile = function (path) {
 
-        console.log("Deleting file: " + path);
+        console.log('Deleting file: ' + path);
 
         // Turn path into a filename
-        var filename = path.split("/").pop();
+        var filename = path.split('/').pop();
 
         return getFileSystem()
             .pipe(function (filesystem) {
@@ -118,27 +118,27 @@ SPOKE.files = ( function($, SPOKE) {
     // sometimes
     my.getFullFilePath = function (path) {
 
-        console.log("Getting full path for file at: " + path);
+        console.log('Getting full path for file at: ' + path);
 
         var gettingFilesystem,
             gettingFullFilePath = $.Deferred();
 
         if (device.platform.match(/Android/)) {
 
-            console.log("Platform detected as Android, so getting root filesystem");
+            console.log('Platform detected as Android, so getting root filesystem');
 
             // Resolve when we have the root filesystem folder
             gettingFilesystem = getFileSystem();
             gettingFilesystem.done(function (filesystem) {
 
-                console.log("Returning full filepath: " + filesystem.root.fullPath + '/' + path);
+                console.log('Returning full filepath: ' + filesystem.root.fullPath + '/' + path);
 
                 gettingFullFilePath.resolve(filesystem.root.fullPath + '/' + path);
             });
         } else  {
             // Resolve immediately with the path because it is the full path
 
-            console.log("Platform detected as not Android, so returning path as it is: " + path);
+            console.log('Platform detected as not Android, so returning path as it is: ' + path);
 
             gettingFullFilePath.resolve(path);
         }
@@ -190,23 +190,23 @@ SPOKE.files = ( function($, SPOKE) {
     // Get the mimetype for a file
     function getMimeType (path) {
 
-        console.log("Getting mimetype for file at: " + path);
+        console.log('Getting mimetype for file at: ' + path);
 
         var extension = path.substr(path.lastIndexOf('.') + 1);
 
-        console.log("File extension parsed as: " + extension);
+        console.log('File extension parsed as: ' + extension);
 
         if(extension.length > 0) {
             // Some mimetypes don't map exactly to extensions
             switch(extension) {
-                case "3gp":
-                    return "audio/3gpp";
+                case '3gp':
+                    return 'audio/3gpp';
                 default:
-                    return "audio/"  + extension;
+                    return 'audio/'  + extension;
             }
         }
         else {
-            throw "Could not get file extension to determine mime type";
+            throw 'Could not get file extension to determine mime type';
         }
     }
 
