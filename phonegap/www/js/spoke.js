@@ -15,6 +15,28 @@
     my.EMPTY_MESSAGE = 'There are no recordings yet';
 
     /**
+     * Functions
+     */
+
+    // Show a loading message and lock out the screen
+    // Needed because $.mobile.loading() does nothing
+    my.showLoading = function (message) {
+
+        console.log('Showing loading message');
+
+        $('#loading-popup-message').html(message);
+        $('#loading-popup').show();
+    }
+
+    // Hide the loading popup again
+    my.hideLoading = function () {
+
+        console.log('Hiding loading message');
+
+        $('#loading-popup').hide();
+    }
+
+    /**
      * Setup & Bindings
      */
 
@@ -39,7 +61,7 @@
 
         my.audioDirectory = 'spoke';
         my.audioFilenameExtension = (device.platform.match(/(iPhone|iPod|iPad)/)) ? '.wav' : '.3gp';
-        my.recordings = Array();
+        my.recordings = new Array();
     	
     	// Fire up the record page manually, because a pageinit will have already
     	// happened for it, but before everything else was ready

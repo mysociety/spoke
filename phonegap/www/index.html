@@ -11,7 +11,7 @@
     <body>
         <div id="record-page" data-role="page">
             <div data-role="header">
-                <h1>SayIt</h1>
+                <h1>Spoke</h1>
             </div>
 
             <div data-role="content">
@@ -36,6 +36,11 @@
                     <a href="#" id="upload-button" data-role="button" data-icon="check" style="display:none">Upload</a>
                 </p>
             </div>
+
+        </div>
+
+        <div id="loading-popup" style="display:none">
+            <div id="loading-popup-message"></div>
         </div>
 
         <!-- Scripts -->
@@ -46,11 +51,6 @@
 
         <!-- Custom Javascript -->
         <script type="text/javascript" src="js/jqm-config.js"></script>
-
-        <!-- Global namespaced object which all of our custom functions will go into -->
-        <script type="text/javascript">
-            window.SPOKE = window.SPOKE || {initialised: false};
-        </script>
         
         <script type="text/javascript" src="js/spoke.js"></script>
 

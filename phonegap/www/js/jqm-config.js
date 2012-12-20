@@ -5,7 +5,8 @@
         // Setup some jquery mobile defaults
         $.mobile.allowCrossDomains = true;
         $.mobile.pushStateEnabled = false;
-        $.mobile.defaultPageTransition = "none";
+        $.mobile.defaultPageTransition = 'none';
+        $.mobile.buttonMarkup.hoverDelay = 0;
     });
     
 })($);
