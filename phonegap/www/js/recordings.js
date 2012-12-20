@@ -201,9 +201,13 @@ SPOKE.recordingPage = (function ($, SPOKE) {
         });    
 
         // When all the promises have completed in some way or another
-        $.when.apply(null, uploadingPromises).then(function() {
-            SPOKE.hideLoading();
-        });
+        $.when.apply(null, uploadingPromises)
+            .done(function () {
+                navigator.notification.alert('All files uploaded');
+            })
+            .always(function() {
+                SPOKE.hideLoading();
+            });
     }
     
     // Start recording to a new audio file in the SPOKE app's directory
