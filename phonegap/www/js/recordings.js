@@ -12,33 +12,8 @@ SPOKE.recordingPage = (function ($, SPOKE) {
         // Populate the list of speakers from PopIt
         console.log("Getting list of speakers")
         
-        var gettingSpeakers = $.ajax(SPOKE.popItUrl + "/api/v1/person", {dataType:'json'});
-        
-        gettingSpeakers.done(function (data, textStatus, jqXHR) {
-            
-            console.log("Got list of speakers: " + JSON.stringify(data));
-            
-            if(data["results"].length > 0) {
-                console.log("At least one speaker returned, populating select");
-                
-                $.each(data["results"], function (index, speaker) {
-                    console.log("Adding speaker: " + speaker["name"] + " with id: " + speaker["_id"] + " to select");
-                    $("#speaker").append('<option value="' + speaker["_id"] + '">' + speaker["name"] + '</option>');
-                });
-                $("#speaker").selectmenu("refresh");
-            }
-            else {
-                console.log("No speakers returned, disabling speaker select");
-                navigator.notification.alert("No speakers were returned by PopIt, so speaker selection is disabled.");
-                $("#speaker").disable();
-            }
-        });
-
-        gettingSpeakers.fail(function (jqXHR, textStatus, errorThrown) { 
-            console.log("Error occurred getting speakers from popit: " + SPOKE.popItUrl + " error was: " + errorThrown);
-            navigator.notification.alert("Error occurred getting speakers from PopIt: " + SPOKE.popItUrl + " error was: " + errorThrown);
-            $("#speaker").disable();
-        });
+        // Populate the list of speakers
+        var populatingSpeakers = populateSpeakersList();
         
         // Populate the list of existing recordings (if there are any)
         var populatingRecordingList = populateRecordingList();
@@ -388,6 +363,42 @@ SPOKE.recordingPage = (function ($, SPOKE) {
     // Simple function to pad a number to two digits
     function pad ( val ) { 
         return val > 9 ? val : '0' + val; 
+    }
+
+    // Populate the speakers list
+    function populateSpeakersList() {
+
+        console.log("Populating speakers list");
+
+        var getting speakers = $.ajax(SPOKE.popItUrl + "/api/v1/person", {dataType:'json'});
+        
+        gettingSpeakers.done(function (data, textStatus, jqXHR) {
+            
+            console.log("Got list of speakers: " + JSON.stringify(data));
+            
+            if(data["results"].length > 0) {
+                console.log("At least one speaker returned, populating select");
+                
+                $.each(data["results"], function (index, speaker) {
+                    console.log("Adding speaker: " + speaker["name"] + " with id: " + speaker["_id"] + " to select");
+                    $("#speaker").append('<option value="' + speaker["_id"] + '">' + speaker["name"] + '</option>');
+                });
+                $("#speaker").selectmenu("refresh");
+            }
+            else {
+                console.log("No speakers returned, disabling speaker select");
+                navigator.notification.alert("No speakers were returned by PopIt, so speaker selection is disabled.");
+                $("#speaker").disable();
+            }
+        });
+
+        gettingSpeakers.fail(function (jqXHR, textStatus, errorThrown) { 
+            console.log("Error occurred getting speakers from popit: " + SPOKE.popItUrl + " error was: " + errorThrown);
+            navigator.notification.alert("Error occurred getting speakers from PopIt: " + SPOKE.popItUrl + " error was: " + errorThrown);
+            $("#speaker").disable();
+        });
+
+        return gettingSpeakers.promise();
     }
 
     return my;
