@@ -167,6 +167,9 @@ SPOKE.recordingPage = (function ($, SPOKE) {
 
                     console.log('File removed successfully');
 
+                    // Remove it from local storage
+                    SPOKE.storage.removeRecording(recording);
+
                     // Update the dom
                     removeRecordingFromList(recording.split('/').pop());
 
