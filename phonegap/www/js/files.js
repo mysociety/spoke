@@ -82,6 +82,7 @@ SPOKE.files = ( function($, SPOKE) {
 
         // Other data to send (object of Key/Value pairs)
         if(params) { 
+            console.log("Sending params: " + params);
             options.params = params;
         }
 
