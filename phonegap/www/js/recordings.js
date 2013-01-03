@@ -133,8 +133,17 @@ SPOKE.recordingPage = (function ($, SPOKE) {
 
             console.log('Uploading file: ' + recording + ' at index ' + index);
 
+            // Build params for POSTing to the api
+            var params = {};
+
+            // get the speaker for the recording
+            // TODO - get this from localStorage or a local db
+            var speaker = $("#speaker").val();
+            console.log("Speaker is: " + speaker);
+            params.speaker = speaker;
+
             // uploadingFiles is, you guessed it, a Promise
-            var uploadingFile = SPOKE.files.uploadFile(recording);
+            var uploadingFile = SPOKE.files.uploadFile(recording, params);
 
             uploadingPromises.push(uploadingFile);
 
@@ -370,7 +379,7 @@ SPOKE.recordingPage = (function ($, SPOKE) {
 
         console.log('Populating speakers list');
 
-        var getting speakers = $.ajax(SPOKE.popItUrl + '/api/v1/person', {dataType:'json'});
+        var gettingSpeakers = $.ajax(SPOKE.popItUrl + '/api/v0.1/person/', {dataType:'json'});
         
         gettingSpeakers.done(function (data, textStatus, jqXHR) {
             
