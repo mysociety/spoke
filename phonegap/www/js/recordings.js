@@ -388,6 +388,9 @@ SPOKE.recordingPage = (function ($, SPOKE) {
 
         console.log('Populating speakers list');
 
+        // Add an initial "unknown" speaker and set it as the default
+        $('#speaker').append('<option value="" selected="selected">Unknown</option>');
+
         var gettingSpeakers = $.ajax(SPOKE.popItUrl + '/api/v0.1/person/', {dataType:'json'});
         
         gettingSpeakers.done(function (data, textStatus, jqXHR) {
@@ -400,20 +403,21 @@ SPOKE.recordingPage = (function ($, SPOKE) {
                 $.each(data['results'], function (index, speaker) {
                     console.log('Adding speaker: ' + speaker['name'] + ' with id: ' + speaker['id'] + ' to select');
                     $('#speaker').append('<option value="' + speaker['meta']['api_url'] + '">' + speaker['name'] + '</option>');
-                });
-                $('#speaker').selectmenu('refresh');
+                });                
             }
             else {
                 console.log('No speakers returned, disabling speaker select');
-                navigator.notification.alert('No speakers were returned by PopIt, so speaker selection is disabled.');
-                $('#speaker').disable();
+                navigator.notification.alert('No speakers were returned by PopIt.');
             }
         });
 
         gettingSpeakers.fail(function (jqXHR, textStatus, errorThrown) { 
             console.log('Error occurred getting speakers from popit: ' + SPOKE.popItUrl + ' error was: ' + errorThrown);
             navigator.notification.alert('Error occurred getting speakers from PopIt: ' + SPOKE.popItUrl + ' error was: ' + errorThrown);
-            $('#speaker').disable();
+        });
+
+        gettingSpeakers.always(function(){
+            $('#speaker').selectmenu('refresh');
         });
 
         return gettingSpeakers.promise();
