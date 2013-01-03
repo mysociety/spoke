@@ -37,6 +37,19 @@ SPOKE.storage = ( function($, SPOKE) {
 		}
 	}
 
+	my.removeRecording = function (filename) {
+
+		console.log("Removing stored data for recording: " + filename);
+
+		var storage = getStorageObject();
+
+		if(storage.recordings.hasOwnProperty(filename)) {
+			delete storage.recordings[filename];
+		}
+
+		saveStorageObject(storage);
+	}
+
 	function getStorageObject() {
 
 		console.log("Getting storage object from localStorage");
