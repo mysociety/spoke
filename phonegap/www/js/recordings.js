@@ -66,7 +66,12 @@ SPOKE.recordingPage = (function ($, SPOKE) {
                 var gettingFilePath = SPOKE.files.getFullFilePath(SPOKE.currentRecording.src);
 
                 gettingFilePath.done(function (filePath) {
+
+                    // Update our in-memory list
                     SPOKE.recordings.push(filePath);
+
+                    // Save the speaker and filename in localStorage
+                    SPOKE.storage.addSpeakerToRecording(filePath, getCurrentSpeaker());
 
                     // Add the filename to the list in the app
                     addRecordingToList(SPOKE.currentRecording.src.split('/').pop());
@@ -138,7 +143,7 @@ SPOKE.recordingPage = (function ($, SPOKE) {
 
             // get the speaker for the recording
             // TODO - get this from localStorage or a local db
-            var speaker = $("#speaker").val();
+            var speaker = SPOKE.storage.getSpeakerForRecording(recording);
             console.log("Speaker is: " + speaker);
             params.speaker = speaker;
 
@@ -247,12 +252,13 @@ SPOKE.recordingPage = (function ($, SPOKE) {
 
     }
 
-    // Toggle the 'recording/stop recording' and timer controls
+    // Toggle the 'recording/stop recording', speaker and timer controls
     function toggleRecordingControls() {
 
         $('#record-button').toggle();
         $('#stop-button').toggle();
         $('#timer').toggle();
+        $('#speaker').prop('disabled', !$('#speaker').prop('disabled'));
 
     }
 
@@ -408,6 +414,10 @@ SPOKE.recordingPage = (function ($, SPOKE) {
         });
 
         return gettingSpeakers.promise();
+    }
+
+    function getCurrentSpeaker() {
+        return $("#speaker").val();
     }
 
     return my;
