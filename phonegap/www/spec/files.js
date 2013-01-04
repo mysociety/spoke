@@ -8,9 +8,11 @@ describe('Spoke.files', function () {
 		mockFilesDirectoryReader,
 		mockFilesDirectory,
 		mockFileSystem,
+		mockFileTransfer,
 		oldDate,
 		oldLocalFileSystem,
-		oldRequestFileSystem;
+		oldRequestFileSystem,
+		oldFileTransfer;
 
 	beforeEach(function () {		
 		var timestamp, filesEntries;
@@ -53,6 +55,19 @@ describe('Spoke.files', function () {
      	}
         window.requestFileSystem = helper.mockRequestFileSystem(true, mockFileSystem);
 
+        // Mock the FileTransfer method
+        if(window.hasOwnProperty('FileTransfer')) {
+        	oldFileTransfer = window.FileTransfer();
+        }
+        mockFileTransfer = helper.mockFileTransfer(true);
+        window.FileTransfer = function() { return mockFileTransfer; };
+
+        // Mock the FileUploadOptions method
+        if(window.hasOwnProperty('FileUploadOptions')) {
+        	oldFileUploadOptions = window.FileUploadOptions;
+        }
+        window.FileUploadOptions = helper.mockFileUploadOptions;
+
     });
 
 	afterEach(function() {
@@ -71,6 +86,13 @@ describe('Spoke.files', function () {
 		}
 		else {
 			delete window.requestFileSystem;
+		}
+
+		if(typeof oldFileTransfer !== 'undefined') {
+			window.FileTransfer = oldFileTransfer;
+		}
+		else {
+			delete window.FileTransfer;
 		}
 	});
 
@@ -162,7 +184,6 @@ describe('Spoke.files', function () {
 
     		// Reset the platform to Android as the default
     		window.device.platform = 'Android';
-    		
     		gettingPath.always(callback);
 
     	});
@@ -173,6 +194,40 @@ describe('Spoke.files', function () {
 
     	runs(function() {
     		expect(callback).toHaveBeenCalledWith("spoke/" + filename);
+    	});
+    });
+
+    it("Should upload a file with the supplied params", function () {
+    	var uploadingFile,
+    		callback = jasmine.createSpy(),
+    		params = {'speaker':'abcde'},
+    		expectedOptions = {
+    			fileKey : 'audio',
+    			fileName : mockFile.name, 
+    			chunkedMode : false, 
+    			mimeType : 'audio/3gpp', 
+    			params : params
+    		};
+
+    	runs(function () {
+    		spyOn(mockFileTransfer, 'upload').andCallThrough();
+
+    		uploadingFile = SPOKE.files.uploadFile(mockFile.fullPath, params);
+    		uploadingFile.always(callback);
+    	});
+
+    	waitsFor(function () {
+    		return callback.calls.length > 0
+    	}, "Uploading file's promise callback should be called", 250);
+
+    	runs(function() {
+    		expect(callback).toHaveBeenCalled();
+    		expect(mockFileTransfer.upload).toHaveBeenCalledWith(
+    			mockFile.fullPath, 
+    			SPOKE.apiUrl, 
+    			jasmine.any(Function), 
+    			jasmine.any(Function), 
+    			expectedOptions);
     	});
     });
 	
