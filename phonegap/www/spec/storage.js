@@ -3,12 +3,12 @@ describe('Spoke.storage', function() {
     beforeEach(function () {
         // Clean up localStorage
         window.localStorage.clear();
-    })
+    });
 
     afterEach(function () {
         // Clean up localStorage
         window.localStorage.clear();
-    })
+    });
     
     it("Should save a new speaker", function () {
 
