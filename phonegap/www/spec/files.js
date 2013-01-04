@@ -91,5 +91,89 @@ describe('Spoke.files', function () {
     		expect(callback).toHaveBeenCalledWith(mockFile);
     	});
     });
+
+    it("Should delete a file", function () {
+    	var deletingFile,
+    		successCallback = jasmine.createSpy(),
+    		alwaysCallback = jasmine.createSpy();
+
+    	runs(function () {
+    		spyOn(mockFile, 'remove').andCallThrough();
+
+    		deletingFile = SPOKE.files.deleteFile('/spoke/' + filename);
+    		deletingFile.done(successCallback);
+    		deletingFile.always(alwaysCallback);
+    	});
+
+    	waitsFor(function () {
+    		return alwaysCallback.calls.length > 0
+    	}, "Deleting file's promise callback should be called", 250);
+
+    	runs(function() {
+    		expect(successCallback).toHaveBeenCalled();
+    		expect(mockFile.remove).toHaveBeenCalled();
+    	});
+    });
+
+    it("Should get directory entries", function () {
+    	var gettingEntries,
+    		callback = jasmine.createSpy();
+
+    	runs(function () {
+    		gettingEntries = SPOKE.files.getDirectoryEntries('spoke');
+    		gettingEntries.always(callback);
+    	});
+
+    	waitsFor(function () {
+    		return callback.calls.length > 0
+    	}, "Getting file entries' promise callback should be called", 250);
+
+    	runs(function() {
+    		expect(callback).toHaveBeenCalledWith([mockFile]);
+    	});
+    });
+
+    it("Should get the full directory path when on Android", function () {
+    	var gettingPath,
+    		callback = jasmine.createSpy();
+
+    	runs(function () {
+    		window.device.platform = 'Android';
+    		gettingPath = SPOKE.files.getFullFilePath("spoke/" + filename);
+    		gettingPath.always(callback);
+    	});
+
+    	waitsFor(function () {
+    		return callback.calls.length > 0
+    	}, "Getting full file path's promise callback should be called", 250);
+
+    	runs(function() {
+    		expect(callback).toHaveBeenCalledWith("//spoke/" + filename);
+    	});
+    });
+
+    it("Should get the relative directory path when on iOS", function () {
+    	var gettingPath,
+    		callback = jasmine.createSpy();
+
+    	runs(function () {
+    		window.device.platform = 'iPhone';
+    		gettingPath = SPOKE.files.getFullFilePath("spoke/" + filename);
+
+    		// Reset the platform to Android as the default
+    		window.device.platform = 'Android';
+    		
+    		gettingPath.always(callback);
+
+    	});
+
+    	waitsFor(function () {
+    		return callback.calls.length > 0
+    	}, "Getting full file path's promise callback should be called", 250);
+
+    	runs(function() {
+    		expect(callback).toHaveBeenCalledWith("spoke/" + filename);
+    	});
+    });
 	
 });
