@@ -41,7 +41,7 @@ var helper = {
             isDirectory: false,
             name: name,
             fullPath: fullPath,
-            remove: function(path, options, onSuccess, onError) {
+            remove: function(onSuccess, onError) {
                 onSuccess();
             }
         }
@@ -55,8 +55,6 @@ var helper = {
             name: name,
             fullPath: fullPath,
             getFile: function(path, options, onSuccess, onError) {
-                console.log(entries);
-                console.log(path);
                 if(entries.hasOwnProperty(path)) {
                     onSuccess(entries[path]);
                 }
