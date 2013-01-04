@@ -105,6 +105,24 @@ var helper = {
                 onFail(error);
             }
         };
+    },
+
+    // Function to create a mock FileTransfer object
+    mockFileTransfer: function(shouldSucceed) {
+        return {
+            upload: function(path, url, onSuccess, onError, options) {
+                if(shouldSucceed) {
+                    onSuccess({});
+                }
+                else {
+                    onError({code:1});
+                }
+            }
+        }
+    },
+
+    mockFileUploadOptions: function() {
+        return {};
     }
 
 };
