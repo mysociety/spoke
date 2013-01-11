@@ -33,14 +33,17 @@
             <ul data-role="listview" data-inset="true" id="recorded-speeches">
                 <% if (_.isEmpty(recordings)) { %>
                     <li>There are no recordings yet</li>
+                <% } else { %>
+                    <% _.each(recordings, function(recording) { %>
+                        <li><%= recording.name %></li>
+                    <% }); %>
                 <% } %>
-                <% _.each(recordings, function(recording) { %>
-                    <li><%= speech.name %></li>
-                <% }); %>
             </ul>
-            <p>
-                <a href="#" id="upload-button" data-role="button" data-icon="check" style="display:none">Upload</a>
-            </p>
+            <% if (!_.isEmpty(recordings)) { %>
+                <p>
+                    <a href="#" id="upload-button" data-role="button" data-icon="check">Upload</a>
+                </p>
+            <% } %>
 
         </script>
 
