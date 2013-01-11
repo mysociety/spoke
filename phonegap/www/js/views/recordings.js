@@ -15,9 +15,7 @@
             render: function () {
                 console.log('Recordings list rendering');
 
-                this.$el.html(this.template({recordings: {}}));
-
-                console.log(this.$el);
+                this.$el.html(this.template({recordings: {}));
 
                 return this;
             },
