@@ -22,15 +22,14 @@
                         id: "home-page",
                         attributes: {
                             "data-role": "page"
-                        }
+                        },
+                        collection: SPOKE.recordings
                     })
                 );
             },
 
             changePage:function (view) {
                 view.render();
-                // Force jQuery Mobile to do it's stuff to the template html
-                view.$el.trigger("pagecreate");
                 $("body").append($(view.el));
                 // Tell jQuery Mobile what just happened
                 $.mobile.changePage(

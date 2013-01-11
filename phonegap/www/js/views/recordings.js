@@ -9,13 +9,15 @@
 
             initialize: function (options) {
                 console.log('Recordings list initialising');
-                // TODO - give it a collection of recordings!
+                this.listenTo(this.collection, "all", this.render);
             },
 
             render: function () {
                 console.log('Recordings list rendering');
 
-                this.$el.html(this.template({recordings: {}));
+                console.log(this.collection);
+
+                this.$el.html(this.template({recordings: this.collection}));
 
                 return this;
             },

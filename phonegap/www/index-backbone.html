@@ -31,15 +31,15 @@
         <script type="text/template" id="recordings-template">
             <h2>Recordings</h2>
             <ul data-role="listview" data-inset="true" id="recorded-speeches">
-                <% if (_.isEmpty(recordings)) { %>
+                <% if (recordings.isEmpty()) { %>
                     <li>There are no recordings yet</li>
                 <% } else { %>
-                    <% _.each(recordings, function(recording) { %>
-                        <li><%= recording.name %></li>
+                    <% recordings.each(function(recording) { %>
+                        <li><%= recording.get("name") %></li>
                     <% }); %>
                 <% } %>
             </ul>
-            <% if (!_.isEmpty(recordings)) { %>
+            <% if (!recordings.isEmpty()) { %>
                 <p>
                     <a href="#" id="upload-button" data-role="button" data-icon="check">Upload</a>
                 </p>
@@ -66,6 +66,18 @@
         <script src="js/jqm-config.js"></script>   
 
         <!-- The App -->
+
+        <!-- Config -->
+        <script src="js/config.js"></script>
+
+        <!-- Null sync -->
+        <script src="js/null-sync.js"></script>
+
+        <!-- Models -->
+        <script src="js/models/recording.js"></script>
+
+        <!-- Collections -->
+        <script src="js/collections/recordings.js"></script>
 
         <!-- Views -->
         <script src="js/views/home.js"></script>
