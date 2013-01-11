@@ -10,7 +10,8 @@
             initialize: function (options) {
                 console.log('Home page initialising');
 
-                //this.listenTo(this.model, "change", this.render);
+                this.listenTo(this.collection, "all", this.render);
+
                 // Phonegap's resume event for when the app is resumed
                 this.listenTo($(document), "resume", this.render);
             },
@@ -24,9 +25,13 @@
 
                 // Create a child recordings view that shows up in
                 // the #recordings div of our template
-                recordingsView = new SPOKE.RecordingsView({el: this.$el.find("#recordings")});
+                recordingsView = new SPOKE.RecordingsView({
+                    el: this.$el.find("#recordings"),
+                    collection: this.collection
+                });
                 recordingsView.render();
-
+                // Force jQuery Mobile to do it's stuff to the template html
+                this.$el.trigger("pagecreate");
                 return this;
             },
 
