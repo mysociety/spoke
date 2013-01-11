@@ -11,7 +11,7 @@
         <!-- Templates -->
 
         <!-- Home Page -->
-        <script type="text/template" id="home">
+        <script type="text/template" id="home-template">
 
             <div data-role="header">
                 <h1>Spoke</h1>
@@ -22,7 +22,25 @@
                 <p>
                     <a href="#" id="record-button" data-role="button" data-icon="plus">Record</a>
                 </p>
+                <div id="recordings"></div>
             </div>
+
+        </script>
+
+        <!-- Recordings list -->
+        <script type="text/template" id="recordings-template">
+            <h2>Recordings</h2>
+            <ul data-role="listview" data-inset="true" id="recorded-speeches">
+                <% if (_.isEmpty(recordings)) { %>
+                    <li>There are no recordings yet</li>
+                <% } %>
+                <% _.each(recordings, function(recording) { %>
+                    <li><%= speech.name %></li>
+                <% }); %>
+            </ul>
+            <p>
+                <a href="#" id="upload-button" data-role="button" data-icon="check" style="display:none">Upload</a>
+            </p>
 
         </script>
 
@@ -62,3 +80,4 @@
     </head>
     <body></body>
 </html>
+    
