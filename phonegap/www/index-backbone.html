@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <link rel="stylesheet" href="css/jquery.mobile-1.2.0/jquery.mobile-1.2.0.min.css" />
+        <link rel="stylesheet" href="css/spoke.css" />
+        <title>Spoke</title>
+
+        <!-- Templates -->
+
+        <!-- Home Page -->
+        <script type="text/template" id="home">
+
+            <div data-role="header">
+                <h1>Spoke</h1>
+            </div>
+
+            <div data-role="content">
+                <h2>Record a speech</h2>
+                <p>
+                    <a href="#" id="record-button" data-role="button" data-icon="plus">Record</a>
+                </p>
+            </div>
+
+        </script>
+
+        <!-- Scripts -->
+
+        <!-- Global namespaced object which all of our custom functions will go into -->
+        <script type="text/javascript">
+            window.SPOKE = window.SPOKE || {};
+        </script>
+
+        <!-- Libraries -->
+        <script src="js/lib/jquery-1.8.3.js"></script>
+        <script src="js/lib/underscore-1.4.3.js"></script>
+        <script src="js/lib/backbone-0.9.9.js"></script>        
+
+        <!-- This file chooses which platform's version of Cordova to load (iOS or Android) -->
+        <script src="cordova-2.2.0-independent.js"></script>
+
+        <!-- Config for jQuery Mobile -->
+        <script src="js/jqm-config.js"></script>   
+
+        <!-- The App -->
+
+        <!-- Views -->
+        <script src="js/views/home.js"></script>
+        <script src="js/views/recordings.js"></script>
+
+        <!-- Router -->
+        <script src="js/router/router.js"></script>
+
+        <!-- Main app entry point -->
+        <script src="js/app.js"></script>
+
+        <!-- jQuery Mobile goes after config so that everything is setup when it loads -->
+        <script src="js/lib/jquery.mobile-1.2.0.js"></script>
+
+    </head>
+    <body></body>
+</html>
