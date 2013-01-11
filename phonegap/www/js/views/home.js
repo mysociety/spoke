@@ -5,7 +5,7 @@
     _.extend(SPOKE, {
         HomeView: Backbone.View.extend({
 
-            template: _.template($("#home").html()),
+            template: _.template($("#home-template").html()),
 
             initialize: function (options) {
                 console.log('Home page initialising');
@@ -16,11 +16,16 @@
             },
 
             render: function () {
+                var recordingsView;
+
                 console.log('Home page rendering');
 
                 this.$el.html(this.template());
-                // Force jQuery Mobile to do it's stuff to the template html
-                this.$el.trigger("pagecreate");
+
+                // Create a child recordings view that shows up in
+                // the #recordings div of our template
+                recordingsView = new SPOKE.RecordingsView({el: this.$el.find("#recordings")});
+                recordingsView.render();
 
                 return this;
             },
