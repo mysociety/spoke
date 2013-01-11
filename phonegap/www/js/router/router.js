@@ -6,27 +6,29 @@
 * function to actually do the changing, so that jQM understands 
 * what Backbone is playing at.
 */
-;(function(SPOKE, Backbone, _, $) {
+;(function (SPOKE, Backbone, _, $) {
     _.extend(SPOKE, {
         AppRouter: Backbone.Router.extend({
 
             currentView: null,
 
             routes:{
-                "":"recording",
+                "": "home"
             },
 
-            recording: function () {
-                this.changePage(new SPOKE.RecordingView({collection: SPOKE.Recordings}), "recording");
+            home: function () {
+                this.changePage(new SPOKE.HomeView({
+                        tagName: 'div',
+                        id: "home-page",
+                        attributes: {
+                            "data-role": "page"
+                        }
+                    })
+                );
             },
 
-            changePage:function (view, id) {
-                // Find the view's html
-                $(view.el).attr("data-role", "page");
-                $(view.el).attr("id", id);
-                // Render the view
+            changePage:function (view) {
                 view.render();
-                // Put it into the page
                 $("body").append($(view.el));
                 // Tell jQuery Mobile what just happened
                 $.mobile.changePage(
@@ -36,7 +38,6 @@
                         transition: $.mobile.defaultPageTransition
                     }
                 );
-
                 // Remove the old view
                 if(!_.isNull(this.currentView)) {
                     this.currentView.remove();
