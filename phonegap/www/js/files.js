@@ -167,7 +167,7 @@ SPOKE.files = ( function($, SPOKE) {
     // Wrap the async Phonegap way of getting a directory in a promise
     function getDirectory (rootDirectory, path, options) {
     	
-    	console.log('Getting a directory');
+    	console.log('Getting a directory: ' + path);
     	
         var directory = $.Deferred();
 
