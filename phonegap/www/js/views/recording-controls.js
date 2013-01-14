@@ -11,7 +11,7 @@
                 console.log('Recording controls page initialising');
                 this.listenTo(this.collection, "all", this.render);
                 this.listenTo(SPOKE, "startRecording", this.toggleControls);
-                this.listenTo(SPOKE, "stopRecording", this.toggleControls);
+                this.listenTo(SPOKE, "stopRecording", this.render);
                 _.bindAll(this);
             },
 
@@ -54,6 +54,10 @@
                 e.preventDefault();
 
                 console.log("Record function");
+
+                // Unbind other vclick events, because jquery.one() will bind
+                // events once for _each_ element it matched
+                this.$el.find("a.speaker").unbind("vclick", this.record);
 
             	// We only want to record if we're not already, this
 		        // could happen with dodgy click/tap/vlick handling or
