@@ -13,7 +13,8 @@
             currentView: null,
 
             routes:{
-                "": "home"
+                "": "home",
+                "recording": "recording"                
             },
 
             home: function () {
@@ -26,6 +27,18 @@
                         collection: SPOKE.recordings
                     })
                 );
+            },
+
+            recording: function () {
+                this.changePage(new SPOKE.RecordingControlsView({
+                        tagName: 'div',
+                        id: "recording-page",
+                        attributes: {
+                            "data-role": "page"
+                        },
+                        collection: SPOKE.speakers
+                    })
+                );  
             },
 
             changePage:function (view) {
