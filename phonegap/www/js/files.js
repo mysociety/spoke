@@ -20,7 +20,7 @@
                         
                         console.log('Filesystem returned: ' + filesystem);
                         
-                        return getDirectory(filesystem.root, SPOKE.audioDirectory, {create: true});
+                        return getDirectory(filesystem.root, SPOKE.config.filesDirectory, {create: true});
                     })
                     .pipe( function (directory) {
                         
@@ -29,7 +29,7 @@
                         // Create a new file, the path is relative to the directory we just got
                         // Use a timestamp to the nearest millisecond as a unique name
                         var timestamp = new Date().getTime();
-                        path = 'recording_' + timestamp + SPOKE.audioFilenameExtension;
+                        path = 'recording_' + timestamp + SPOKE.config.audioFilenameExtension;
                         return getFile(directory, path, {create: true, exclusive: true});
                     });
             },
@@ -44,7 +44,7 @@
 
                 return getFileSystem()
                     .pipe(function (filesystem) {
-                        return getDirectory(filesystem.root, SPOKE.audioDirectory);
+                        return getDirectory(filesystem.root, SPOKE.config.filesDirectory);
                     })
                     .pipe(function (directory) {
                         return getFile(directory, filename, {});
@@ -86,7 +86,7 @@
                 }
 
                 transfer = new FileTransfer();
-                transfer.upload(path, SPOKE.apiUrl, uploadingFile.resolve, uploadingFile.reject, options);
+                transfer.upload(path, SPOKE.config.apiUrl, uploadingFile.resolve, uploadingFile.reject, options);
 
                 return uploadingFile;
             },
