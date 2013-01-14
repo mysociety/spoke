@@ -6,7 +6,7 @@
 	_.extend(SPOKE, {
 		RecordingsCollection: Backbone.Collection.extend({
 			model: SPOKE.Recording,
-			url: SPOKE.apiUrl
+			localStorage: new Backbone.LocalStorage("Recordings")
 		})
 	});
 
