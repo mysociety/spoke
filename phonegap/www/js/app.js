@@ -32,12 +32,14 @@
         _.extend(SPOKE, {
             router: new SPOKE.AppRouter(),
             recordings: new SPOKE.RecordingsCollection(),
+            speakers: new SPOKE.SpeakersCollection()
         });
         
         // Bind events for the whole app
         
         // App resume events
         $(document).on('resume', function() {
+            SPOKE.speakers.fetch();
             SPOKE.recordings.fetch();
         });
 
@@ -72,6 +74,7 @@
         });
 
         // Fetch initial data
+        SPOKE.speakers.fetch();
         SPOKE.recordings.fetch();
         
         // Start routing
