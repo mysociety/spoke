@@ -34,6 +34,13 @@
             recordings: new SPOKE.RecordingsCollection(),
             speakers: new SPOKE.SpeakersCollection()
         });
+
+        // Extend SPOKE with Backbone event handling, so we can register
+        // app-wide events
+        _.extend(SPOKE, Backbone.Events);
+
+        // Work out while filename extension to use
+        SPOKE.config.audioFilenameExtension = (device.platform.match(/(iPhone|iPod|iPad)/)) ? '.wav' : '.3gp';
         
         // Bind events for the whole app
         
