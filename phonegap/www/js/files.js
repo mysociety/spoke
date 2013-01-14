@@ -112,7 +112,7 @@
                         
                         return gettingEntries.promise();
                     });
-            }
+            },
 
             // Work around the fact that Android returns different paths than iOS
             // sometimes
