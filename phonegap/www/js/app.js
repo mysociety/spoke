@@ -9,7 +9,7 @@
 
     // Phonegap is ready
     document.addEventListener('deviceready', pgReady.resolve, false);
-
+    
     // jQuery Mobile is ready
     $(document).on('mobileinit', jqmReady.resolve);
 
@@ -22,14 +22,40 @@
 
         // Everything is ready now
     	console.log('Initialising the SPOKE app');
-
-        console.log('Device platform is: ' + device.platform);
-
+        // Initialise the app object
         _.extend(SPOKE, {
-            app: new SPOKE.AppRouter()
+            router: new SPOKE.AppRouter(),
+            recordings: new SPOKE.RecordingsCollection(),
         });
-
+        // Fetch initial data
+        SPOKE.recordings.fetch();
+        // Start routing
         Backbone.history.start();
+        // Bind events for the whole app
+        // App resume events
+        $(document).on('resume', function() {
+            SPOKE.recordings.fetch();
+        });
+        // Reset events on the recordings collection
+        SPOKE.recordings.on('reset', function(models, options) {
+            // Get a list of the current files
+            var gettingFiles = SPOKE.files.getDirectoryEntries(SPOKE.config.filesDirectory);
+            gettingFiles.done(function (files) {
+                // Go over the models and find the real file, deleting the model
+                // if it's not there, ie: it's been deleted outside the app
+                SPOKE.recordings.each(function (recording) {
+                    var fileExists = false;
+                    _.each(files, function(file) {
+                        if(file.name === recording.name) {
+                            fileExists = true;
+                        }
+                    });
+                    if(!fileExists) {
+                        recording.destroy();
+                    }
+                });
+            });
+        });
         
     });
 
