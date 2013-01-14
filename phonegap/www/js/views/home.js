@@ -26,15 +26,6 @@
                 // Force jQuery Mobile to do it's stuff to the template html
                 this.$el.trigger("pagecreate");
                 return this;
-            },
-
-            events: {
-                "vclick #record-button": "recordButton"
-            },
-
-            recordButton: function (e) {
-                e.preventDefault();
-                console.log('Recording Audio');
             }
         }) 
     });
