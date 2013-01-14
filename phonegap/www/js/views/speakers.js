@@ -20,6 +20,15 @@
                 this.$el.html(this.template({speakers: this.collection}));
 
                 return this;
+            },
+
+            events: {
+                "vclick a.speaker": "speakerChange"
+            },
+
+            speakerChange: function(e) {
+                console.log("Speaker clicked");
+                e.preventDefault();
             }
         }) 
     });
