@@ -10,6 +10,7 @@
             initialize: function (options) {
                 console.log('Recordings list initialising');
                 this.listenTo(this.collection, "all", this.render);
+                _.bindAll(this);
             },
 
             render: function () {
@@ -28,8 +29,71 @@
 
             uploadButton: function (e) {
                 e.preventDefault();
-                
-                console.log('Uploading Audio');
+
+                var uploadingPromises = new Array(), 
+                    modelsToDelete = new Array();
+
+                console.log('Upload button clicked');
+
+                console.log('Trying to upload the recordings in: ' + this.collection.toJSON());
+
+                // Do the uploading
+                this.collection.each(function(recording) {
+
+                    console.log('Uploading file: ' + recording.toJSON());
+
+                    params = {};
+                    if(typeof recording.get('speaker') !== "undefined") {
+                        params.speaker = recording.get('speaker');
+                    }
+
+                    // uploadingFiles is, you guessed it, a Promise
+                    var uploadingFile = SPOKE.files.uploadFile(recording.get('path'), params);
+
+                    uploadingPromises.push(uploadingFile);
+
+                    uploadingFile.done(function (result) {
+
+                        // result.response contains the server response if we want
+                        // to do anything with it
+                        console.log('File: ' + recording.toJSON() + ' successfully uploaded.');
+                        
+                        // Delete the file from local disk
+                        // Another async process, so another Promise
+                        deletingFile = SPOKE.files.deleteFile(recording.get('path'));
+                        
+                        deletingFile.done(function () {
+                            console.log('File removed successfully');
+                            modelsToDelete.push(recording);
+                        });
+
+                        deletingFile.fail(function (error) {
+                            var message = 'An error occured deleting the file: ' + recording.toJSON() + ' error was: ' + error.code;
+                            console.log(message);
+                            navigator.notification.alert(message);
+                        });
+
+                    });
+
+                    uploadingFile.fail(function (error) {
+                        var message = 'Failed to upload the file: ' + recording + ' error code was: ' + error.code;
+                        console.log(message);
+                        navigator.notification.alert(message);
+                    });
+
+                });    
+
+                // When all the promises have completed in some way or another
+                $.when.apply(null, uploadingPromises)
+                    .done(function () {
+                        navigator.notification.alert('All files uploaded');
+                    })
+                    .always(function() {
+                        // Destroy all the models we uploaded
+                        _.each(modelsToDelete, function(model) {
+                            model.destroy();
+                        });
+                    });
             }
         }) 
     });
