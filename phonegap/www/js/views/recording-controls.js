@@ -29,7 +29,13 @@
             },
 
             events: {
+            	"vclick #start-button": "startButton",
                 "vclick #stop-button": "stopButton"
+            },
+
+            startButton: function (e) {
+            	e.preventDefault();
+            	console.log('Starting recording audio');
             },
 
             stopButton: function (e) {
