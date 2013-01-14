@@ -7,57 +7,138 @@
         <link rel="stylesheet" href="css/jquery.mobile-1.2.0/jquery.mobile-1.2.0.min.css" />
         <link rel="stylesheet" href="css/spoke.css" />
         <title>Spoke</title>
-    </head>
-    <body>
-        <div id="record-page" data-role="page">
+
+        <!-- Templates -->
+
+        <!-- Home Page -->
+        <script type="text/template" id="home-template">
+
             <div data-role="header">
                 <h1>Spoke</h1>
             </div>
 
             <div data-role="content">
-                <h2>Choose a speaker</h2>
                 <p>
-                    <label for="speaker" class="select ui-hidden-accessible">Speaker: </label>
-                    <select name="speaker" id="speaker">
-                        <!-- Options put in by JS from a popit instance -->
-                    </select>
+                    <a href="#recording" id="record-button" data-role="button" data-icon="plus">Record a new speech</a>
                 </p>
-                <h2>Record a speech</h2>
+                <div id="recordings"></div>
+            </div>
+
+        </script>
+
+        <!-- Recordings list -->
+        <script type="text/template" id="recordings-template">
+            <h2>Recordings</h2>
+            <ul data-role="listview" data-inset="true" id="recorded-speeches">
+                <% if (recordings.isEmpty()) { %>
+                    <li>There are no recordings yet</li>
+                <% } else { %>
+                    <% recordings.each(function(recording) { %>
+                        <li><%= recording.get("name") %></li>
+                    <% }); %>
+                <% } %>
+            </ul>
+            <% if (!recordings.isEmpty()) { %>
                 <p>
-                    <a href="#" id="record-button" data-role="button" data-icon="plus">Record</a>
-                    <h3 id="timer" style="display:none">
-                        <span id="hours">00</span>:<span id="minutes">00</span>:<span id="seconds">00</span>
-                    </h3>
+                    <a href="#" id="upload-button" data-role="button" data-icon="check">Upload</a>
+                </p>
+            <% } %>
+
+        </script>
+
+        <!-- Recording Controls Page -->
+        <script type="text/template" id="recording-controls-template">
+
+            <div data-role="header">
+                <a href="#" data-icon="home">Home</a>
+                <h1>Recording</h1>
+            </div>
+
+            <div data-role="content">
+                <h2>Select a speaker to start recording</h2>
+                <div id="speakers"></div>
+                <p>
+                    <div id="timer" style="display:none"></div>
                     <a href="#" id="stop-button" data-role="button" data-icon="delete" style="display:none">Stop</a>
-                </p>
-                <h2>Speeches</h2>
-                <ul data-role="listview" data-inset="true" id="recorded-speeches"></ul>
-                <p>
-                    <a href="#" id="upload-button" data-role="button" data-icon="check" style="display:none">Upload</a>
                 </p>
             </div>
 
-        </div>
+        </script>
 
-        <div id="loading-popup" style="display:none">
-            <div id="loading-popup-message"></div>
-        </div>
+        <!-- Speakers list -->
+        <script type="text/template" id="speakers-template">
+
+            <ul data-role="listview" data-inset="true" id="speakers-list">
+                <% if (speakers.isEmpty()) { %>
+                    <li>There are no speakers yet</li>
+                <% } else { %>
+                    <% speakers.each(function(speaker) { %>
+                        <li><a href="#" class="speaker" data-api-url="<%= speaker.get("api_url") %>"><%= speaker.get("name") %></a></li>
+                    <% }); %>
+                <% } %>
+            </ul>
+
+        </script>
+
+        <!-- Timer -->
+        <script type="text/template" id="timer-template">
+            <h3 id="timer-text">
+                <span id="hours">00</span>:<span id="minutes">00</span>:<span id="seconds">00</span>
+            </h3>
+        </script>
 
         <!-- Scripts -->
-        <script type="text/javascript" src="js/lib/jquery-1.8.3.js"></script>
+
+        <!-- Global namespaced object which all of our custom functions will go into -->
+        <script type="text/javascript">
+            window.SPOKE = window.SPOKE || {};
+        </script>
+
+        <!-- Libraries -->
+        <script src="js/lib/jquery-1.8.3.js"></script>
+        <script src="js/lib/underscore-1.4.3.js"></script>
+        <script src="js/lib/backbone-0.9.9.js"></script>   
+        <script src="js/lib/backbone.localStorage-1.0.js"></script>     
 
         <!-- This file chooses which platform's version of Cordova to load (iOS or Android) -->
-        <script type="text/javascript" src="cordova-2.2.0-independent.js"></script>
+        <script src="cordova-2.2.0-independent.js"></script>
 
-        <!-- Custom Javascript -->
-        <script type="text/javascript" src="js/jqm-config.js"></script>   
-        <script type="text/javascript" src="js/spoke.js"></script>
-        <script type="text/javascript" src="js/config.js"></script>
-        <script type="text/javascript" src="js/files.js"></script>
-        <script type="text/javascript" src="js/storage.js"></script>
-        <script type="text/javascript" src="js/recordings.js"></script>
+        <!-- Config for jQuery Mobile -->
+        <script src="js/jqm-config.js"></script>   
 
-        <script type="text/javascript" src="js/lib/jquery.mobile-1.2.0.min.js"></script>
+        <!-- The App -->
 
-    </body>
+        <!-- Config -->
+        <script src="js/config.js"></script>
+
+        <!-- Files Helper -->
+        <script src="js/files.js"></script>
+
+        <!-- Models -->
+        <script src="js/models/recording.js"></script>
+        <script src="js/models/speaker.js"></script>
+
+        <!-- Collections -->
+        <script src="js/collections/recordings.js"></script>
+        <script src="js/collections/speakers.js"></script>
+
+        <!-- Views -->
+        <script src="js/views/home.js"></script>
+        <script src="js/views/recordings.js"></script>
+        <script src="js/views/recording-controls.js"></script>
+        <script src="js/views/speakers.js"></script>
+        <script src="js/views/timer.js"></script>
+
+        <!-- Router -->
+        <script src="js/router/router.js"></script>
+
+        <!-- Main app entry point -->
+        <script src="js/app.js"></script>
+
+        <!-- jQuery Mobile goes after config so that everything is setup when it loads -->
+        <script src="js/lib/jquery.mobile-1.2.0.js"></script>
+
+    </head>
+    <body></body>
 </html>
+    
