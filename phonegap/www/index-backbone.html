@@ -20,7 +20,7 @@
             <div data-role="content">
                 <h2>Record a speech</h2>
                 <p>
-                    <a href="#" id="record-button" data-role="button" data-icon="plus">Record</a>
+                    <a href="#recording" id="record-button" data-role="button" data-icon="plus">Record</a>
                 </p>
                 <div id="recordings"></div>
             </div>
@@ -44,6 +44,43 @@
                     <a href="#" id="upload-button" data-role="button" data-icon="check">Upload</a>
                 </p>
             <% } %>
+
+        </script>
+
+        <!-- Recording Controls Page -->
+        <script type="text/template" id="recording-controls-template">
+
+            <div data-role="header">
+                <h1>Recording</h1>
+            </div>
+
+            <div data-role="content">
+                <h2>Recording</h2>
+                <p>
+                    <a href="#" id="record-button" data-role="button" data-icon="plus">Start recording</a>
+                    <h3 id="timer" style="display:none">
+                        <span id="hours">00</span>:<span id="minutes">00</span>:<span id="seconds">00</span>
+                    </h3>
+                    <a href="#" id="stop-button" data-role="button" data-icon="delete" style="display:none">Stop</a>
+                </p>
+                <div id="speaker"></div>
+            </div>
+
+        </script>
+
+        <!-- Speakers list -->
+        <script type="text/template" id="speakers-template">
+
+            <h2>Speakers</h2>
+            <ul data-role="listview" data-inset="true" id="speakers-list">
+                <% if (!speakers.isEmpty()) { %>
+                    <li>There are no speakers yet</li>
+                <% } else { %>
+                    <% speakers.each(function(speaker) { %>
+                        <li><%= speaker.get("name") %></li>
+                    <% }); %>
+                <% } %>
+            </ul>
 
         </script>
 
@@ -76,13 +113,17 @@
 
         <!-- Models -->
         <script src="js/models/recording.js"></script>
+        <script src="js/models/speaker.js"></script>
 
         <!-- Collections -->
         <script src="js/collections/recordings.js"></script>
+        <script src="js/collections/speakers.js"></script>
 
         <!-- Views -->
         <script src="js/views/home.js"></script>
         <script src="js/views/recordings.js"></script>
+        <script src="js/views/recording-controls.js"></script>
+        <script src="js/views/speakers.js"></script>
 
         <!-- Router -->
         <script src="js/router/router.js"></script>
