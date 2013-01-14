@@ -9,20 +9,13 @@
 
             initialize: function (options) {
                 console.log('Home page initialising');
-
                 this.listenTo(this.collection, "all", this.render);
-
-                // Phonegap's resume event for when the app is resumed
-                this.listenTo($(document), "resume", this.render);
             },
 
             render: function () {
                 var recordingsView;
-
                 console.log('Home page rendering');
-
                 this.$el.html(this.template());
-
                 // Create a child recordings view that shows up in
                 // the #recordings div of our template
                 recordingsView = new SPOKE.RecordingsView({
@@ -41,7 +34,6 @@
 
             recordButton: function (e) {
                 e.preventDefault();
-                
                 console.log('Recording Audio');
             }
         }) 
