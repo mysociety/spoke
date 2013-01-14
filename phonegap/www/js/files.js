@@ -3,149 +3,151 @@
  * Mainly wrappers around their async functions to return Promises
  */ 
 
-SPOKE.files = ( function($, SPOKE) {
-
-    var my = {};
-
-	// Create a new file to put our recording's into. This requires
-    // calling several async api functions, so we use .pipe() to 
-    // connect them all up, and return the resulting promise object
-    my.createFile = function () {
-    	
-    	console.log('Creating a file');
-    	
-        // Chain a bunch of promises together to return one thing
-        // which encapsulates all the async calls
-        return getFileSystem()
-            .pipe( function (filesystem) {
-            	
-            	console.log('Filesystem returned: ' + filesystem);
-            	
-                return getDirectory(filesystem.root, SPOKE.audioDirectory, {create: true});
-            })
-            .pipe( function (directory) {
-            	
-            	console.log('Directory returned: ' + directory.fullPath);
-
-            	// Create a new file, the path is relative to the directory we just got
-                // Use a timestamp to the nearest millisecond as a unique name
-                var timestamp = new Date().getTime();
-                path = 'recording_' + timestamp + SPOKE.audioFilenameExtension;
-                return getFile(directory, path, {create: true, exclusive: true});
-            });
-    }
-
-    // Delete a file from the filesystem
-    my.deleteFile = function (path) {
-
-        console.log('Deleting file: ' + path);
-
-        // Turn path into a filename
-        var filename = path.split('/').pop();
-
-        return getFileSystem()
-            .pipe(function (filesystem) {
-                return getDirectory(filesystem.root, SPOKE.audioDirectory);
-            })
-            .pipe(function (directory) {
-                return getFile(directory, filename, {});
-            })
-            .pipe(function (file) {
-                var deletingFile = $.Deferred();
-                file.remove(deletingFile.resolve, deletingFile.reject);
-                return deletingFile;
-            });
-
-    }
-
-    // Upload a file to the Spoke server
-    my.uploadFile = function (path, params) {
-
-        console.log('Uploading file: ' + path);
-
-        var uploadingFile = $.Deferred(),
-            options = new FileUploadOptions(),
-            transfer;
-        
-        options.fileKey = 'audio'; // Form element name that'll be given to the server
-        options.fileName = path.split('/').pop(); // Filename on server, I think the server should decide this
-        options.chunkedMode = false;
-        try {
-           options.mimeType = getMimeType(path);
-        }
-        catch(error) {
-            // Something went wrong getting the mime type, so just return
-            // a broken promise immediately
-            uploadingFile.reject(error);
-            return uploadingFile;
-        }
-
-        // Other data to send (object of Key/Value pairs)
-        if(params) { 
-            console.log("Sending params: " + params);
-            options.params = params;
-        }
-
-        transfer = new FileTransfer();
-        transfer.upload(path, SPOKE.apiUrl, uploadingFile.resolve, uploadingFile.reject, options);
-
-        return uploadingFile;
-    }
-
-    // Get a list of files in a directory and return a promise which
-    // wraps the appropriate asynchronous phonegap api call
-    my.getDirectoryEntries = function (dirName) {
-
-        console.log('Getting directory entries for directory: ' + dirName);
-
-        // Get the list of recordings currently on the device, we
-        // need to make several async calls to do this, so we use
-        // .pipe() to connect them up and return the resulting promise
-        return getFileSystem()
-            .pipe(function (filesystem) {
-                return getDirectory(filesystem.root, dirName);
-            })
-            .pipe(function (directory) {
-                var directoryReader = directory.createReader();
-                var gettingEntries = $.Deferred();
-
-                directoryReader.readEntries(gettingEntries.resolve, gettingEntries.reject);
+ (function(SPOKE, Backbone, _, $) {
+    _.extend(SPOKE, {
+        files: {
+            // Create a new file to put our recording's into. This requires
+            // calling several async api functions, so we use .pipe() to 
+            // connect them all up, and return the resulting promise object
+            createFile: function () {
                 
-                return gettingEntries.promise();
-            });
-    }
+                console.log('Creating a file');
+                
+                // Chain a bunch of promises together to return one thing
+                // which encapsulates all the async calls
+                return getFileSystem()
+                    .pipe( function (filesystem) {
+                        
+                        console.log('Filesystem returned: ' + filesystem);
+                        
+                        return getDirectory(filesystem.root, SPOKE.audioDirectory, {create: true});
+                    })
+                    .pipe( function (directory) {
+                        
+                        console.log('Directory returned: ' + directory.fullPath);
 
-    // Work around the fact that Android returns different paths than iOS
-    // sometimes
-    my.getFullFilePath = function (path) {
+                        // Create a new file, the path is relative to the directory we just got
+                        // Use a timestamp to the nearest millisecond as a unique name
+                        var timestamp = new Date().getTime();
+                        path = 'recording_' + timestamp + SPOKE.audioFilenameExtension;
+                        return getFile(directory, path, {create: true, exclusive: true});
+                    });
+            },
 
-        console.log('Getting full path for file at: ' + path);
+            // Delete a file from the filesystem
+            deleteFile: function (path) {
 
-        var gettingFilesystem,
-            gettingFullFilePath = $.Deferred();
+                console.log('Deleting file: ' + path);
 
-        if (device.platform.match(/Android/)) {
+                // Turn path into a filename
+                var filename = path.split('/').pop();
 
-            console.log('Platform detected as Android, so getting root filesystem');
+                return getFileSystem()
+                    .pipe(function (filesystem) {
+                        return getDirectory(filesystem.root, SPOKE.audioDirectory);
+                    })
+                    .pipe(function (directory) {
+                        return getFile(directory, filename, {});
+                    })
+                    .pipe(function (file) {
+                        var deletingFile = $.Deferred();
+                        file.remove(deletingFile.resolve, deletingFile.reject);
+                        return deletingFile;
+                    });
 
-            // Resolve when we have the root filesystem folder
-            gettingFilesystem = getFileSystem();
-            gettingFilesystem.done(function (filesystem) {
+            },
 
-                console.log('Returning full filepath: ' + filesystem.root.fullPath + '/' + path);
+            // Upload a file to the Spoke server
+            uploadFile: function (path, params) {
 
-                gettingFullFilePath.resolve(filesystem.root.fullPath + '/' + path);
-            });
-        } else  {
-            // Resolve immediately with the path because it is the full path
+                console.log('Uploading file: ' + path);
 
-            console.log('Platform detected as not Android, so returning path as it is: ' + path);
+                var uploadingFile = $.Deferred(),
+                    options = new FileUploadOptions(),
+                    transfer;
+                
+                options.fileKey = 'audio'; // Form element name that'll be given to the server
+                options.fileName = path.split('/').pop(); // Filename on server, I think the server should decide this
+                options.chunkedMode = false;
+                try {
+                   options.mimeType = getMimeType(path);
+                }
+                catch(error) {
+                    // Something went wrong getting the mime type, so just return
+                    // a broken promise immediately
+                    uploadingFile.reject(error);
+                    return uploadingFile;
+                }
 
-            gettingFullFilePath.resolve(path);
+                // Other data to send (object of Key/Value pairs)
+                if(params) { 
+                    console.log("Sending params: " + params);
+                    options.params = params;
+                }
+
+                transfer = new FileTransfer();
+                transfer.upload(path, SPOKE.apiUrl, uploadingFile.resolve, uploadingFile.reject, options);
+
+                return uploadingFile;
+            },
+
+            // Get a list of files in a directory and return a promise which
+            // wraps the appropriate asynchronous phonegap api call
+            getDirectoryEntries: function (dirName) {
+
+                console.log('Getting directory entries for directory: ' + dirName);
+
+                // Get the list of recordings currently on the device, we
+                // need to make several async calls to do this, so we use
+                // .pipe() to connect them up and return the resulting promise
+                return getFileSystem()
+                    .pipe(function (filesystem) {
+                        return getDirectory(filesystem.root, dirName);
+                    })
+                    .pipe(function (directory) {
+                        var directoryReader = directory.createReader();
+                        var gettingEntries = $.Deferred();
+
+                        directoryReader.readEntries(gettingEntries.resolve, gettingEntries.reject);
+                        
+                        return gettingEntries.promise();
+                    });
+            }
+
+            // Work around the fact that Android returns different paths than iOS
+            // sometimes
+            getFullFilePath: function (path) {
+
+                console.log('Getting full path for file at: ' + path);
+
+                var gettingFilesystem,
+                    gettingFullFilePath = $.Deferred();
+
+                if (device.platform.match(/Android/)) {
+
+                    console.log('Platform detected as Android, so getting root filesystem');
+
+                    // Resolve when we have the root filesystem folder
+                    gettingFilesystem = getFileSystem();
+                    gettingFilesystem.done(function (filesystem) {
+
+                        console.log('Returning full filepath: ' + filesystem.root.fullPath + '/' + path);
+
+                        gettingFullFilePath.resolve(filesystem.root.fullPath + '/' + path);
+                    });
+                } else  {
+                    // Resolve immediately with the path because it is the full path
+
+                    console.log('Platform detected as not Android, so returning path as it is: ' + path);
+
+                    gettingFullFilePath.resolve(path);
+                }
+
+                return gettingFullFilePath.promise();
+            }
+
         }
-
-        return gettingFullFilePath.promise();
-    }
+    });
 
     // Wrap the async Phonegap way of getting a filesystem in a promise
     function getFileSystem() {
@@ -211,6 +213,4 @@ SPOKE.files = ( function($, SPOKE) {
         }
     }
 
-    return my;
-
-})($, SPOKE);
+})(SPOKE, Backbone, _, $);
