@@ -18,9 +18,8 @@
             </div>
 
             <div data-role="content">
-                <h2>Record a speech</h2>
                 <p>
-                    <a href="#recording" id="record-button" data-role="button" data-icon="plus">Record</a>
+                    <a href="#recording" id="record-button" data-role="button" data-icon="plus">Record a new speech</a>
                 </p>
                 <div id="recordings"></div>
             </div>
@@ -51,19 +50,17 @@
         <script type="text/template" id="recording-controls-template">
 
             <div data-role="header">
+                <a href="#" data-icon="home">Home</a>
                 <h1>Recording</h1>
             </div>
 
             <div data-role="content">
-                <h2>Recording</h2>
+                <h2>Select a speaker to start recording</h2>
+                <div id="speakers"></div>
                 <p>
-                    <a href="#" id="record-button" data-role="button" data-icon="plus">Start recording</a>
-                    <h3 id="timer" style="display:none">
-                        <span id="hours">00</span>:<span id="minutes">00</span>:<span id="seconds">00</span>
-                    </h3>
+                    <div id="timer" style="display:none"></div>
                     <a href="#" id="stop-button" data-role="button" data-icon="delete" style="display:none">Stop</a>
                 </p>
-                <div id="speakers"></div>
             </div>
 
         </script>
@@ -71,17 +68,23 @@
         <!-- Speakers list -->
         <script type="text/template" id="speakers-template">
 
-            <h2>Speakers</h2>
             <ul data-role="listview" data-inset="true" id="speakers-list">
                 <% if (speakers.isEmpty()) { %>
                     <li>There are no speakers yet</li>
                 <% } else { %>
                     <% speakers.each(function(speaker) { %>
-                        <li><%= speaker.get("name") %></li>
+                        <li><a href="#" class="speaker" data-api-url="<%= speaker.get("api_url") %>"><%= speaker.get("name") %></a></li>
                     <% }); %>
                 <% } %>
             </ul>
 
+        </script>
+
+        <!-- Timer -->
+        <script type="text/template" id="timer-template">
+            <h3 id="timer-text">
+                <span id="hours">00</span>:<span id="minutes">00</span>:<span id="seconds">00</span>
+            </h3>
         </script>
 
         <!-- Scripts -->
@@ -124,6 +127,7 @@
         <script src="js/views/recordings.js"></script>
         <script src="js/views/recording-controls.js"></script>
         <script src="js/views/speakers.js"></script>
+        <script src="js/views/timer.js"></script>
 
         <!-- Router -->
         <script src="js/router/router.js"></script>
