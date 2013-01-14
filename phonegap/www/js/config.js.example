@@ -3,6 +3,12 @@
  * Things you don't want to check in like server urls and 
  * secret keys can go here
  */
-(function(SPOKE) {
-	SPOKE.apiUrl = "http://www.example.org/speech/add";
-})(SPOKE);
+(function(SPOKE, _) {
+	_.extend(SPOKE, {
+		config: {
+			apiUrl: 'http://example.org/api/v0.1/speech/',
+			popItUrl: 'http://example.popit.mysociety.org',
+			filesDirectory: 'spoke'
+		}		
+	});
+})(SPOKE, _);
