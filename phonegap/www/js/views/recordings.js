@@ -15,7 +15,7 @@
             render: function () {
                 console.log('Recordings list rendering');
 
-                console.log(this.collection);
+                console.log(this.collection.toJSON());
 
                 this.$el.html(this.template({recordings: this.collection}));
 
