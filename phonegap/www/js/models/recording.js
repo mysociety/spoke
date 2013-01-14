@@ -8,7 +8,7 @@
 ;(function (SPOKE, Backbone, _, $) {
 	_.extend(SPOKE, {
 		Recording: Backbone.Model.extend({
-			
+			localStorage: new Backbone.LocalStorage("Recordings")
 		})
 	});
 
