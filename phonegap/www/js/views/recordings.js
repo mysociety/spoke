@@ -30,15 +30,15 @@
             uploadButton: function (e) {
                 e.preventDefault();
 
-                var uploadingPromises = new Array(), 
-                    modelsToDelete = new Array();
+                var uploadingPromises = new Array(),
+                    that = this;
 
                 console.log('Upload button clicked');
 
                 console.log('Trying to upload the recordings in: ' + this.collection.toJSON());
 
                 // Do the uploading
-                this.collection.each(function(recording) {
+                this.collection.clone().each(function(recording) {
 
                     console.log('Uploading file: ' + recording.toJSON());
 
@@ -63,8 +63,9 @@
                         deletingFile = SPOKE.files.deleteFile(recording.get('path'));
                         
                         deletingFile.done(function () {
-                            console.log('File removed successfully');
-                            modelsToDelete.push(recording);
+                            console.log('File removed successfully, destroying model');
+                            var real_recording = that.collection.get(recording);
+                            real_recording.destroy();
                         });
 
                         deletingFile.fail(function (error) {
@@ -87,12 +88,6 @@
                 $.when.apply(null, uploadingPromises)
                     .done(function () {
                         navigator.notification.alert('All files uploaded');
-                    })
-                    .always(function() {
-                        // Destroy all the models we uploaded
-                        _.each(modelsToDelete, function(model) {
-                            model.destroy();
-                        });
                     });
             }
         }) 
