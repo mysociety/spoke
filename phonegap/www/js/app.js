@@ -11,9 +11,9 @@
     document.addEventListener('deviceready', pgReady.resolve, false);
 
     // For testing basics in a browser
-    if(!window.Phonegap) {
-        pgReady.resolve();
-    }
+    // if(!window.Device) {
+    //     pgReady.resolve();
+    // }
 
     // jQuery Mobile is ready
     $(document).on('mobileinit', jqmReady.resolve);
