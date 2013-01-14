@@ -63,7 +63,7 @@
                     </h3>
                     <a href="#" id="stop-button" data-role="button" data-icon="delete" style="display:none">Stop</a>
                 </p>
-                <div id="speaker"></div>
+                <div id="speakers"></div>
             </div>
 
         </script>
@@ -73,7 +73,7 @@
 
             <h2>Speakers</h2>
             <ul data-role="listview" data-inset="true" id="speakers-list">
-                <% if (!speakers.isEmpty()) { %>
+                <% if (speakers.isEmpty()) { %>
                     <li>There are no speakers yet</li>
                 <% } else { %>
                     <% speakers.each(function(speaker) { %>
