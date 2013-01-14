@@ -11,6 +11,7 @@
         // Do some tricksy things so that jQuery mobile and Backbone
         // play nicely (ie: jQM lets Backbone do the routing)
         $.mobile.hashListeningEnabled = false;
+        $.mobile.linkBindingEnabled = false;
 
         // Remove page from DOM when it's being replaced, and unbind any events
         // TODO - There is probably a nicer way to do this now with
