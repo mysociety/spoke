@@ -55,12 +55,19 @@
             </div>
 
             <div data-role="content">
-                <h2>Select a speaker to start recording</h2>
+                <h2 id="intro-title">Select a speaker to start recording</h2>
                 <div id="speakers"></div>
-                <p>
-                    <div id="timer" style="display:none"></div>
-                    <a href="#" id="stop-button" data-role="button" data-icon="delete" style="display:none">Stop</a>
-                </p>
+            </div>
+
+            <div data-role="footer" data-position="fixed">
+                <div class="ui-grid-a">
+                    <div class="ui-block-a">
+                        <div id="timer" style="display:none"></div>
+                    </div>
+                    <div class="ui-block-b">
+                        <a href="#" id="stop-button" data-role="button" data-icon="delete" style="display:none">Stop</a>
+                    </div>
+                </div>
             </div>
 
         </script>
@@ -82,9 +89,9 @@
 
         <!-- Timer -->
         <script type="text/template" id="timer-template">
-            <h3 id="timer-text">
+            <h2 id="timer-text">
                 <span id="hours">00</span>:<span id="minutes">00</span>:<span id="seconds">00</span>
-            </h3>
+            </h2>
         </script>
 
         <!-- Scripts -->
