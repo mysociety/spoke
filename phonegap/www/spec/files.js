@@ -2,8 +2,8 @@ describe('Spoke.files', function () {
 
 	// Mock instance variables
 	var filename,
-		mockFile, 
-		mockRootDirectoryReader,		
+		mockFile,
+		mockRootDirectoryReader,
 		mockRootDirectory,
 		mockFilesDirectoryReader,
 		mockFilesDirectory,
@@ -12,9 +12,11 @@ describe('Spoke.files', function () {
 		oldDate,
 		oldLocalFileSystem,
 		oldRequestFileSystem,
-		oldFileTransfer;
+		oldFileTransfer,
+        oldDevice,
+        oldFilenameExtension;
 
-	beforeEach(function () {		
+	beforeEach(function () {
 		var timestamp, filesEntries;
 
 		// Mock the Date() object so that we can get the same filename every time
@@ -24,8 +26,14 @@ describe('Spoke.files', function () {
 		};
 		timestamp = new Date().getTime();
 
-        // Mock the phonegap file apis	
-        filename = "recording_" + timestamp + SPOKE.audioFilenameExtension;
+        // Fix the filename extension used
+        if(SPOKE.config.hasOwnProperty('audioFilenameExtension')) {
+            oldFilenameExtension = SPOKE.config.audioFilenameExtension;
+        }
+        SPOKE.config.audioFilenameExtension = '.3gp';
+
+        // Mock the phonegap file apis
+        filename = "recording_" + timestamp + SPOKE.config.audioFilenameExtension;
         mockFile = helper.mockFile(filename, "/spoke/" + filename);
 
         // A mock directory for files
@@ -68,12 +76,18 @@ describe('Spoke.files', function () {
         }
         window.FileUploadOptions = helper.mockFileUploadOptions;
 
+        // Mock the "device" window object
+        if(window.hasOwnProperty('device')) {
+            oldDevice = window.device;
+        }
+        window.device = {};
+
     });
 
 	afterEach(function() {
 		// Undo all the crazy mocking we did
 		Date = oldDate;
-		
+
 		if(typeof oldLocalFileSystem !== 'undefined') {
 			window.LocalFileSystem = oldLocalFileSystem;
 		}
@@ -94,6 +108,20 @@ describe('Spoke.files', function () {
 		else {
 			delete window.FileTransfer;
 		}
+
+        if(typeof oldDevice != 'undefined') {
+            window.device = oldDevice;
+        }
+        else {
+            delete window.device;
+        }
+
+        if(typeof oldFilenameExtension != 'undefined') {
+            SPOKE.config.audioFilenameExtension = oldFilenameExtension;
+        }
+        else {
+            delete SPOKE.config.audioFilenameExtension;
+        }
 	});
 
     it("Should create a new file", function () {
@@ -181,9 +209,6 @@ describe('Spoke.files', function () {
     	runs(function () {
     		window.device.platform = 'iPhone';
     		gettingPath = SPOKE.files.getFullFilePath("spoke/" + filename);
-
-    		// Reset the platform to Android as the default
-    		window.device.platform = 'Android';
     		gettingPath.always(callback);
 
     	});
@@ -203,13 +228,14 @@ describe('Spoke.files', function () {
     		params = {'speaker':'abcde'},
     		expectedOptions = {
     			fileKey : 'audio',
-    			fileName : mockFile.name, 
-    			chunkedMode : false, 
-    			mimeType : 'audio/3gpp', 
+    			fileName : mockFile.name,
+    			chunkedMode : false,
+    			mimeType : 'audio/3gpp',
     			params : params
     		};
 
     	runs(function () {
+            SPOKE.config.audioFilenameExtension = "3gp";
     		spyOn(mockFileTransfer, 'upload').andCallThrough();
 
     		uploadingFile = SPOKE.files.uploadFile(mockFile.fullPath, params);
@@ -223,12 +249,12 @@ describe('Spoke.files', function () {
     	runs(function() {
     		expect(callback).toHaveBeenCalled();
     		expect(mockFileTransfer.upload).toHaveBeenCalledWith(
-    			mockFile.fullPath, 
-    			SPOKE.apiUrl, 
-    			jasmine.any(Function), 
-    			jasmine.any(Function), 
+    			mockFile.fullPath,
+    			SPOKE.config.apiUrl,
+    			jasmine.any(Function),
+    			jasmine.any(Function),
     			expectedOptions);
     	});
     });
-	
+
 });

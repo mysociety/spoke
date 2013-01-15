@@ -10,19 +10,62 @@
         <script type="text/javascript" src="spec/lib/jasmine-1.2.0/jasmine-html.js"></script>
 
         <!-- include source files here... -->
-        <script type="text/javascript" src="js/lib/jquery-1.8.3.js"></script>
-        
-        <script type="text/javascript" src="js/spoke.js"></script>
-        <script type="text/javascript" src="js/config.js"></script>
-        <script type="text/javascript" src="js/files.js"></script>
-        <script type="text/javascript" src="js/storage.js"></script>
-        <script type="text/javascript" src="js/recordings.js"></script>
+
+        <!-- Global namespaced object which all of our custom functions will go into -->
+        <script type="text/javascript">
+            window.SPOKE = window.SPOKE || {};
+        </script>
+
+        <!-- Libraries -->
+        <script src="js/lib/jquery-1.8.3.js"></script>
+        <script src="js/lib/underscore-1.4.3.js"></script>
+        <script src="js/lib/backbone-0.9.9.js"></script>
+        <!--<script src="js/lib/backbone.localStorage-1.0.js"></script>-->
+
+        <!-- This file chooses which platform's version of Cordova to load (iOS or Android) -->
+        <!--<script src="cordova-2.2.0-independent.js"></script>->
+
+        <!-- Config for jQuery Mobile -->
+        <!--<script src="js/jqm-config.js"></script>-->
+
+        <!-- The App -->
+
+        <!-- Config -->
+        <script src="js/config.js"></script>
+
+        <!-- Files Helper -->
+        <script src="js/files.js"></script>
+
+        <!-- Models -->
+        <!--<script src="js/models/recording.js"></script>
+        <script src="js/models/speaker.js"></script>-->
+
+        <!-- Collections -->
+        <!--<script src="js/collections/recordings.js"></script>
+        <script src="js/collections/speakers.js"></script>-->
+
+        <!-- Views -->
+        <!--<script src="js/views/home.js"></script>
+        <script src="js/views/recordings.js"></script>
+        <script src="js/views/recording-controls.js"></script>
+        <script src="js/views/speakers.js"></script>
+        <script src="js/views/timer.js"></script>-->
+
+        <!-- Router -->
+        <!--<script src="js/router/router.js"></script>-->
+
+        <!-- Main app entry point -->
+        <!--<script src="js/app.js"></script>-->
+
+        <!-- jQuery Mobile goes after config so that everything is setup when it loads -->
+        <!--<script src="js/lib/jquery.mobile-1.2.0.js"></script>-->
 
         <!-- include spec files here... -->
+
+        <!-- Helper file for dealing with Phonegap APIs on desktop browsers -->
         <script type="text/javascript" src="spec/helper.js"></script>
-        
-        <script type="text/javascript" src="spec/spoke.js"></script>
-        <script type="text/javascript" src="spec/storage.js"></script>
+
+        <!--<script type="text/javascript" src="spec/spoke.js"></script>-->
         <script type="text/javascript" src="spec/files.js"></script>
 
         <script type="text/javascript">
