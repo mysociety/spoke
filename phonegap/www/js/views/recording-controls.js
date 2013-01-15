@@ -48,6 +48,8 @@
             },
 
             record: function(e) {
+                var speaker, recordingAudio;
+
                 e.preventDefault();
 
                 console.log("Record function");
@@ -60,11 +62,14 @@
 		        // could happen with dodgy click/tap/vlick handling or
 		        // slow phones and angry users
 		        if(typeof this.currentRecording === 'undefined') {
+                    // Get the clicked speaker
+                    speaker = $(e.target).attr("data-api-url")
+
 		            // startRecording wraps the phonegap media creation api in
 		            // a promise and returns it, it also creates a new recording
 		            // model instance and saves a global reference to
 		            // the current recording media object in this.currentRecording
-		            var recordingAudio = this.startRecording();
+		            recordingAudio = this.startRecording(speaker);
 
                     recordingAudio.done(function() {
                         var message = 'Recording saved!';
@@ -88,7 +93,7 @@
 
             // Start recording to a new audio file in the SPOKE app's directory
             // using the Media API
-            startRecording: function () {         	
+            startRecording: function (speaker) {         	
                 
                 console.log('Recording Audio');
                 
@@ -118,15 +123,16 @@
 
                     // Create a new model instance to hold it
                     recording = SPOKE.recordings.create({
-                    	"name": file.name,
-                    	"path": file.fullPath
+                    	name: file.name,
+                    	path: file.fullPath,
+                        speaker: speaker
                     });
 
                     // Save a reference to this recording for easy access later
                     that.currentRecording = media;
 
                     // Trigger the global event to tell everything that recording is happening
-                	SPOKE.trigger("startRecording", {});
+                	SPOKE.trigger("startRecording", recording);
 
                 });
 
@@ -153,6 +159,8 @@
                 	// Unset the currentRecording variable
 		            delete this.currentRecording;
                 	// Trigger the global event to tell everything that recording has stopped
+                    // TODO - it would be nice to send the model object out again now
+                    // but what's the nicest way to get a reference to it?
                 	SPOKE.trigger("stopRecording", {});
                 }
 

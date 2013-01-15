@@ -14,7 +14,9 @@
 			parse: function(response) {
 				var defaultSpeaker = {
 					name: "Unknown",
-					api_url: ""
+					meta: {
+						api_url: ""
+					}
 				};
 				response.results.unshift(defaultSpeaker);
 				return response.results;

@@ -40,7 +40,7 @@
                 // Do the uploading
                 this.collection.clone().each(function(recording) {
 
-                    console.log('Uploading file: ' + recording.toJSON());
+                    console.log('Uploading file: ' + JSON.stringify(recording.toJSON()));
 
                     params = {};
                     if(typeof recording.get('speaker') !== "undefined") {
@@ -49,14 +49,13 @@
 
                     // uploadingFiles is, you guessed it, a Promise
                     var uploadingFile = SPOKE.files.uploadFile(recording.get('path'), params);
-
                     uploadingPromises.push(uploadingFile);
 
                     uploadingFile.done(function (result) {
 
                         // result.response contains the server response if we want
                         // to do anything with it
-                        console.log('File: ' + recording.toJSON() + ' successfully uploaded.');
+                        console.log('File: ' + JSON.stringify(recording.toJSON()) + ' successfully uploaded.');
                         
                         // Delete the file from local disk
                         // Another async process, so another Promise
