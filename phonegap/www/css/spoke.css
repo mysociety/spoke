@@ -23,3 +23,11 @@
     padding: 15px;
     border-radius: 5px;
 }
+
+#timer {
+	text-align: center;
+}
+
+#stop-button {
+	margin-top:17px;
+}
