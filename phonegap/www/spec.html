@@ -55,7 +55,7 @@
         <!--<script src="js/router/router.js"></script>-->
 
         <!-- Main app entry point -->
-        <!--<script src="js/app.js"></script>-->
+        <script src="js/app.js"></script>
 
         <!-- jQuery Mobile goes after config so that everything is setup when it loads -->
         <!--<script src="js/lib/jquery.mobile-1.2.0.js"></script>-->
@@ -65,8 +65,12 @@
         <!-- Helper file for dealing with Phonegap APIs on desktop browsers -->
         <script type="text/javascript" src="spec/helper.js"></script>
 
-        <!--<script type="text/javascript" src="spec/spoke.js"></script>-->
+        <!-- Specs which don't need the app started up -->
         <script type="text/javascript" src="spec/files.js"></script>
+
+        <!-- Specs which test the app and need the environment set up -->
+        <script type="text/javascript" src="spec/app.js"></script>
+
 
         <script type="text/javascript">
             (function() {
