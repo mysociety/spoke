@@ -1,9 +1,13 @@
+beforeEach(function () {
+
+});
+
 afterEach(function() {
     document.getElementById('stage').innerHTML = '';
 });
 
 var helper = {
-    
+
     // Trigger an event from a particular object
     trigger: function(obj, name) {
         var e = document.createEvent('Event');
@@ -22,15 +26,16 @@ var helper = {
         // Create a fake jquery mobile page
         var pageDiv = window.document.createElement("div");
         pageDiv.id = 'record-page';
-        $('body').append(pageDiv);
+        $('#stage').append(pageDiv);
 
         // create a fake device object
         window.device = {
             platform: "Android"
         };
 
+        // Trigger the events neccessary to start the app
         helper.trigger(window.document, 'deviceready');
-        helper.trigger(window.document, 'mobileinit');  
+        helper.trigger(window.document, 'mobileinit');
         helper.trigger(pageDiv, 'pageinit');
     },
 
@@ -44,7 +49,7 @@ var helper = {
             remove: function(onSuccess, onError) {
                 onSuccess();
             }
-        }
+        };
     },
 
     // Mock Directory object from Phonegap's File api
@@ -72,8 +77,8 @@ var helper = {
                 else {
                     onError({code:1});
                 }
-            },
-        }
+            }
+        };
     },
 
     // Function to create a mock DirectoryReader object
@@ -82,7 +87,7 @@ var helper = {
             readEntries: function (onSuccess, onFail) {
                 onSuccess(files);
             }
-        }
+        };
     },
 
     // Function to create a mock FileSystem object from Phonegap's File api
@@ -90,14 +95,14 @@ var helper = {
         return {
             name: name,
             root: root
-        }
+        };
     },
 
     // Function to create a mock requestFileSystem method from Phonegap's File api
     mockRequestFileSystem: function(returnSuccess, fileSystem, error) {
 
         return function(type, someNumber, onSuccess, onFail) {
-            
+
             if(returnSuccess) {
                 onSuccess(fileSystem);
             }
@@ -118,7 +123,7 @@ var helper = {
                     onError({code:1});
                 }
             }
-        }
+        };
     },
 
     mockFileUploadOptions: function() {
