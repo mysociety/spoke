@@ -10,11 +10,6 @@
     // Phonegap is ready
     document.addEventListener('deviceready', pgReady.resolve, false);
 
-    // For testing basics in a browser
-    // if(!window.Device) {
-    //     pgReady.resolve();
-    // }
-
     // jQuery Mobile is ready
     $(document).on('mobileinit', jqmReady.resolve);
 
@@ -26,8 +21,8 @@
     $.when(jqmReady, pgReady, firstPageReady).then(function() {
 
         // Everything is ready now
-    	console.log('Initialising the SPOKE app');
-        
+        console.log('Initialising the SPOKE app');
+
         // Initialise the app object
         _.extend(SPOKE, {
             router: new SPOKE.AppRouter(),
@@ -41,9 +36,9 @@
 
         // Work out while filename extension to use
         SPOKE.config.audioFilenameExtension = (device.platform.match(/(iPhone|iPod|iPad)/)) ? '.wav' : '.3gp';
-        
+
         // Bind events for the whole app
-        
+
         // App resume events
         $(document).on('resume', function() {
             SPOKE.speakers.fetch();
@@ -83,10 +78,10 @@
         // Fetch initial data
         SPOKE.speakers.fetch();
         SPOKE.recordings.fetch();
-        
+
         // Start routing
         Backbone.history.start();
-        
+
     });
 
 })(SPOKE, Backbone, _, $);

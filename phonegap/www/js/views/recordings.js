@@ -30,7 +30,7 @@
             uploadButton: function (e) {
                 e.preventDefault();
 
-                var uploadingPromises = new Array(),
+                var uploadingPromises = [],
                     that = this;
 
                 console.log('Upload button clicked');
@@ -56,11 +56,11 @@
                         // result.response contains the server response if we want
                         // to do anything with it
                         console.log('File: ' + JSON.stringify(recording.toJSON()) + ' successfully uploaded.');
-                        
+
                         // Delete the file from local disk
                         // Another async process, so another Promise
                         deletingFile = SPOKE.files.deleteFile(recording.get('path'));
-                        
+
                         deletingFile.done(function () {
                             console.log('File removed successfully, destroying model');
                             var real_recording = that.collection.get(recording);
@@ -81,7 +81,7 @@
                         navigator.notification.alert(message);
                     });
 
-                });    
+                });
 
                 // When all the promises have completed in some way or another
                 $.when.apply(null, uploadingPromises)
@@ -89,6 +89,6 @@
                         navigator.notification.alert('All files uploaded');
                     });
             }
-        }) 
+        })
     });
 })(SPOKE, Backbone, _, $);

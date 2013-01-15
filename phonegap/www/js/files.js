@@ -1,29 +1,29 @@
 /**
  * Things to do with Phonegap files
  * Mainly wrappers around their async functions to return Promises
- */ 
+ */
 
  (function(SPOKE, Backbone, _, $) {
     _.extend(SPOKE, {
         files: {
             // Create a new file to put our recording's into. This requires
-            // calling several async api functions, so we use .pipe() to 
+            // calling several async api functions, so we use .pipe() to
             // connect them all up, and return the resulting promise object
             createFile: function () {
-                
+
                 console.log('Creating a file');
-                
+
                 // Chain a bunch of promises together to return one thing
                 // which encapsulates all the async calls
                 return getFileSystem()
                     .pipe( function (filesystem) {
-                        
+
                         console.log('Filesystem returned: ' + filesystem);
-                        
+
                         return getDirectory(filesystem.root, SPOKE.config.filesDirectory, {create: true});
                     })
                     .pipe( function (directory) {
-                        
+
                         console.log('Directory returned: ' + directory.fullPath);
 
                         // Create a new file, the path is relative to the directory we just got
@@ -65,7 +65,7 @@
                 var uploadingFile = $.Deferred(),
                     options = new FileUploadOptions(),
                     transfer;
-                
+
                 options.fileKey = 'audio'; // Form element name that'll be given to the server
                 options.fileName = path.split('/').pop(); // Filename on server, I think the server should decide this
                 options.chunkedMode = false;
@@ -80,7 +80,7 @@
                 }
 
                 // Other data to send (object of Key/Value pairs)
-                if(params) { 
+                if(params) {
                     console.log("Sending params: " + params);
                     options.params = params;
                 }
@@ -109,7 +109,7 @@
                         var gettingEntries = $.Deferred();
 
                         directoryReader.readEntries(gettingEntries.resolve, gettingEntries.reject);
-                        
+
                         return gettingEntries.promise();
                     });
             },
@@ -151,15 +151,15 @@
 
     // Wrap the async Phonegap way of getting a filesystem in a promise
     function getFileSystem() {
-    	
-    	console.log('Getting the file system');
-    	
+
+        console.log('Getting the file system');
+
         var filesystem = $.Deferred();
 
         window.requestFileSystem(
-            LocalFileSystem.PERSISTENT, 
+            LocalFileSystem.PERSISTENT,
             0,
-            filesystem.resolve, 
+            filesystem.resolve,
             filesystem.reject
         );
 
@@ -168,9 +168,9 @@
 
     // Wrap the async Phonegap way of getting a directory in a promise
     function getDirectory (rootDirectory, path, options) {
-    	
-    	console.log('Getting a directory: ' + path);
-    	
+
+        console.log('Getting a directory: ' + path);
+
         var directory = $.Deferred();
 
         rootDirectory.getDirectory(path, options, directory.resolve, directory.reject);
@@ -180,9 +180,9 @@
 
     // Wrap the async Phonegap way of getting a file in a promise
     function getFile (directory, path, options) {
-    	
-    	console.log('Getting a file with path: ' + path + ' in directory: ' + directory.fullPath);
-    	
+
+        console.log('Getting a file with path: ' + path + ' in directory: ' + directory.fullPath);
+
         var file = $.Deferred();
 
         directory.getFile(path, options, file.resolve, file.reject);
@@ -201,11 +201,11 @@
 
         if(extension.length > 0) {
             // Some mimetypes don't map exactly to extensions
-            switch(extension) {
-                case '3gp':
-                    return 'audio/3gpp';
-                default:
-                    return 'audio/'  + extension;
+            if(extension === '3gp') {
+                return 'audio/3gpp';
+            }
+            else {
+                return 'audio/'  + extension;
             }
         }
         else {

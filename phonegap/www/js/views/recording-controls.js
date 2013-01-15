@@ -16,12 +16,12 @@
             },
 
             render: function () {
-            	var speakersView, timerView;
+                var speakersView, timerView;
 
                 console.log('Recording controls page rendering');
-                
+
                 this.$el.html(this.template());
-                
+
                 // Create a child speakers view that shows up in
                 // the #speaker div of our template
                 speakerView = new SPOKE.SpeakersView({
@@ -32,13 +32,13 @@
 
                 // Create a child timer view that shows in #timer
                 timerView = new SPOKE.TimerView({
-                	el: this.$el.find("#timer")
-                })
+                    el: this.$el.find("#timer")
+                });
                 timerView.render();
 
                 // Force jQuery Mobile to do it's stuff to the template html
                 this.$el.trigger("pagecreate");
-                
+
                 return this;
             },
 
@@ -58,18 +58,18 @@
                 // events once for _each_ element it matched
                 this.$el.find("a.speaker").unbind("vclick", this.record);
 
-            	// We only want to record if we're not already, this
-		        // could happen with dodgy click/tap/vlick handling or
-		        // slow phones and angry users
-		        if(typeof this.currentRecording === 'undefined') {
+                // We only want to record if we're not already, this
+                // could happen with dodgy click/tap/vlick handling or
+                // slow phones and angry users
+                if(typeof this.currentRecording === 'undefined') {
                     // Get the clicked speaker
-                    speaker = $(e.target).attr("data-api-url")
+                    speaker = $(e.target).attr("data-api-url");
 
-		            // startRecording wraps the phonegap media creation api in
-		            // a promise and returns it, it also creates a new recording
-		            // model instance and saves a global reference to
-		            // the current recording media object in this.currentRecording
-		            recordingAudio = this.startRecording(speaker);
+                    // startRecording wraps the phonegap media creation api in
+                    // a promise and returns it, it also creates a new recording
+                    // model instance and saves a global reference to
+                    // the current recording media object in this.currentRecording
+                    recordingAudio = this.startRecording(speaker);
 
                     recordingAudio.done(function() {
                         var message = 'Recording saved!';
@@ -77,26 +77,26 @@
                         navigator.notification.alert(message);
                     });
 
-		            // Failure - tell the user
-		            recordingAudio.fail(function(error) {
-		            	var message = 'Something went wrong recording the audio: ' + error.message;
-		                console.log(message);
-		                navigator.notification.alert(message);
-		            });
-		        }
+                    // Failure - tell the user
+                    recordingAudio.fail(function(error) {
+                        var message = 'Something went wrong recording the audio: ' + error.message;
+                        console.log(message);
+                        navigator.notification.alert(message);
+                    });
+                }
             },
 
             stop: function(e) {
-            	e.preventDefault();
-            	this.stopRecording();
+                e.preventDefault();
+                this.stopRecording();
             },
 
             // Start recording to a new audio file in the SPOKE app's directory
             // using the Media API
-            startRecording: function (speaker) {         	
-                
+            startRecording: function (speaker) {
+
                 console.log('Recording Audio');
-                
+
                 // Get a file to record to - iOS needs this, others don't care so much
 
                 // creatingFile and recordingAudio are promises because the Phonegap filesystem
@@ -107,7 +107,7 @@
 
                 creatingFile.done( function (file) {
 
-                	var src, media, recording;
+                    var src, media, recording;
 
                     // We have a FileEntry to play with in file
                     console.log('File created: ' + file.fullPath);
@@ -117,14 +117,14 @@
                     // Android just wants it to be relative
                     src = (device.platform.match(/(iPhone|iPod|iPad)/)) ? file.fullPath : SPOKE.config.filesDirectory + '/' + file.name;
                     media = new Media(src, recordingAudio.resolve, recordingAudio.reject);
-                    
+
                     // Start the recording
                     media.startRecord();
 
                     // Create a new model instance to hold it
                     recording = SPOKE.recordings.create({
-                    	name: file.name,
-                    	path: file.fullPath,
+                        name: file.name,
+                        path: file.fullPath,
                         speaker: speaker
                     });
 
@@ -132,7 +132,7 @@
                     that.currentRecording = media;
 
                     // Trigger the global event to tell everything that recording is happening
-                	SPOKE.trigger("startRecording", recording);
+                    SPOKE.trigger("startRecording", recording);
 
                 });
 
@@ -155,24 +155,24 @@
                 console.log(JSON.stringify(this.currentRecording));
 
                 if(typeof this.currentRecording !== 'undefined') {
-                	this.currentRecording.stopRecord();
-                	// Unset the currentRecording variable
-		            delete this.currentRecording;
-                	// Trigger the global event to tell everything that recording has stopped
+                    this.currentRecording.stopRecord();
+                    // Unset the currentRecording variable
+                    delete this.currentRecording;
+                    // Trigger the global event to tell everything that recording has stopped
                     // TODO - it would be nice to send the model object out again now
                     // but what's the nicest way to get a reference to it?
-                	SPOKE.trigger("stopRecording", {});
+                    SPOKE.trigger("stopRecording", {});
                 }
 
             },
 
             // Toggle the 'start recording/stop recording' buttons, and timer controls
-		    toggleControls: function () {
+            toggleControls: function () {
                 $("#intro-title").toggle();
-		        $('#stop-button').toggle();
-		        $('#timer').toggle();
-		    }
+                $('#stop-button').toggle();
+                $('#timer').toggle();
+            }
 
         })
     });
-})(SPOKE, Backbone, _, $)
+})(SPOKE, Backbone, _, $);
