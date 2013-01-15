@@ -29,10 +29,6 @@
                     collection: this.collection
                 });
                 speakerView.render();
-                
-                // Bind once to a click on any speaker, so we can use that to
-                // start recording
-                this.$el.find("a.speaker").one("vclick", this.record);
 
                 // Create a child timer view that shows in #timer
                 timerView = new SPOKE.TimerView({
@@ -47,7 +43,8 @@
             },
 
             events: {
-                "vclick #stop-button": "stop"
+                "vclick #stop-button": "stop",
+                "vclick a.speaker": "record"
             },
 
             record: function(e) {
@@ -163,7 +160,7 @@
 
             // Toggle the 'start recording/stop recording' buttons, and timer controls
 		    toggleControls: function () {
-		        $('#start-button').toggle();
+                $("#intro-title").toggle();
 		        $('#stop-button').toggle();
 		        $('#timer').toggle();
 		    }
