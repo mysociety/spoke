@@ -18,70 +18,90 @@
         firstPageReady.resolve();
     });
 
-    $.when(jqmReady, pgReady, firstPageReady).then(function() {
+    // Add an init action to spoke
+    _.extend(SPOKE, {
+        initialise: function () {
+            // Everything is ready now
+            console.log('Initialising the SPOKE app');
 
-        // Everything is ready now
-        console.log('Initialising the SPOKE app');
+            // Initialise the app object
+            _.extend(SPOKE, {
+                router: new SPOKE.AppRouter(),
+                recordings: new SPOKE.RecordingsCollection(),
+                speakers: new SPOKE.SpeakersCollection()
+            });
 
-        // Initialise the app object
-        _.extend(SPOKE, {
-            router: new SPOKE.AppRouter(),
-            recordings: new SPOKE.RecordingsCollection(),
-            speakers: new SPOKE.SpeakersCollection()
-        });
+            // Extend SPOKE with Backbone event handling, so we can register
+            // app-wide events
+            _.extend(SPOKE, Backbone.Events);
 
-        // Extend SPOKE with Backbone event handling, so we can register
-        // app-wide events
-        _.extend(SPOKE, Backbone.Events);
+            // Work out while filename extension to use
+            SPOKE.config.audioFilenameExtension = (device.platform.match(/(iPhone|iPod|iPad)/)) ? '.wav' : '.3gp';
 
-        // Work out while filename extension to use
-        SPOKE.config.audioFilenameExtension = (device.platform.match(/(iPhone|iPod|iPad)/)) ? '.wav' : '.3gp';
+            // Bind events for the whole app
 
-        // Bind events for the whole app
+            // App resume events
+            $(document).on('resume', function() {
+                SPOKE.speakers.fetch();
+                SPOKE.recordings.fetch();
+            });
 
-        // App resume events
-        $(document).on('resume', function() {
-            SPOKE.speakers.fetch();
-            SPOKE.recordings.fetch();
-        });
+            // Reset events on the recordings collection
+            SPOKE.recordings.on('reset', function(models, options) {
 
-        // Reset events on the recordings collection
-        SPOKE.recordings.on('reset', function(models, options) {
+                console.log("Recordings collection has been reset");
 
-            console.log("Recordings collection has been reset");
+                // Get a list of the current files
+                var gettingFiles = SPOKE.files.getDirectoryEntries(SPOKE.config.filesDirectory);
 
-            // Get a list of the current files
-            var gettingFiles = SPOKE.files.getDirectoryEntries(SPOKE.config.filesDirectory);
+                gettingFiles.done(function (files) {
 
-            gettingFiles.done(function (files) {
+                    // Go over the models and find the real file, deleting the model
+                    // if it's not there, ie: it's been deleted outside the app
+                    SPOKE.recordings.each(function (recording) {
+                        var fileExists = false;
 
-                // Go over the models and find the real file, deleting the model
-                // if it's not there, ie: it's been deleted outside the app
-                SPOKE.recordings.each(function (recording) {
-                    var fileExists = false;
+                        _.each(files, function(file) {
+                            if(file.name === recording.name) {
+                                fileExists = true;
+                            }
+                        });
 
-                    _.each(files, function(file) {
-                        if(file.name === recording.name) {
-                            fileExists = true;
+                        if(!fileExists) {
+                            recording.destroy();
                         }
                     });
 
-                    if(!fileExists) {
-                        recording.destroy();
-                    }
                 });
 
             });
 
-        });
+            // Fetch initial data
+            SPOKE.speakers.fetch();
+            SPOKE.recordings.fetch();
 
-        // Fetch initial data
-        SPOKE.speakers.fetch();
-        SPOKE.recordings.fetch();
+            // Start routing
+            Backbone.history.start();
+        },
 
-        // Start routing
-        Backbone.history.start();
+        destroy: function() {
+            // Undo all the stuff we did in initialise
+            // Only useful in unit testing
+            console.log('Destroying the SPOKE app');
 
+            delete SPOKE.router;
+            delete SPOKE.recordings;
+            delete SPOKE.speakers;
+            delete SPOKE.config.audioFilenameExtension
+
+            // Stop the history
+            Backbone.history.stop();
+        }
+    });
+
+    $.when(jqmReady, pgReady, firstPageReady).then(function () {
+        console.log("All three init events have happened");
+        SPOKE.initialise();
     });
 
 })(SPOKE, Backbone, _, $);
