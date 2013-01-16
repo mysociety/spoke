@@ -6,7 +6,6 @@
 
             initialize: function (options) {
                 console.log('Timer initialising');
-                this.render();
                 this.listenTo(SPOKE, "startRecording", this.start);
                 this.listenTo(SPOKE, "stopRecording", this.stop);
                 _.bindAll(this);
