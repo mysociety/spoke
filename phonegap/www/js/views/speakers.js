@@ -7,17 +7,20 @@
 
             template: _.template($("#speakers-template").html()),
 
+            speakers: [],
+
             initialize: function (options) {
                 console.log('Speaker list initialising');
-                this.listenTo(this.collection, "all", this.render);
+                this.speakers = options.speakers;
+                _.bindAll(this);
             },
 
             render: function () {
                 console.log('Speaker list rendering');
 
-                console.log(this.collection);
+                console.log(JSON.stringify(this.speakers.toJSON()));
 
-                this.$el.html(this.template({speakers: this.collection}));
+                this.$el.html(this.template({speakers: this.speakers}));
 
                 return this;
             },
@@ -27,9 +30,9 @@
             },
 
             speakerChange: function(e) {
-                console.log("Speaker clicked");
                 e.preventDefault();
+                console.log("Speaker clicked");
             }
-        }) 
+        })
     });
 })(SPOKE, Backbone, _, $);
