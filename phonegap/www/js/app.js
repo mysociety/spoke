@@ -43,8 +43,8 @@
             // App resume events
             $(document).on('resume', function() {
                 console.log("App is being resumed");
-                SPOKE.speakers.refreshLocalStorage();
                 SPOKE.speakers.fetch({error: function() { console.log(arguments); }});
+                SPOKE.recordings.refreshLocalStorage();
                 SPOKE.recordings.fetch({error: function() { console.log(arguments); }});
             });
 
