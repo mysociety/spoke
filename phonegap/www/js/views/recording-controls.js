@@ -69,9 +69,9 @@
             },
 
             destroy: function () {
-                this.remove();
                 this.speakerView.remove();
                 this.timerView.remove();
+                this.remove();
             },
 
             record: function(e) {
