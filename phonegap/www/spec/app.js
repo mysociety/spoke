@@ -9,7 +9,7 @@ describe('SPOKE', function () {
     beforeEach(function() {
         // Mock things we need to start the app
         appRouter = jasmine.createSpyObj('appRouter',['route', 'navigate']);
-        recordingsCollection = jasmine.createSpyObj('recordingsCollection', ['fetch', 'on']);
+        recordingsCollection = jasmine.createSpyObj('recordingsCollection', ['fetch', 'on', 'refreshLocalStorage']);
         speakersCollection = jasmine.createSpyObj('speakersCollection',['fetch']);
 
         if(SPOKE.hasOwnProperty("AppRouter")) {
@@ -81,10 +81,11 @@ describe('SPOKE', function () {
         expect(speakersCollection.fetch).toHaveBeenCalled();
     });
 
-    it("Should fetch collections when a resume event happens", function () {
+    it("Should fetch collections and reset localStorage when a resume event happens", function () {
         SPOKE.initialise();
         $(document).trigger('resume');
-        expect(recordingsCollection.fetch).toHaveBeenCalledWith();
-        expect(speakersCollection.fetch).toHaveBeenCalledWith();
+        expect(recordingsCollection.fetch).toHaveBeenCalled();
+        expect(recordingsCollection.refreshLocalStorage).toHaveBeenCalled();
+        expect(speakersCollection.fetch).toHaveBeenCalled();
     });
 });
