@@ -4,6 +4,8 @@
 
             template: _.template($("#timer-template").html()),
 
+            timer: null,
+
             initialize: function (options) {
                 console.log('Timer initialising');
                 this.listenTo(SPOKE, "startRecording", this.start);
@@ -20,14 +22,14 @@
             // Start a HH:MM:SS timer which updates three <span> elements
             start: function () {
 
-                var that = this;
+                var that = this,
+                    sec = 0;
 
                 console.log('Starting recording timer');
 
                 // Stop any old one, just in case
                 this.stop();
 
-                var sec = 0;
                 this.timer = setInterval( function(){
                     that.$el.find('#seconds').html(that.pad(++sec % 60));
                     that.$el.find('#minutes').html(that.pad(parseInt(sec / 60, 10)));
@@ -41,8 +43,9 @@
 
                 console.log('Stopping recording timer');
 
-                if(typeof this.timer !== 'undefined') {
+                if(!_.isNull(this.timer)) {
                     clearInterval(this.timer);
+                    this.timer = null;
                 }
 
                 this.$el.find('#seconds').html('00');
