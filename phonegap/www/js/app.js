@@ -46,36 +46,6 @@
                 SPOKE.recordings.fetch();
             });
 
-            // Reset events on the recordings collection
-            SPOKE.recordings.on('reset', function(models, options) {
-
-                console.log("Recordings collection has been reset");
-
-                // Get a list of the current files
-                var gettingFiles = SPOKE.files.getDirectoryEntries(SPOKE.config.filesDirectory);
-
-                gettingFiles.done(function (files) {
-
-                    // Go over the models and find the real file, deleting the model
-                    // if it's not there, ie: it's been deleted outside the app
-                    SPOKE.recordings.each(function (recording) {
-                        var fileExists = false;
-
-                        _.each(files, function(file) {
-                            if(file.name === recording.name) {
-                                fileExists = true;
-                            }
-                        });
-
-                        if(!fileExists) {
-                            recording.destroy();
-                        }
-                    });
-
-                });
-
-            });
-
             // Fetch initial data
             SPOKE.speakers.fetch();
             SPOKE.recordings.fetch();
@@ -92,7 +62,7 @@
             delete SPOKE.router;
             delete SPOKE.recordings;
             delete SPOKE.speakers;
-            delete SPOKE.config.audioFilenameExtension
+            delete SPOKE.config.audioFilenameExtension;
 
             // Stop the history
             Backbone.history.stop();
