@@ -57,6 +57,13 @@
                     });
 
                 });
+            },
+
+            refreshLocalStorage: function () {
+                this.localStorage = new Backbone.LocalStorage("Recordings");
+                _.each(this.models, function(model) {
+                    model.refreshLocalStorage();
+                });
             }
 		})
 	});

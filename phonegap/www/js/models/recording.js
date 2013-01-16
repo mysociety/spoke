@@ -8,7 +8,11 @@
 ;(function (SPOKE, Backbone, _, $) {
     _.extend(SPOKE, {
         Recording: Backbone.Model.extend({
-            localStorage: new Backbone.LocalStorage("Recordings")
+            localStorage: new Backbone.LocalStorage("Recordings"),
+
+            refreshLocalStorage: function () {
+                this.localStorage = new Backbone.LocalStorage("Recordings");
+            }
         })
     });
 
