@@ -9,11 +9,16 @@
 
             recordingsView: null,
 
-            recordings: []
+            recordings: [],
 
             initialize: function (options) {
                 console.log('Home page initialising');
                 this.recordings = options.recordings;
+                // Create a child recordings view that shows up in
+                // the #recordings div of our template
+                this.recordingsView = new SPOKE.RecordingsView({
+                    recordings: this.recordings
+                });
                 this.listenTo(this.recordings, "all", this.render);
                 _.bindAll(this);
             },
@@ -21,21 +26,17 @@
             render: function () {
                 console.log('Home page rendering');
                 this.$el.html(this.template());
-                // Create a child recordings view that shows up in
-                // the #recordings div of our template
-                this.recordingsView = new SPOKE.RecordingsView({
-                    el: this.$el.find("#recordings"),
-                    recordings: this.recordings
-                });
-                this.recordingsView.render();
+
+                this.recordingsView.setElement(this.$("#recordings")).render();
+
                 // Force jQuery Mobile to do it's stuff to the template html
                 this.$el.trigger("pagecreate");
                 return this;
             },
 
             destroy: function () {
-                this.remove();
                 this.recordingsView.remove();
+                this.remove();
             }
         })
     });
