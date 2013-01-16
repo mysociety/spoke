@@ -7,34 +7,56 @@
 
             template: _.template($("#recording-controls-template").html()),
 
+            speakers: [],
+
+            recordings: [],
+
+            speakerView: null,
+
+            timerView: null,
+
+            liveRecording: null,
+
+            liveMedia: null,
+
             initialize: function (options) {
                 console.log('Recording controls page initialising');
-                this.listenTo(this.collection, "all", this.render);
+                this.speakers = options.speakers;
+                this.recordings = options.recordings;
+
+                // Create a child speakers view that shows up in
+                // the #speaker div of our template
+                this.speakerView = new SPOKE.SpeakersView({
+                    speakers: this.speakers
+                });
+
+                // Create a child timer view that shows in #timer
+                this.timerView = new SPOKE.TimerView();
+
                 this.listenTo(SPOKE, "startRecording", this.toggleControls);
                 this.listenTo(SPOKE, "stopRecording", this.render);
+
                 _.bindAll(this);
             },
 
             render: function () {
-                var speakersView, timerView;
-
                 console.log('Recording controls page rendering');
 
                 this.$el.html(this.template());
 
-                // Create a child speakers view that shows up in
-                // the #speaker div of our template
-                speakerView = new SPOKE.SpeakersView({
-                    el: this.$el.find("#speakers"),
-                    collection: this.collection
-                });
-                speakerView.render();
+                this.speakerView.setElement(this.$("#speakers")).render();
 
-                // Create a child timer view that shows in #timer
-                timerView = new SPOKE.TimerView({
-                    el: this.$el.find("#timer")
-                });
-                timerView.render();
+                // Manually bind an event to speaker links.
+                // We do this here rather than declaring it in this.events because we
+                // want it bound with every new render, but Backbone will only
+                // bind the events in this.events when the view is created.
+                // We need it bound in every render because we have to bind to
+                // *any* speaker link in order to start recording when one is clicked
+                // but we only actually want the bound callback to fire once, so we unbind
+                // it again in this.record
+                this.$el.on("click", "a.speaker", this.record);
+
+                this.timerView.setElement(this.$("#timer")).render();
 
                 // Force jQuery Mobile to do it's stuff to the template html
                 this.$el.trigger("pagecreate");
@@ -43,25 +65,32 @@
             },
 
             events: {
-                "vclick #stop-button": "stop",
-                "vclick a.speaker": "record"
+                "click #stop-button": "stop"
+            },
+
+            destroy: function () {
+                this.remove();
+                this.speakerView.remove();
+                this.timerView.remove();
             },
 
             record: function(e) {
-                var speaker, recordingAudio;
-
                 e.preventDefault();
+                var speaker, recordingAudio;
 
                 console.log("Record function");
 
-                // Unbind other vclick events, because jquery.one() will bind
-                // events once for _each_ element it matched
-                this.$el.find("a.speaker").unbind("vclick", this.record);
+                // Unbind any more vclick events, because we will have bounnd
+                // them to every a.speaker but any that happen from now
+                // until the recording stops mean "this speaker is now speaking"
+                // not "a new recording is happening" so we don't want this to fire
+                // again.
+                this.$el.off("click", "a.speaker");
 
                 // We only want to record if we're not already, this
                 // could happen with dodgy click/tap/vlick handling or
                 // slow phones and angry users
-                if(typeof this.currentRecording === 'undefined') {
+                if(_.isNull(this.liveRecording)) {
                     // Get the clicked speaker
                     speaker = $(e.target).attr("data-api-url");
 
@@ -107,7 +136,7 @@
 
                 creatingFile.done( function (file) {
 
-                    var src, media, recording;
+                    var src, media;
 
                     // We have a FileEntry to play with in file
                     console.log('File created: ' + file.fullPath);
@@ -122,17 +151,17 @@
                     media.startRecord();
 
                     // Create a new model instance to hold it
-                    recording = SPOKE.recordings.create({
+                    that.liveRecording = new SPOKE.Recording({
                         name: file.name,
                         path: file.fullPath,
                         speaker: speaker
                     });
 
                     // Save a reference to this recording for easy access later
-                    that.currentRecording = media;
+                    that.liveMedia = media;
 
                     // Trigger the global event to tell everything that recording is happening
-                    SPOKE.trigger("startRecording", recording);
+                    SPOKE.trigger("startRecording", that.liveRecording);
 
                 });
 
@@ -147,21 +176,24 @@
 
             },
 
-            // Stop the current recording
+            // Stop the live recording
             stopRecording: function () {
+                var newRecording;
 
                 console.log('Stopping recording');
 
-                console.log(JSON.stringify(this.currentRecording));
+                console.log(JSON.stringify(this.liveRecording));
 
-                if(typeof this.currentRecording !== 'undefined') {
-                    this.currentRecording.stopRecord();
-                    // Unset the currentRecording variable
-                    delete this.currentRecording;
+                if(!_.isNull(this.liveRecording) && !_.isNull(this.liveMedia)) {
+                    this.liveMedia.stopRecord();
+                    // Unset the currentMedia variable
+                    this.liveMedia = null;
+                    // Create a model in the recordings collection for the live recording
+                    newRecording = this.recordings.create(this.liveRecording);
                     // Trigger the global event to tell everything that recording has stopped
-                    // TODO - it would be nice to send the model object out again now
-                    // but what's the nicest way to get a reference to it?
-                    SPOKE.trigger("stopRecording", {});
+                    SPOKE.trigger("stopRecording", newRecording);
+                    // Now unset it too
+                    this.liveRecording = null;
                 }
 
             },
