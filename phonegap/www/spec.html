@@ -15,6 +15,22 @@
 
         <!-- Templates -->
 
+        <!-- Home Page -->
+        <script type="text/template" id="home-template">
+
+            <div data-role="header">
+                <h1>Spoke</h1>
+            </div>
+
+            <div data-role="content">
+                <p>
+                    <a href="#recording" id="record-button" data-role="button" data-icon="plus">Record a new speech</a>
+                </p>
+                <div id="recordings"></div>
+            </div>
+
+        </script>
+
         <!-- Recordings list -->
         <script type="text/template" id="recordings-template">
             <h2>Recordings</h2>
@@ -33,6 +49,54 @@
                 </p>
             <% } %>
 
+        </script>
+
+        <!-- Recording Controls Page -->
+        <script type="text/template" id="recording-controls-template">
+
+            <div data-role="header">
+                <a href="#" data-icon="home">Home</a>
+                <h1>Recording</h1>
+            </div>
+
+            <div data-role="content">
+                <h2 id="intro-title">Select a speaker to start recording</h2>
+                <div id="speakers"></div>
+            </div>
+
+            <div data-role="footer" data-position="fixed">
+                <div class="ui-grid-a">
+                    <div class="ui-block-a">
+                        <div id="timer" style="display:none"></div>
+                    </div>
+                    <div class="ui-block-b">
+                        <a href="#" id="stop-button" data-role="button" data-icon="delete" style="display:none">Stop</a>
+                    </div>
+                </div>
+            </div>
+
+        </script>
+
+        <!-- Speakers list -->
+        <script type="text/template" id="speakers-template">
+
+            <ul data-role="listview" data-inset="true" id="speakers-list">
+                <% if (speakers.isEmpty()) { %>
+                    <li>There are no speakers yet</li>
+                <% } else { %>
+                    <% speakers.each(function(speaker) { %>
+                        <li><a href="#" class="speaker" data-api-url="<%= speaker.get("meta").api_url %>"><%= speaker.get("name") %></a></li>
+                    <% }); %>
+                <% } %>
+            </ul>
+
+        </script>
+
+        <!-- Timer -->
+        <script type="text/template" id="timer-template">
+            <h2 id="timer-text">
+                <span id="hours">00</span>:<span id="minutes">00</span>:<span id="seconds">00</span>
+            </h2>
         </script>
 
         <!-- Global namespaced object which all of our custom functions will go into -->
@@ -70,9 +134,9 @@
         <!-- Views -->
         <!--<script src="js/views/home.js"></script>-->
         <script src="js/views/recordings.js"></script>
-        <!--<script src="js/views/recording-controls.js"></script>
+        <!--<script src="js/views/recording-controls.js"></script>-->
         <script src="js/views/speakers.js"></script>
-        <script src="js/views/timer.js"></script>-->
+        <!--<script src="js/views/timer.js"></script>-->
 
         <!-- Router -->
         <!--<script src="js/router/router.js"></script>-->
@@ -98,6 +162,8 @@
         <script type="text/javascript" src="spec/recordings-view.js"></script>
         <script type="text/javascript" src="spec/recordings-collection.js"></script>
         <script type="text/javascript" src="spec/speakers-collection.js"></script>
+
+        <script type="text/javascript" src="spec/speakers-view.js"></script>
 
 
         <script type="text/javascript">
