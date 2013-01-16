@@ -165,4 +165,28 @@ describe('SPOKE.RecordingsView', function () {
         expect(recording1.destroy).not.toHaveBeenCalled();
         expect(navigator.notification.alert).toHaveBeenCalled();
     });
+
+    it("Should alert the user when all files have been uploaded", function () {
+        var fakeUploadResult = $.Deferred();
+        var fakeDeleteResult = $.Deferred();
+        var recording1 = new SPOKE.Recording({
+            name: "acdc.wav",
+            path: "/acdc.wav",
+            speaker: "http://example.com/speaker/1"
+        });
+
+        spyOn(SPOKE.files, "uploadFile").andReturn(fakeUploadResult);
+        spyOn(SPOKE.files, "deleteFile").andReturn(fakeDeleteResult);
+        spyOn(recording1, "destroy");
+
+        navigator.notification = jasmine.createSpyObj('navigation', ['alert']);
+
+        recordings.add(recording1);
+        recordingsView.render();
+        $("#upload-button").click();
+        fakeUploadResult.resolve();
+        fakeDeleteResult.resolve();
+
+        expect(navigator.notification.alert).toHaveBeenCalledWith('All files uploaded');
+    });
 });
