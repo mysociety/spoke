@@ -7,24 +7,24 @@
 
             template: _.template($("#recordings-template").html()),
 
+            recordings: [],
+
             initialize: function (options) {
                 console.log('Recordings list initialising');
-                this.listenTo(this.collection, "all", this.render);
+                this.recordings = options.recordings;
+                this.listenTo(this.recordings, "all", this.render);
                 _.bindAll(this);
             },
 
             render: function () {
                 console.log('Recordings list rendering');
-
-                console.log(this.collection.toJSON());
-
-                this.$el.html(this.template({recordings: this.collection}));
-
+                console.log(this.recordings.toJSON());
+                this.$el.html(this.template({recordings: this.recordings}));
                 return this;
             },
 
             events: {
-                "vclick #upload-button": "uploadButton"
+                "click #upload-button": "uploadButton"
             },
 
             uploadButton: function (e) {
@@ -35,10 +35,10 @@
 
                 console.log('Upload button clicked');
 
-                console.log('Trying to upload the recordings in: ' + this.collection.toJSON());
+                console.log('Trying to upload the recordings in: ' + this.recordings.toJSON());
 
                 // Do the uploading
-                this.collection.clone().each(function(recording) {
+                this.recordings.clone().each(function(recording) {
 
                     console.log('Uploading file: ' + JSON.stringify(recording.toJSON()));
 
@@ -63,7 +63,7 @@
 
                         deletingFile.done(function () {
                             console.log('File removed successfully, destroying model');
-                            var real_recording = that.collection.get(recording);
+                            var real_recording = that.recordings.get(recording);
                             real_recording.destroy();
                         });
 
