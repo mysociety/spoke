@@ -26,7 +26,7 @@
             },
 
             events: {
-                "vclick a.speaker": "speakerChange"
+                "click a.speaker": "speakerChange"
             },
 
             speakerChange: function(e) {
