@@ -9,9 +9,12 @@
 
             recordingsView: null,
 
+            recordings: []
+
             initialize: function (options) {
                 console.log('Home page initialising');
-                this.listenTo(this.collection, "all", this.render);
+                this.recordings = options.recordings;
+                this.listenTo(this.recordings, "all", this.render);
                 _.bindAll(this);
             },
 
@@ -22,7 +25,7 @@
                 // the #recordings div of our template
                 this.recordingsView = new SPOKE.RecordingsView({
                     el: this.$el.find("#recordings"),
-                    collection: this.collection
+                    recordings: this.recordings
                 });
                 this.recordingsView.render();
                 // Force jQuery Mobile to do it's stuff to the template html
