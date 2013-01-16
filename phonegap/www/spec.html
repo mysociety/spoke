@@ -9,7 +9,31 @@
         <script type="text/javascript" src="spec/lib/jasmine-1.2.0/jasmine.js"></script>
         <script type="text/javascript" src="spec/lib/jasmine-1.2.0/jasmine-html.js"></script>
 
+        <script type="text/javascript" src="spec/lib/jasmine-jquery-1.4.2.js"></script>
+
         <!-- include source files here... -->
+
+        <!-- Templates -->
+
+        <!-- Recordings list -->
+        <script type="text/template" id="recordings-template">
+            <h2>Recordings</h2>
+            <ul data-role="listview" data-inset="true" id="recorded-speeches">
+                <% if (recordings.isEmpty()) { %>
+                    <li>There are no recordings yet</li>
+                <% } else { %>
+                    <% recordings.each(function(recording) { %>
+                        <li><%= recording.get("name") %></li>
+                    <% }); %>
+                <% } %>
+            </ul>
+            <% if (!recordings.isEmpty()) { %>
+                <p>
+                    <a href="#" id="upload-button" data-role="button" data-icon="check">Upload</a>
+                </p>
+            <% } %>
+
+        </script>
 
         <!-- Global namespaced object which all of our custom functions will go into -->
         <script type="text/javascript">
@@ -18,12 +42,11 @@
 
         <!-- Libraries -->
         <script src="js/lib/jquery-1.8.3.js"></script>
+        <!-- This file chooses which platform's version of Cordova to load (iOS or Android) -->
+        <!--<script src="cordova-2.2.0-independent.js"></script>-->
         <script src="js/lib/underscore-1.4.3.js"></script>
         <script src="js/lib/backbone-0.9.9.js"></script>
-        <!--<script src="js/lib/backbone.localStorage-1.0.js"></script>-->
-
-        <!-- This file chooses which platform's version of Cordova to load (iOS or Android) -->
-        <!--<script src="cordova-2.2.0-independent.js"></script>->
+        <script src="js/lib/backbone.localStorage-1.0.js"></script>
 
         <!-- Config for jQuery Mobile -->
         <!--<script src="js/jqm-config.js"></script>-->
@@ -37,17 +60,17 @@
         <script src="js/files.js"></script>
 
         <!-- Models -->
-        <!--<script src="js/models/recording.js"></script>
-        <script src="js/models/speaker.js"></script>-->
+        <script src="js/models/recording.js"></script>
+        <!--<script src="js/models/speaker.js"></script>-->
 
         <!-- Collections -->
-        <!--<script src="js/collections/recordings.js"></script>
-        <script src="js/collections/speakers.js"></script>-->
+        <script src="js/collections/recordings.js"></script>
+        <!--<script src="js/collections/speakers.js"></script>-->
 
         <!-- Views -->
-        <!--<script src="js/views/home.js"></script>
+        <!--<script src="js/views/home.js"></script>-->
         <script src="js/views/recordings.js"></script>
-        <script src="js/views/recording-controls.js"></script>
+        <!--<script src="js/views/recording-controls.js"></script>
         <script src="js/views/speakers.js"></script>
         <script src="js/views/timer.js"></script>-->
 
@@ -68,8 +91,11 @@
         <!-- Specs which don't need the app started up -->
         <script type="text/javascript" src="spec/files.js"></script>
 
-        <!-- Specs which test the app and need the environment set up -->
+        <!-- Tests of the app startup -->
         <script type="text/javascript" src="spec/app.js"></script>
+
+        <!-- Specs which test the app and need the environment already set up -->
+        <script type="text/javascript" src="spec/recordings-view.js"></script>
 
 
         <script type="text/javascript">
