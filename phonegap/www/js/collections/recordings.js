@@ -2,6 +2,7 @@
  * Recordings Collection.
  * A collection of Recording models
  */
+
  ;(function (SPOKE, Backbone, _, $) {
 	_.extend(SPOKE, {
 		RecordingsCollection: Backbone.Collection.extend({
@@ -12,25 +13,25 @@
                 // Reset events on the recordings collection
                 console.log("Recordings collection initialising");
                 this.on('reset', this.checkFilesExist);
+                _.bindAll(this);
             },
 
-            checkFilesExist: function (models, options) {
+            checkFilesExist: function (collection) {
 
                 console.log("Checking current collection against files");
 
-                var that = this;
-                var gettingFiles = SPOKE.files.getDirectoryEntries(SPOKE.config.filesDirectory);
-
+                var that = this,
+                    gettingFiles = SPOKE.files.getDirectoryEntries(SPOKE.config.filesDirectory);
 
                 gettingFiles.done(function (files) {
-                    var clonedCollection = that.clone();
+                    var modelsToDelete = [];
 
-                    console.log("Looping over models: " + JSON.stringify(clonedCollection.models));
+                    console.log("Looping over models: " + JSON.stringify(collection));
                     console.log("Files: " + JSON.stringify(files));
 
-                    clonedCollection.each(function (model) {
+                    collection.each(function (model) {
 
-                        console.log("Checking model: " + JSON.stringify(model.toJSON()));
+                        console.log("Checking model: " + JSON.stringify(model));
 
                         var fileExists = false;
 
@@ -42,11 +43,17 @@
                         });
 
                         if(!fileExists) {
-                            console.log("File does not exist for model with name: " + model.get("name"));
-                            real_model = that.get(model);
-                            real_model.destroy();
+                            console.log("File: " + model.get("name") + " doesn't exist, model will be deleted.");
+                            modelsToDelete.push(model);
                         }
 
+                    });
+
+                    console.log("Models which we're going to delete: " + JSON.stringify(modelsToDelete));
+
+                    _.each(modelsToDelete, function(model){
+                        console.log("Deleting model: " + JSON.stringify(model));
+                        model.destroy();
                     });
 
                 });
