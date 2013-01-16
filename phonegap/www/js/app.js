@@ -42,13 +42,13 @@
 
             // App resume events
             $(document).on('resume', function() {
-                SPOKE.speakers.fetch();
-                SPOKE.recordings.fetch();
+                SPOKE.speakers.fetch({error: function() { console.log(arguments); }});
+                SPOKE.recordings.fetch({error: function() { console.log(arguments); }});
             });
 
             // Fetch initial data
-            SPOKE.speakers.fetch();
-            SPOKE.recordings.fetch();
+            SPOKE.speakers.fetch({error: function() { console.log(arguments); }});
+            SPOKE.recordings.fetch({error: function() { console.log(arguments); }});
 
             // Start routing
             Backbone.history.start();
