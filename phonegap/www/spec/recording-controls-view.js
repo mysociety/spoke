@@ -118,8 +118,7 @@ describe('SPOKE.RecordingControlsView', function () {
         var media = jasmine.createSpyObj('media', ['startRecord', 'stopRecord']);
         var expectedRecording = {
             name: "1.wav",
-            path: "/1.wav",
-            speaker: "http://example.com/speaker/1"
+            path: "/1.wav"
         };
 
         speakers.add(speaker1);
@@ -157,8 +156,7 @@ describe('SPOKE.RecordingControlsView', function () {
         var media = jasmine.createSpyObj('media', ['startRecord', 'stopRecord']);
         var expectedRecording = {
             name: "1.wav",
-            path: "/1.wav",
-            speaker: "http://example.com/speaker/1"
+            path: "/1.wav"
         };
 
         speakers.add(speaker1);
@@ -185,8 +183,7 @@ describe('SPOKE.RecordingControlsView', function () {
         var media = jasmine.createSpyObj('media', ['startRecord', 'stopRecord']);
         var expectedRecording = {
             name: "1.wav",
-            path: "/1.wav",
-            speaker: "http://example.com/speaker/1"
+            path: "/1.wav"
         };
 
         speakers.add(speaker1);
@@ -213,8 +210,7 @@ describe('SPOKE.RecordingControlsView', function () {
         var media = jasmine.createSpyObj('media', ['startRecord', 'stopRecord']);
         var expectedRecording = {
             name: "1.wav",
-            path: "/1.wav",
-            speaker: "http://example.com/speaker/1"
+            path: "/1.wav"
         };
 
         speakers.add(speaker1);
