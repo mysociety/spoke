@@ -39,6 +39,26 @@ var helper = {
         helper.trigger(pageDiv, 'pageinit');
     },
 
+    // Create a mock Media object from Phonegap's Media api
+    mockMedia: function(shouldSucceed) {
+        var mock = function(src, success, error) {
+            var media = {
+                src: src,
+                startRecord: function() {},
+                stopRecord: function() {
+                    if(shouldSucceed) {
+                        success();
+                    }
+                    else {
+                        error({message: "mock error"});
+                    }
+                }
+            }
+            return media;
+        };
+        return mock;
+    },
+
     // Mock File object from Phonegap's File api
     mockFile: function (name, fullPath) {
         return {
