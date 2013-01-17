@@ -3,7 +3,11 @@ beforeEach(function () {
 });
 
 afterEach(function() {
-    document.getElementById('stage').innerHTML = '';
+    $('#stage').empty();
+    window.localStorage.clear();
+    if(SPOKE.hasOwnProperty("recordings")) {
+        SPOKE.recordings.refreshLocalStorage();
+    }
 });
 
 var helper = {
