@@ -8,10 +8,27 @@
 ;(function (SPOKE, Backbone, _, $) {
     _.extend(SPOKE, {
         Recording: Backbone.Model.extend({
+
             localStorage: new Backbone.LocalStorage("Recordings"),
+
+            initialize: function (options) {
+                _.bindAll(this);
+            },
 
             refreshLocalStorage: function () {
                 this.localStorage = new Backbone.LocalStorage("Recordings");
+            },
+
+            addSpeaker: function (speaker) {
+                var speakers = this.get("speakers");
+                if(_.isUndefined(speakers)) {
+                    speakers = [];
+                }
+                speakers.push({
+                    timestamp: new Date().getTime(),
+                    speaker: speaker
+                });
+                this.set("speakers", speakers);
             }
         })
     });
