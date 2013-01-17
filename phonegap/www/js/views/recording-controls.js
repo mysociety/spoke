@@ -91,14 +91,11 @@
                 // could happen with dodgy click/tap/vlick handling or
                 // slow phones and angry users
                 if(_.isNull(this.liveRecording)) {
-                    // Get the clicked speaker
-                    speaker = $(e.target).attr("data-api-url");
-
                     // startRecording wraps the phonegap media creation api in
                     // a promise and returns it, it also creates a new recording
                     // model instance and saves a global reference to
                     // the current recording media object in this.currentRecording
-                    recordingAudio = this.startRecording(speaker);
+                    recordingAudio = this.startRecording();
 
                     recordingAudio.done(function() {
                         var message = 'Recording saved!';
@@ -122,7 +119,7 @@
 
             // Start recording to a new audio file in the SPOKE app's directory
             // using the Media API
-            startRecording: function (speaker) {
+            startRecording: function () {
 
                 console.log('Recording Audio');
 
@@ -153,8 +150,7 @@
                     // Create a new model instance to hold it
                     that.liveRecording = new SPOKE.Recording({
                         name: file.name,
-                        path: file.fullPath,
-                        speaker: speaker
+                        path: file.fullPath
                     });
 
                     // Save a reference to this recording for easy access later
