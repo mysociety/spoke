@@ -9,9 +9,17 @@
 
             speakers: [],
 
+            liveRecording: null,
+
             initialize: function (options) {
                 console.log('Speaker list initialising');
                 this.speakers = options.speakers;
+                this.listenTo(SPOKE, 'startRecording', function (liveRecording) {
+                    this.liveRecording = liveRecording;
+                });
+                this.listenTo(SPOKE, 'stopRecording', function() {
+                    this.liveRecording = null;
+                });
                 _.bindAll(this);
             },
 
@@ -31,7 +39,10 @@
 
             speakerChange: function(e) {
                 e.preventDefault();
-                console.log("Speaker clicked");
+                if(!_.isNull(this.liveRecording)) {
+                    var speaker = $(e.target).attr("data-api-url");
+                    this.liveRecording.addSpeaker(speaker);
+                }
             }
         })
     });
