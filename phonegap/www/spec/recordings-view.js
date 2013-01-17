@@ -28,13 +28,11 @@ describe('SPOKE.RecordingsView', function () {
     it("Should render the filename of each recording when there are recordings", function () {
         var recording1 = new SPOKE.Recording({
             name: "acdc.wav",
-            path: "/acdc.wav",
-            speaker: "http://example.com/speaker/1"
+            path: "/acdc.wav"
         });
         var recording2 = new SPOKE.Recording({
             name: "jpriest.wav",
-            path: "/jpriest.wav",
-            speaker: "http://example.com/speaker/2"
+            path: "/jpriest.wav"
         });
         recordings.add(recording1);
         recordings.add(recording2);
@@ -51,8 +49,7 @@ describe('SPOKE.RecordingsView', function () {
     it("Should show an upload button when there are recordings", function () {
         var recording1 = new SPOKE.Recording({
             name: "acdc.wav",
-            path: "/acdc.wav",
-            speaker: "http://example.com/speaker/1"
+            path: "/acdc.wav"
         });
         recordings.add(recording1);
         recordingsView.render();
@@ -60,24 +57,46 @@ describe('SPOKE.RecordingsView', function () {
     });
 
     it("Should try to upload when the upload button is clicked ", function () {
-        var recording1 = new SPOKE.Recording({
+        var attributes = {
             name: "acdc.wav",
-            path: "/acdc.wav",
-            speaker: "http://example.com/speaker/1"
-        });
+            path: "/acdc.wav"
+        };
+        var recording1 = new SPOKE.Recording(attributes);
         spyOn(SPOKE.files, "uploadFile").andReturn($.Deferred());
         recordings.add(recording1);
         recordingsView.render();
         $("#upload-button").click();
-        expect(SPOKE.files.uploadFile).toHaveBeenCalledWith('/acdc.wav', {speaker: "http://example.com/speaker/1"});
+        expect(SPOKE.files.uploadFile).toHaveBeenCalledWith('/acdc.wav', {});
+    });
+
+    it("Should send the list of speakers when it uploads", function () {
+        var attributes = {
+            name: "acdc.wav",
+            path: "/acdc.wav",
+            speakers: [
+                {
+                    timestamp: 1,
+                    speaker: "http://a.com/speaker/1"
+                },
+                {
+                    timestamp: 2,
+                    speaker: "http://a.com/speaker/2"
+                }
+            ]
+        };
+        var recording1 = new SPOKE.Recording(attributes);
+        spyOn(SPOKE.files, "uploadFile").andReturn($.Deferred());
+        recordings.add(recording1);
+        recordingsView.render();
+        $("#upload-button").click();
+        expect(SPOKE.files.uploadFile).toHaveBeenCalledWith('/acdc.wav', {speakers: attributes.speakers});
     });
 
     it("Should try to delete the file if the upload is successful", function () {
         var fakeUploadResult = $.Deferred();
         var recording1 = new SPOKE.Recording({
             name: "acdc.wav",
-            path: "/acdc.wav",
-            speaker: "http://example.com/speaker/1"
+            path: "/acdc.wav"
         });
 
         spyOn(SPOKE.files, "uploadFile").andReturn(fakeUploadResult);
@@ -98,8 +117,7 @@ describe('SPOKE.RecordingsView', function () {
         var fakeDeleteResult = $.Deferred();
         var recording1 = new SPOKE.Recording({
             name: "acdc.wav",
-            path: "/acdc.wav",
-            speaker: "http://example.com/speaker/1"
+            path: "/acdc.wav"
         });
 
         spyOn(SPOKE.files, "uploadFile").andReturn(fakeUploadResult);
@@ -121,8 +139,7 @@ describe('SPOKE.RecordingsView', function () {
         var fakeUploadResult = $.Deferred();
         var recording1 = new SPOKE.Recording({
             name: "acdc.wav",
-            path: "/acdc.wav",
-            speaker: "http://example.com/speaker/1"
+            path: "/acdc.wav"
         });
 
         spyOn(SPOKE.files, "uploadFile").andReturn(fakeUploadResult);
@@ -146,8 +163,7 @@ describe('SPOKE.RecordingsView', function () {
         var fakeDeleteResult = $.Deferred();
         var recording1 = new SPOKE.Recording({
             name: "acdc.wav",
-            path: "/acdc.wav",
-            speaker: "http://example.com/speaker/1"
+            path: "/acdc.wav"
         });
 
         spyOn(SPOKE.files, "uploadFile").andReturn(fakeUploadResult);
@@ -171,8 +187,7 @@ describe('SPOKE.RecordingsView', function () {
         var fakeDeleteResult = $.Deferred();
         var recording1 = new SPOKE.Recording({
             name: "acdc.wav",
-            path: "/acdc.wav",
-            speaker: "http://example.com/speaker/1"
+            path: "/acdc.wav"
         });
 
         spyOn(SPOKE.files, "uploadFile").andReturn(fakeUploadResult);

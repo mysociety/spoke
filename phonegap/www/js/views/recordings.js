@@ -43,8 +43,8 @@
                     console.log('Uploading file: ' + JSON.stringify(recording.toJSON()));
 
                     params = {};
-                    if(typeof recording.get('speaker') !== "undefined") {
-                        params.speaker = recording.get('speaker');
+                    if(!_.isUndefined(recording.get('speakers'))) {
+                        params.speakers = recording.get('speakers');
                     }
 
                     // uploadingFiles is, you guessed it, a Promise
