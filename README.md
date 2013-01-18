@@ -3,7 +3,7 @@ Spoke
 
 App
 ---
-The mobile app uses Phonegap to run in Android and iOS, the main code can be
+The mobile app uses Phonegap to run in Android and iOS. The main code can be
 found in `phonegap/www` which is then symlinked into the right places from
 `phonegap/android/assets` and `ios` for the Android and iOS versions
 respectively. You should be able to open the Eclipse project in
