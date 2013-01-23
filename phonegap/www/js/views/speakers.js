@@ -38,8 +38,10 @@
             },
 
             speakerChange: function(e) {
+                console.log("Speaker clicked");
                 e.preventDefault();
                 if(!_.isNull(this.liveRecording)) {
+                    console.log("Adding speaker to live recording");
                     var speaker = $(e.target).attr("data-api-url");
                     this.liveRecording.addSpeaker(speaker);
                 }
