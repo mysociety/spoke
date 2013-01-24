@@ -21,9 +21,7 @@
 
             addSpeaker: function (speaker) {
                 var speakers = this.get("speakers");
-                console.log("MOMENT: " + moment);
                 var timestamp = moment.utc().valueOf();
-                console.log(timestamp);
                 if(_.isUndefined(speakers)) {
                     speakers = [];
                 }
