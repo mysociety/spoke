@@ -44,7 +44,7 @@
 
                     params = {};
                     if(!_.isUndefined(recording.get('speakers'))) {
-                        params.speakers = recording.get('speakers');
+                        params.timestamps = recording.get('speakers');
                     }
 
                     // uploadingFiles is, you guessed it, a Promise
