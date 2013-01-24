@@ -19,9 +19,9 @@ describe('SPOKE.files', function () {
     beforeEach(function () {
         var timestamp, filesEntries;
 
-        // Mock the Date.UTC() method so that we can get the same filename every time
-        timestamp = new Date('01/01/2000').getTime();
-        spyOn(Date, "UTC").andReturn(timestamp);
+        // Mock the moment.utc() method so that we can get the same filename every time
+        timestamp = moment.utc([2000, 0, 1, 0, 0, 0, 0]);
+        spyOn(moment, "utc").andReturn(timestamp);
 
         // Fix the filename extension used
         if(SPOKE.config.hasOwnProperty('audioFilenameExtension')) {
@@ -30,7 +30,7 @@ describe('SPOKE.files', function () {
         SPOKE.config.audioFilenameExtension = '.3gp';
 
         // Mock the phonegap file apis
-        filename = "recording_" + timestamp + SPOKE.config.audioFilenameExtension;
+        filename = "recording_" + timestamp.valueOf() + SPOKE.config.audioFilenameExtension;
         mockFile = helper.mockFile(filename, "/spoke/" + filename);
 
         // A mock directory for files

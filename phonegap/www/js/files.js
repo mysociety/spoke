@@ -3,7 +3,7 @@
  * Mainly wrappers around their async functions to return Promises
  */
 
- (function(SPOKE, Backbone, _, $) {
+ ;(function (SPOKE, Backbone, _, $, moment) {
     _.extend(SPOKE, {
         files: {
             // Create a new file to put our recording's into. This requires
@@ -28,7 +28,7 @@
 
                         // Create a new file, the path is relative to the directory we just got
                         // Use a timestamp to the nearest millisecond as a unique name
-                        var timestamp = Date.UTC();
+                        var timestamp = moment.utc().valueOf();
                         path = 'recording_' + timestamp + SPOKE.config.audioFilenameExtension;
                         return getFile(directory, path, {create: true, exclusive: true});
                     });
@@ -213,4 +213,4 @@
         }
     }
 
-})(SPOKE, Backbone, _, $);
+})(SPOKE, Backbone, _, $, moment);
