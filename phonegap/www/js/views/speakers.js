@@ -11,6 +11,8 @@
 
             liveRecording: null,
 
+            selectedListItem: null,
+
             initialize: function (options) {
                 console.log('Speaker list initialising');
                 this.speakers = options.speakers;
@@ -38,13 +40,34 @@
             },
 
             speakerChange: function(e) {
+                var listItem = $(e.target).parents("li").first();
+
                 console.log("Speaker clicked");
+
                 e.preventDefault();
+
                 if(!_.isNull(this.liveRecording)) {
-                    console.log("Adding speaker to live recording");
                     var speaker = $(e.target).attr("data-api-url");
+                    console.log("Adding speaker: " + speaker + " to live recording");
                     this.liveRecording.addSpeaker(speaker);
                 }
+
+                // Update the styles to make it look like the speaker is selected
+                // Deselect the old selectedListItem if there is any
+                if(!_.isNull(this.selectedListItem)) {
+                    this.deselectListItem(this.selectedListItem);
+                }
+                // select the current list item and save it in this.selectedListItem
+                this.selectListItem(listItem)
+                this.selectedListItem = listItem;
+            },
+
+            deselectListItem: function (item) {
+                $(item).removeClass("ui-btn-down-a").addClass("ui-btn-up-c");
+            },
+
+            selectListItem: function (item) {
+                $(item).removeClass("ui-btn-up-c").addClass("ui-btn-down-a");
             }
         })
     });
