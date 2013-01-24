@@ -89,7 +89,7 @@ describe('SPOKE.RecordingsView', function () {
         recordings.add(recording1);
         recordingsView.render();
         $("#upload-button").click();
-        expect(SPOKE.files.uploadFile).toHaveBeenCalledWith('/acdc.wav', {speakers: attributes.speakers});
+        expect(SPOKE.files.uploadFile).toHaveBeenCalledWith('/acdc.wav', {timestamps: attributes.speakers});
     });
 
     it("Should try to delete the file if the upload is successful", function () {
