@@ -19,12 +19,9 @@ describe('SPOKE.files', function () {
     beforeEach(function () {
         var timestamp, filesEntries;
 
-        // Mock the Date() object so that we can get the same filename every time
-        oldDate = Date;
-        Date = function (fake) {
-            return new oldDate('01/01/2000');
-        };
-        timestamp = new Date().getTime();
+        // Mock the Date.UTC() method so that we can get the same filename every time
+        timestamp = new Date('01/01/2000').getTime();
+        spyOn(Date, "UTC").andReturn(timestamp);
 
         // Fix the filename extension used
         if(SPOKE.config.hasOwnProperty('audioFilenameExtension')) {
@@ -86,8 +83,6 @@ describe('SPOKE.files', function () {
 
     afterEach(function() {
         // Undo all the crazy mocking we did
-        Date = oldDate;
-
         if(typeof oldLocalFileSystem !== 'undefined') {
             window.LocalFileSystem = oldLocalFileSystem;
         }

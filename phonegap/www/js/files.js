@@ -28,7 +28,7 @@
 
                         // Create a new file, the path is relative to the directory we just got
                         // Use a timestamp to the nearest millisecond as a unique name
-                        var timestamp = new Date().getTime();
+                        var timestamp = Date.UTC();
                         path = 'recording_' + timestamp + SPOKE.config.audioFilenameExtension;
                         return getFile(directory, path, {create: true, exclusive: true});
                     });

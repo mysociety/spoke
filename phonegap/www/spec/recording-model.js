@@ -8,19 +8,14 @@ describe('SPOKE.Recording', function () {
             name: "1.wav",
             path: "/1.wav"
         });
-        // Mock the Date() object so that we can get the same filename every time
-        oldDate = Date;
-        Date = function (fake) {
-            return new oldDate('01/01/2000');
-        };
-        this.timestamp = new Date().getTime();
+        // Mock the Date.UTC() method so that we can get the same filename every time
+        this.timestamp = new Date('01/01/2000').getTime();
+        spyOn(Date, "UTC").andReturn(this.timestamp);
     });
 
     afterEach(function () {
         this.recording.destroy();
         this.recording = null;
-        // Undo all the crazy mocking we did
-        Date = oldDate;
     });
 
     it("Should have an empty list of speakers initially", function () {
