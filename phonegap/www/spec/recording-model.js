@@ -8,9 +8,9 @@ describe('SPOKE.Recording', function () {
             name: "1.wav",
             path: "/1.wav"
         });
-        // Mock the Date.UTC() method so that we can get the same filename every time
-        this.timestamp = new Date('01/01/2000').getTime();
-        spyOn(Date, "UTC").andReturn(this.timestamp);
+        // Mock the moment.utc() method so that we can get the same filename every time
+        this.timestamp = moment.utc([2000, 0, 1, 0, 0, 0, 0]);
+        spyOn(moment, "utc").andReturn(this.timestamp);
     });
 
     afterEach(function () {
@@ -29,6 +29,6 @@ describe('SPOKE.Recording', function () {
 
         this.recording.addSpeaker(fakeSpeaker);
 
-        expect(this.recording.get("speakers")).toEqual([{timestamp: this.timestamp, speaker: fakeSpeaker}]);
+        expect(this.recording.get("speakers")).toEqual([{timestamp: this.timestamp.valueOf(), speaker: fakeSpeaker}]);
     });
 });

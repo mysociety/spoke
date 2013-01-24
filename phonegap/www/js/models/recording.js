@@ -5,7 +5,7 @@
  *    path: the full path to the recording, in whatever format the device likes it
  *    speaker: the popit url of the speaker on the recording
  */
-;(function (SPOKE, Backbone, _, $) {
+;(function (SPOKE, Backbone, _, $, moment) {
     _.extend(SPOKE, {
         Recording: Backbone.Model.extend({
 
@@ -21,11 +21,14 @@
 
             addSpeaker: function (speaker) {
                 var speakers = this.get("speakers");
+                console.log("MOMENT: " + moment);
+                var timestamp = moment.utc().valueOf();
+                console.log(timestamp);
                 if(_.isUndefined(speakers)) {
                     speakers = [];
                 }
                 speakers.push({
-                    timestamp: Date.UTC(),
+                    timestamp: timestamp,
                     speaker: speaker
                 });
                 this.set("speakers", speakers);
@@ -33,4 +36,4 @@
         })
     });
 
-})(SPOKE, Backbone, _, $);
+})(SPOKE, Backbone, _, $, moment);
