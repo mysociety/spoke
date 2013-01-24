@@ -20,7 +20,7 @@ describe('SPOKE.RecordingControlsView', function () {
         // We don't mock window.Media() because it's complicated and needs
         // behaviour specifying, so use helper.mockMedia when you want it
         if(navigator.hasOwnProperty('notification')) {
-            oldNotification = navigator.notification
+            oldNotification = navigator.notification;
         }
         navigator.notification = jasmine.createSpyObj('navigation', ['alert']);
     });

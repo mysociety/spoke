@@ -57,7 +57,7 @@ var helper = {
                         error({message: "mock error"});
                     }
                 }
-            }
+            };
             return media;
         };
         return mock;
