@@ -25,7 +25,7 @@
                     speakers = [];
                 }
                 speakers.push({
-                    timestamp: new Date().getTime(),
+                    timestamp: Date.UTC(),
                     speaker: speaker
                 });
                 this.set("speakers", speakers);
