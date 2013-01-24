@@ -36,7 +36,7 @@ describe('SPOKE.SpeakersCollection', function () {
                         api_url: "http://spoke-testing.popit.mysociety.org/api/v0.1/person/50d1b17071ec32dd6e0019f3",
                         edit_url: "http://spoke-testing.popit.mysociety.org/person/steven-day"
                     }
-                },
+                }
             ]
         };
         var defaultSpeaker = {
