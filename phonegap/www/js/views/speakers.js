@@ -58,7 +58,7 @@
                     this.deselectListItem(this.selectedListItem);
                 }
                 // select the current list item and save it in this.selectedListItem
-                this.selectListItem(listItem)
+                this.selectListItem(listItem);
                 this.selectedListItem = listItem;
             },
 
