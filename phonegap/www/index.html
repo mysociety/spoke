@@ -96,7 +96,13 @@
 
         <!-- Loading messages -->
         <script type="text/template" id="uploading-message">
-                Uploading <%=fileCount%> files. Uploaded <%=uploadedCount%> so far.
+            <span class="ui-icon ui-icon-loading"></span>
+            <h1>Uploading <%=fileCount%> files.</h1>
+            <ul>
+                <% _.each(uploadPercentages, function(percentage, index) { %>
+                    <li>File <%=index + 1%> <span id="uploading-percentage-<%=index%>"><%=percentage%></span>%</li>
+                <% }); %>
+            </ul>
         </script>
 
         <!-- Scripts -->
