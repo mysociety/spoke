@@ -7,7 +7,11 @@
 
             template: _.template($("#recordings-template").html()),
 
+            uploadingMsgTemplate: _.template($("#uploading-message").html()),
+
             recordings: [],
+
+            filesUploaded: 0,
 
             initialize: function (options) {
                 console.log('Recordings list initialising');
@@ -37,6 +41,14 @@
 
                 console.log('Trying to upload the recordings in: ' + this.recordings.toJSON());
 
+                // Show the loader
+                this.filesUploaded = 0;
+                $.mobile.loading('show', {
+                    theme:'a',
+                    textVisible:true,
+                    text: this.uploadingMsgTemplate({fileCount: this.recordings.length, uploadedCount:this.filesUploaded})
+                });
+
                 // Do the uploading
                 this.recordings.clone().each(function(recording) {
 
@@ -56,6 +68,14 @@
                         // result.response contains the server response if we want
                         // to do anything with it
                         console.log('File: ' + JSON.stringify(recording.toJSON()) + ' successfully uploaded.');
+
+                        // Update the loading dialog's percentage
+                        that.filesUploaded++;
+                        $.mobile.loading('show', {
+                            theme:'a',
+                            textVisible:true,
+                            html: that.uploadingMsgTemplate({fileCount: that.recordings.length, uploadedCount:that.filesUploaded})
+                        });
 
                         // Delete the file from local disk
                         // Another async process, so another Promise
@@ -84,9 +104,13 @@
                 });
 
                 // When all the promises have completed in some way or another
-                $.when.apply(null, uploadingPromises)
+                $.whenAll.apply(null, uploadingPromises)
                     .done(function () {
                         navigator.notification.alert('All files uploaded');
+                    })
+                    .always(function () {
+                        // Hide the loader
+                        $.mobile.loading('hide');
                     });
             }
         })
