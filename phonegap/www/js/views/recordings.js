@@ -11,7 +11,7 @@
 
             recordings: [],
 
-            filesUploaded: 0,
+            uploadPercentages: [],
 
             initialize: function (options) {
                 console.log('Recordings list initialising');
@@ -25,6 +25,24 @@
                 console.log(this.recordings.toJSON());
                 this.$el.html(this.template({recordings: this.recordings}));
                 return this;
+            },
+
+            showUploadingDialog: function() {
+                // Show the loader with the current percentages
+                $.mobile.loading('show', {
+                    theme:'a',
+                    textonly:false,
+                    textVisible:true,
+                    html: this.uploadingMsgTemplate({
+                        fileCount: this.recordings.length,
+                        uploadPercentages:this.uploadPercentages
+                    })
+                });
+            },
+
+            updateUploadingPercentage: function(index, percentage) {
+                this.uploadPercentages[index] = percentage;
+                $("#uploading-percentage-" + index).html(percentage);
             },
 
             events: {
@@ -41,16 +59,14 @@
 
                 console.log('Trying to upload the recordings in: ' + this.recordings.toJSON());
 
-                // Show the loader
-                this.filesUploaded = 0;
-                $.mobile.loading('show', {
-                    theme:'a',
-                    textVisible:true,
-                    text: this.uploadingMsgTemplate({fileCount: this.recordings.length, uploadedCount:this.filesUploaded})
-                });
+                // Populate the initial percentages and show the loading screen
+                for(var i = 0; i < this.recordings.length; i++) {
+                    this.uploadPercentages[i] = 0;
+                }
+                this.showUploadingDialog();
 
                 // Do the uploading
-                this.recordings.clone().each(function(recording) {
+                this.recordings.clone().each(function(recording, index) {
 
                     console.log('Uploading file: ' + JSON.stringify(recording.toJSON()));
 
@@ -59,8 +75,20 @@
                         params.timestamps = recording.get('speakers');
                     }
 
+                    // Upload progress callback
+                    // TODO - make this something that the view binds to and thus updates
+                    // automatically with a new render?
+                    var progress = function(progressEvent) {
+                        if(progressEvent.lengthComputable) {
+                            console.log("Upload progress Event for file at index: " + index);
+                            console.log("Loaded: " + progressEvent.loaded + " total: " + progressEvent.total);
+                            var percentage = Math.floor((progressEvent.loaded / progressEvent.total) * 100);
+                            that.updateUploadingPercentage(index, percentage);
+                        }
+                    };
+
                     // uploadingFiles is, you guessed it, a Promise
-                    var uploadingFile = SPOKE.files.uploadFile(recording.get('path'), params);
+                    var uploadingFile = SPOKE.files.uploadFile(recording.get('path'), params, progress);
                     uploadingPromises.push(uploadingFile);
 
                     uploadingFile.done(function (result) {
@@ -69,13 +97,8 @@
                         // to do anything with it
                         console.log('File: ' + JSON.stringify(recording.toJSON()) + ' successfully uploaded.');
 
-                        // Update the loading dialog's percentage
-                        that.filesUploaded++;
-                        $.mobile.loading('show', {
-                            theme:'a',
-                            textVisible:true,
-                            html: that.uploadingMsgTemplate({fileCount: that.recordings.length, uploadedCount:that.filesUploaded})
-                        });
+                        // Update the percentage
+                        that.updateUploadingPercentage(index, 100);
 
                         // Delete the file from local disk
                         // Another async process, so another Promise
