@@ -58,7 +58,7 @@
             },
 
             // Upload a file to the Spoke server
-            uploadFile: function (path, params) {
+            uploadFile: function (path, params, progress) {
 
                 console.log('Uploading file: ' + path);
 
@@ -86,6 +86,7 @@
                 }
 
                 transfer = new FileTransfer();
+                transfer.onprogress = progress;
                 transfer.upload(path, SPOKE.config.apiUrl, uploadingFile.resolve, uploadingFile.reject, options);
 
                 return uploadingFile;
