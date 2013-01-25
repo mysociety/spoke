@@ -94,6 +94,11 @@
             </h2>
         </script>
 
+        <!-- Loading messages -->
+        <script type="text/template" id="uploading-message">
+                Uploading <%=fileCount%> files. Uploaded <%=uploadedCount%> so far.
+        </script>
+
         <!-- Scripts -->
 
         <!-- Global namespaced object which all of our custom functions will go into -->
@@ -103,6 +108,7 @@
 
         <!-- Libraries -->
         <script src="js/lib/jquery-1.8.3.js"></script>
+        <script src="js/lib/jquery.whenall.min.js"></script>
         <!-- This file chooses which platform's version of Cordova to load (iOS or Android) -->
         <script src="cordova-2.2.0-independent.js"></script>
         <script src="js/lib/underscore-1.4.3.js"></script>
