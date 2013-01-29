@@ -1,6 +1,12 @@
 Spoke
 =====
 
+A project to upload and store audio and text of speeches.
+
+Documentation
+-------------
+Documentation (a work in progress) can be found at: http://mysociety.github.com/spoke/develop/phonegap/
+
 App
 ---
 The mobile app uses Phonegap to run in Android and iOS. The main code can be
