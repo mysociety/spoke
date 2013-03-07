@@ -1,4 +1,5 @@
 import os
+import re
 import tempfile
 import filecmp
 from datetime import timedelta
@@ -12,6 +13,9 @@ import magic
 import speeches
 from speeches.utils import AudioHelper
 from speeches.models import Recording, RecordingTimestamp, Speaker
+
+def strip_kbps_from_file_info(s):
+    return re.sub(r'\s+\d+\s+kbps,', '', s)
 
 class AudioHelperTests(TestCase):
 
@@ -50,8 +54,8 @@ class AudioHelperTests(TestCase):
         self.tmp_filename = getattr(self.helper, method)(os.path.join(self._in_fixtures, known_input))
         expected = self.expected_output_file(expected_output)
         # Check that the type of the file is exactly the same first of all:
-        self.assertEquals(magic.from_file(self.tmp_filename),
-                          magic.from_file(expected))
+        self.assertEquals(strip_kbps_from_file_info(magic.from_file(self.tmp_filename)),
+                          strip_kbps_from_file_info(magic.from_file(expected)))
         # Now check that the files are identical:
         self.assertSameAudioLength(self.tmp_filename, expected)
 
