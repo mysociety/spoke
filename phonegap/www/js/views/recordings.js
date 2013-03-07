@@ -52,7 +52,8 @@
             uploadButton: function (e) {
                 e.preventDefault();
 
-                var uploadingPromises = [],
+                var toUploadSuccessfully = this.recordings.length,
+                    toUpload = this.recordings.length,
                     that = this;
 
                 console.log('Upload button clicked');
@@ -89,9 +90,12 @@
 
                     // uploadingFiles is, you guessed it, a Promise
                     var uploadingFile = SPOKE.files.uploadFile(recording.get('path'), params, progress);
-                    uploadingPromises.push(uploadingFile);
 
                     uploadingFile.done(function (result) {
+                        toUploadSuccessfully--;
+                        if (toUploadSuccessfully === 0) {
+                            navigator.notification.alert('All files uploaded');
+                        }
 
                         // result.response contains the server response if we want
                         // to do anything with it
@@ -124,17 +128,15 @@
                         navigator.notification.alert(message);
                     });
 
-                });
-
-                // When all the promises have completed in some way or another
-                $.whenAll.apply(null, uploadingPromises)
-                    .done(function () {
-                        navigator.notification.alert('All files uploaded');
-                    })
-                    .always(function () {
-                        // Hide the loader
-                        $.mobile.loading('hide');
+                    uploadingFile.always(function (error) {
+                        toUpload--;
+                        if (toUpload === 0) {
+                            // Hide the loader
+                            $.mobile.loading('hide');
+                        }
                     });
+
+                });
             }
         })
     });
