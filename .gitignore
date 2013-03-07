@@ -27,3 +27,4 @@ DerivedData
 /phonegap/www/js/config.js
 *.xcuserstate
 chromedriver.log
+*~
