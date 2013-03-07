@@ -1,6 +1,7 @@
-import audioread
+import audioread.ffdec
 import magic
 import os
+import re
 import tempfile
 import filecmp
 from datetime import timedelta
@@ -13,6 +14,9 @@ from instances.tests import InstanceTestCase
 import speeches
 from speeches.utils import AudioHelper
 from speeches.models import Recording, RecordingTimestamp, Speaker
+
+def strip_kbps_from_file_info(s):
+    return re.sub(r'\s+\d+\s+kbps,', '', s)
 
 class AudioHelperTests(InstanceTestCase):
 
@@ -39,21 +43,25 @@ class AudioHelperTests(InstanceTestCase):
 
     def assertSameAudioLength(self, filename_a, filename_b):
         files = (filename_a, filename_b)
-        af1 = audioread.audio_open(filename_a)
-        af2 = audioread.audio_open(filename_b)
+        # Use FFMPEG directly as CoreAudio returns incorrect durations for the generated MP3s
+        af1 = audioread.ffdec.FFmpegAudioFile(filename_a)
+        af2 = audioread.ffdec.FFmpegAudioFile(filename_b)
         message = 'The audio files %s (%.3fs) and %s (%.3fs) were of different lengths'
         message = message % (files[0], af1.duration, files[1], af2.duration)
+        # Make sure the lengths are within 0.2s of each other - this is
+        # intended to be imprecise enough to ignore any differences in
+        # frame padding in the MP3:
         self.assertAlmostEqual(af1.duration,
                                af2.duration,
-                               2, # to 2 decimal places (of seconds)
-                               message)
+                               delta=0.2,
+                               msg=message)
 
     def convert(self, known_input, method, expected_output):
         self.tmp_filename = getattr(self.helper, method)(os.path.join(self._in_fixtures, known_input))
         expected = self.expected_output_file(expected_output)
         # Check that the type of the file is exactly the same first of all:
-        self.assertEquals(magic.from_file(self.tmp_filename),
-                          magic.from_file(expected))
+        self.assertEquals(strip_kbps_from_file_info(magic.from_file(self.tmp_filename)),
+                          strip_kbps_from_file_info(magic.from_file(expected)))
         # Now check that the files are identical:
         self.assertSameAudioLength(self.tmp_filename, expected)
 
