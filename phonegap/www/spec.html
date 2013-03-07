@@ -99,6 +99,17 @@
             </h2>
         </script>
 
+        <!-- Loading messages -->
+        <script type="text/template" id="uploading-message">
+            <span class="ui-icon ui-icon-loading"></span>
+            <h1>Uploading <%=fileCount%> files.</h1>
+            <ul>
+                <% _.each(uploadPercentages, function(percentage, index) { %>
+                    <li>File <%=index + 1%> <span id="uploading-percentage-<%=index%>"><%=percentage%></span>%</li>
+                <% }); %>
+            </ul>
+        </script>
+
         <!-- Global namespaced object which all of our custom functions will go into -->
         <script type="text/javascript">
             window.SPOKE = window.SPOKE || {};

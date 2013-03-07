@@ -9,6 +9,7 @@ describe('SPOKE.RecordingsView', function () {
             el: $("#page"),
             recordings: recordings
         });
+        $.mobile = helper.mockJQueryMobile;
     });
 
     afterEach(function () {
@@ -66,7 +67,7 @@ describe('SPOKE.RecordingsView', function () {
         recordings.add(recording1);
         recordingsView.render();
         $("#upload-button").click();
-        expect(SPOKE.files.uploadFile).toHaveBeenCalledWith('/acdc.wav', {});
+        expect(SPOKE.files.uploadFile).toHaveBeenCalledWith('/acdc.wav', {}, jasmine.any(Function));
     });
 
     it("Should send the list of speakers when it uploads", function () {
@@ -89,7 +90,7 @@ describe('SPOKE.RecordingsView', function () {
         recordings.add(recording1);
         recordingsView.render();
         $("#upload-button").click();
-        expect(SPOKE.files.uploadFile).toHaveBeenCalledWith('/acdc.wav', {timestamps: attributes.speakers});
+        expect(SPOKE.files.uploadFile).toHaveBeenCalledWith('/acdc.wav', {timestamps: attributes.speakers}, jasmine.any(Function));
     });
 
     it("Should try to delete the file if the upload is successful", function () {

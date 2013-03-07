@@ -25,6 +25,10 @@ var helper = {
         return window.getComputedStyle(element).getPropertyValue(property);
     },
 
+    mockJQueryMobile: {
+        loading: function(what, opts) { }
+    },
+
     // Fake the starting up of a JQM + Phonegap app
     fakeAppStart: function() {
         // Create a fake jquery mobile page
