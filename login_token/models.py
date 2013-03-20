@@ -52,7 +52,7 @@ class LoginToken(InstanceMixin, models.Model):
 
 
 @transaction.commit_on_success
-def handle_instance_users_change(sender, o, *args, **kwargs):
+def handle_instance_users_change(*args, **kwargs):
     '''Keep login_token_logintoken and instances_instance_users in sync
 
     We use this as an m2m_changed signal handler for the sender
@@ -64,6 +64,8 @@ def handle_instance_users_change(sender, o, *args, **kwargs):
     Essentially, if anything is added / removed to the
     instance_instance_users table, the corresponding change is made to
     the login_token_logintoken table.'''
+
+    o = kwargs['instance']
 
     action = kwargs['action']
     primary_keys = kwargs['pk_set']
