@@ -9,6 +9,12 @@ from django.views.generic import ListView
 from instances.models import Instance
 
 urlpatterns = patterns('',
+
+    # FIXME: this shouldn't be in the instances application, and
+    # instead be added via a URLCONF from the projects's settings;
+    # adding this here is a temporary measure.
+    url(r'^accounts/tokens/?$', 'login_token.views.login_tokens_for_user'),
+
     (r'^', ListView.as_view(
         queryset = Instance.objects.all(),
         context_object_name = 'instances',
