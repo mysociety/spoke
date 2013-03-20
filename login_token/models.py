@@ -65,8 +65,6 @@ def handle_instance_users_change(*args, **kwargs):
     instance_instance_users table, the corresponding change is made to
     the login_token_logintoken table.'''
 
-    o = kwargs['instance']
-
     action = kwargs['action']
     primary_keys = kwargs['pk_set']
 
@@ -77,7 +75,7 @@ def handle_instance_users_change(*args, **kwargs):
 
     if kwargs['reverse']:
         # Then the modification came through user.instances:
-        user = o
+        user = kwargs['instance']
         if action == 'post_clear':
             iids_in_user_instances = set(i.id for i in user.instances.all())
             iids_in_login_token = set(lt.instance.id for lt in LoginToken.objects.filter(user=user))
@@ -90,7 +88,7 @@ def handle_instance_users_change(*args, **kwargs):
                                           user=user)
     else:
         # Then the modification came through instance.users
-        instance = o
+        instance = kwargs['instance']
         if action == 'post_clear':
             uids_in_instance_users = set(u.id for u in instance.users.all())
             uids_in_login_token = set(lt.user.id for lt in LoginToken.objects.filter(instance=instance))
