@@ -63,7 +63,10 @@ def handle_instance_users_change(*args, **kwargs):
 
     Essentially, if anything is added / removed to the
     instance_instance_users table, the corresponding change is made to
-    the login_token_logintoken table.'''
+    the login_token_logintoken table.  It would be more elegant to
+    just have token as an extra field on the Instance <=> User join
+    table, but it seemed good to be able to keep this application as
+    an optional addition to the instances application.'''
 
     action = kwargs['action']
     primary_keys = kwargs['pk_set']
