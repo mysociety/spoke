@@ -10,10 +10,11 @@ from instances.models import Instance
 
 urlpatterns = patterns('',
 
-    # FIXME: this shouldn't be in the instances application, and
+    # FIXME: these shouldn't be in the instances application, and
     # instead be added via a URLCONF from the projects's settings;
     # adding this here is a temporary measure.
     url(r'^accounts/tokens/?$', 'login_token.views.login_tokens_for_user'),
+    url(r'^accounts/mobile-login', 'login_token.views.check_login_token'),
 
     (r'^', ListView.as_view(
         queryset = Instance.objects.all(),

@@ -198,5 +198,7 @@ djcelery.setup_loader()
 # errors with difference between sqlite and postgres
 SOUTH_TESTS_MIGRATE = False
 
+AUTHENTICATION_BACKENDS = ('login_token.auth_backend.LoginTokenBackend',)
+
 # Now get the mySociety configuration
 from .mysociety import *
