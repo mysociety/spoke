@@ -74,7 +74,12 @@
 
             // Stop the history
             Backbone.history.stop();
+        },
+
+        mobileLoginURL: function() {
+            return "http://" + SPOKE.config.baseHost + "/accounts/mobile-login";
         }
+
     });
 
     $.when(jqmReady, pgReady, firstPageReady).then(function () {
