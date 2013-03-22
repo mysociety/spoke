@@ -50,6 +50,7 @@
                         attributes: {
                             "data-role": "page"
                         },
+                        login_tokens: SPOKE.login_tokens
                     })
                 );
             },
