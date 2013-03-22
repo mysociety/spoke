@@ -1,3 +1,4 @@
+/* -*- mode: espresso; espresso-indent-level: 4; indent-tabs-mode: nil -*- */
 /**
  * Spoke javascript main setup
  */
