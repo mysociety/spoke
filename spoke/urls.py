@@ -22,9 +22,6 @@ urlpatterns = patterns('',
 
     url(r'^accounts/tokens/?$', 'login_token.views.login_tokens_for_user'),
 
-    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-    url(r'^admin/', include(admin.site.urls)),
-
     url(r'autocomplete/', include('autocomplete_light.urls')),
 )
 

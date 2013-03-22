@@ -8,13 +8,22 @@ from django.views.generic import ListView
 
 from instances.models import Instance
 
+# Admin section
+from django.contrib import admin
+admin.autodiscover()
+
 urlpatterns = patterns('',
 
     # FIXME: these shouldn't be in the instances application, and
     # instead be added via a URLCONF from the projects's settings;
     # adding this here is a temporary measure.
     url(r'^accounts/tokens/?$', 'login_token.views.login_tokens_for_user'),
+    url(r'^accounts/login/$', 'django.contrib.auth.views.login'),
+    url(r'^accounts/logout/$', 'django.contrib.auth.views.logout'),
     url(r'^accounts/mobile-login', 'login_token.views.check_login_token'),
+
+    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+    url(r'^admin/', include(admin.site.urls)),
 
     (r'^', ListView.as_view(
         queryset = Instance.objects.all(),
