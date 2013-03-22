@@ -18,15 +18,15 @@
                     <label for="text-3">Enter your 3-word login token:</label>
                     <input type="text" data-clear-btn="true" name="login-token" id="login-token" value=""></input>
                     <button aria-disabled="false" class="ui-btn-hidden" type="submit" data-theme="b" name="submit" value="submit-value">Submit</button></div>
-                        <% if (!login_tokens.isEmpty()) { %>
-                            <p>... or choose from a previous login:</p>
-                            <ul data-role="listview" data-inset="true" id="login-tokens">
-                                <% login_tokens.each(function(login_token) { %>
-                                    <li><%= login_token.toString() %></li>
-                                <% }); %>
-                            </ul>
-                        <% } %>
                 </form>
+                <% if (!login_tokens.isEmpty()) { %>
+                    <p>Or choose from a previous login:</p>
+                    <ul data-role="listview" data-inset="true" id="login-tokens">
+                        <% login_tokens.each(function(login_token) { %>
+                            <li><%= login_token.toString() %></li>
+                        <% }); %>
+                    </ul>
+                <% } %>
             </div>
         </script>
 
