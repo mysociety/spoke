@@ -19,6 +19,15 @@
         firstPageReady.resolve();
     });
 
+    var extractSessionIDFromCookieHeader = function(s) {
+        var m = s.match(/sessionid=([0-9a-f]+)/);
+        if (m) {
+            return m[1];
+        } else {
+            return null;
+        }
+    };
+
     // Add an init action to spoke
     _.extend(SPOKE, {
         initialise: function () {
