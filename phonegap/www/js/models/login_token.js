@@ -13,7 +13,7 @@
                 }
             },
 
-            initialize: function (attributes, options) {
+            initialize: function () {
                 _.bindAll(this);
             },
 
