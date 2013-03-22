@@ -86,10 +86,12 @@ def handle_instance_users_change(*args, **kwargs):
 
     if action == 'post_add':
         if kwargs['reverse']:
+            user = kwargs['instance']
             for instance_id in primary_keys:
                 LoginToken.objects.get_or_create(instance=Instance.objects.get(pk=instance_id),
                                                  user=user)
         else:
+            instance = kwargs['instance']
             for user_id in primary_keys:
                 LoginToken.objects.get_or_create(instance=instance,
                                                  user=User.objects.get(pk=user_id))
