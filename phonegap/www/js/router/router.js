@@ -13,8 +13,9 @@
             currentView: null,
 
             routes:{
-                "": "home",
-                "recording": "recording"
+                "": "login",
+                "home": "home",
+                "recording": "recording",
             },
 
             home: function () {
@@ -38,6 +39,17 @@
                         },
                         speakers: SPOKE.speakers,
                         recordings: SPOKE.recordings
+                    })
+                );
+            },
+
+            login: function () {
+                this.changePage(new SPOKE.LoginView({
+                        tagName: 'div',
+                        id: "login-page",
+                        attributes: {
+                            "data-role": "page"
+                        },
                     })
                 );
             },
