@@ -29,7 +29,7 @@
                 router: new SPOKE.AppRouter(),
                 recordings: new SPOKE.RecordingsCollection(),
                 speakers: new SPOKE.SpeakersCollection(),
-		login_tokens: new SPOKE.LoginTokensCollection()
+                login_tokens: new SPOKE.LoginTokensCollection()
             });
 
             // Extend SPOKE with Backbone event handling, so we can register
@@ -47,8 +47,8 @@
                 SPOKE.speakers.fetch({error: function() { console.log(arguments); }});
                 SPOKE.recordings.refreshLocalStorage();
                 SPOKE.recordings.fetch({error: function() { console.log(arguments); }});
-		SPOKE.login_tokens.refreshLocalStorage();
-		SPOKE.login_tokens.fetch({error: function() { console.log(arguments); }});
+                SPOKE.login_tokens.refreshLocalStorage();
+                SPOKE.login_tokens.fetch({error: function() { console.log(arguments); }});
             });
 
             // Fetch initial data
@@ -65,7 +65,7 @@
             // Only useful in unit testing
             console.log('Destroying the SPOKE app');
 
-	    delete SPOKE.login_tokens;
+            delete SPOKE.login_tokens;
             delete SPOKE.router;
             delete SPOKE.recordings;
             delete SPOKE.speakers;
