@@ -5,8 +5,6 @@ from .models import LoginToken
 class LoginTokenBackend(object):
 
     def authenticate(self, token=None):
-        import sys
-        print >> sys.stderr, "authenticating with token:", token
         if token is None:
             return None
         try:
