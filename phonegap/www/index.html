@@ -20,7 +20,7 @@
                         <p>... or choose from a previous login:</p>
                         <ul data-role="listview" data-inset="true" id="login-tokens">
                             <% login_tokens.each(function(login_token) { %>
-                                <li><%= login_token.get("instance") %> (<%= login_token.get("user") %>)</li>
+                                <li><%= login_token.toString() %></li>
                             <% }); %>
                         </ul>
                     <% } %>
