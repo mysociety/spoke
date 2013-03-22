@@ -14,16 +14,19 @@
         <script type="text/template" id="login-template">
             <div data-role="content">
                 <h2>Spoke Login</h2>
-                <label for="text-3">Enter your 3-word login token:</label>
-                <input type="text" data-clear-btn="true" name="login-token" id="login-token" value=""></input>
-                    <% if (!login_tokens.isEmpty()) { %>
-                        <p>... or choose from a previous login:</p>
-                        <ul data-role="listview" data-inset="true" id="login-tokens">
-                            <% login_tokens.each(function(login_token) { %>
-                                <li><%= login_token.toString() %></li>
-                            <% }); %>
-                        </ul>
-                    <% } %>
+                <form action="<%= SPOKE.mobileLoginURL() %>" method="post">
+                    <label for="text-3">Enter your 3-word login token:</label>
+                    <input type="text" data-clear-btn="true" name="login-token" id="login-token" value=""></input>
+                    <button aria-disabled="false" class="ui-btn-hidden" type="submit" data-theme="b" name="submit" value="submit-value">Submit</button></div>
+                        <% if (!login_tokens.isEmpty()) { %>
+                            <p>... or choose from a previous login:</p>
+                            <ul data-role="listview" data-inset="true" id="login-tokens">
+                                <% login_tokens.each(function(login_token) { %>
+                                    <li><%= login_token.toString() %></li>
+                                <% }); %>
+                            </ul>
+                        <% } %>
+                </form>
             </div>
         </script>
 
