@@ -25,11 +25,12 @@
 
             authenticated: function () {
                 return ! (this.instance === null && this.user === null)
-            }
+            },
 
             toString: function () {
-                if this.authenticated() {
-                    return this.instance + " as " + this.user;
+                if (this.authenticated()) {
+                    return this.get('instance')['label'] + " as " +
+                        this.get('user');
                 } else {
                     return "[unused] " + this.three_word_token;
                 }
