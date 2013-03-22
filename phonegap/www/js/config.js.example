@@ -6,9 +6,10 @@
 (function(SPOKE, _) {
 	_.extend(SPOKE, {
 		config: {
-			apiUrl: 'http://example.org/api/v0.1/recording/',
+			hostingUrl: 'http://example.org',
 			popItUrl: 'http://example.popit.mysociety.org',
 			filesDirectory: 'spoke'
 		}
 	});
+	SPOKE.config.apiUrl = SPOKE.config.hostingUrl + "/api/v0.1/recording/";
 })(SPOKE, _);
