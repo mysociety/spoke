@@ -93,7 +93,7 @@ def handle_instance_users_change(*args, **kwargs):
             for user_id in primary_keys:
                 LoginToken.objects.get_or_create(instance=instance,
                                                  user=User.objects.get(pk=user_id))
-    else action == 'post_clear' or action == 'post_remove':
+    elif action == 'post_clear' or action == 'post_remove':
         pass # See the FIXME comment above
 
         # # We don't get primary keys from pre_clear, post_clear, pre_remove
