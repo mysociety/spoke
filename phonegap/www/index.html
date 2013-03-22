@@ -14,7 +14,7 @@
         <script type="text/template" id="login-template">
             <div data-role="content">
                 <h2>Spoke Login</h2>
-                <form action="<%= SPOKE.mobileLoginURL() %>" method="post">
+                <form action="<%= SPOKE.mobileLoginURL() %>" method="post" data-ajax="false" onsubmit="SPOKE.mobileLoginOnSubmit(); return false">
                     <label for="text-3">Enter your 3-word login token:</label>
                     <input type="text" data-clear-btn="true" name="login-token" id="login-token" value=""></input>
                     <button aria-disabled="false" class="ui-btn-hidden" type="submit" data-theme="b" name="submit" value="submit-value">Submit</button></div>

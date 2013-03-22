@@ -87,8 +87,48 @@
 
         mobileLoginURL: function() {
             return "http://" + SPOKE.config.baseHost + "/accounts/mobile-login";
-        }
+        },
 
+        mobileLoginOnSubmit: function() {
+            $.mobile.loading('show');
+            $.ajax({'url': SPOKE.mobileLoginURL(),
+                    'type': 'POST',
+                    'data': {
+                        'login-token': $('#login-token').val()
+                    },
+                    'dataType': 'json',
+                    'success': function(data, textStatus, jqXHR) {
+                        var cookieHeader = jqXHR.getResponseHeader('Set-Cookie'),
+                            sessionID = extractSessionIDFromCookieHeader(cookieHeader),
+                            result = data['result'];
+                        $.mobile.loading('hide');
+                        if (! sessionID) {
+                            alert("Couldn't find the session ID in the response");
+                        }
+                        var newLoginToken = new SPOKE.LoginToken(
+                            {'instance': result['instance'],
+                             'user': result['user'],
+                             'cookie': sessionID,
+                             'three_word_token': result['mobile-token']});
+                        SPOKE.login_tokens.add(newLoginToken);
+                        SPOKE.instanceURL = 'http://' +
+                            result['instance']['label'] +
+                            "." +
+                            SPOKE.config.baseHost;
+
+                        // FIXME: not working for the moment:
+                        // SPOKE.login_tokens.sync();
+
+                        // Switch to showing the home page:
+                        SPOKE.router.home();
+                    },
+                    'error': function(jqXHR, textStatus, errorThrown) {
+                        $.mobile.loading('hide');
+                        alert('Logging in failed');
+                    }});
+        },
+
+        instanceURL: null
     });
 
     $.when(jqmReady, pgReady, firstPageReady).then(function () {

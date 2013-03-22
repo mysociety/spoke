@@ -87,7 +87,11 @@
 
                 transfer = new FileTransfer();
                 transfer.onprogress = progress;
-                transfer.upload(path, SPOKE.config.apiUrl, uploadingFile.resolve, uploadingFile.reject, options);
+                transfer.upload(path,
+				SPOKE.instanceURL + '/api/v0.1/recording/',
+				uploadingFile.resolve,
+				uploadingFile.reject,
+				options);
 
                 return uploadingFile;
             },
