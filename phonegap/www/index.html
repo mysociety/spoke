@@ -10,12 +10,16 @@
 
         <!-- Templates -->
 
+        <!-- The login page -->
+        <script type="text/template" id="login-template">
+            <div data-role="content">
+                <label for="text-3">Enter your 3-word login token:</label>
+                <input type="text" data-clear-btn="true" name="login-token" id="login-token" value="">
+            </div>
+        </script>
+
         <!-- Home Page -->
         <script type="text/template" id="home-template">
-
-            <div data-role="header">
-                <h1>Spoke</h1>
-            </div>
 
             <div data-role="content">
                 <p>
@@ -142,6 +146,7 @@
 
         <!-- Views -->
         <script src="js/views/home.js"></script>
+        <script src="js/views/login.js"></script>
         <script src="js/views/recordings.js"></script>
         <script src="js/views/recording-controls.js"></script>
         <script src="js/views/speakers.js"></script>
