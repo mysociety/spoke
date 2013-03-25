@@ -39,9 +39,8 @@
             localStorage: new Backbone.LocalStorage("LoginTokens"),
 
             refreshLocalStorage: function () {
-                this.localStorage = new Backbone.LocalStorage("LoginToken");
+                this.localStorage = new Backbone.LocalStorage("LoginTokens");
             },
-
 
         })
     });
