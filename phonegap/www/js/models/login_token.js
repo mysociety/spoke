@@ -19,7 +19,8 @@
             defaults: {
                 instance: null,
                 user: null,
-                cookie: null
+                cookie: null,
+                three_word_token: null
             },
 
             authenticated: function () {
