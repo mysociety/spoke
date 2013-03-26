@@ -12,7 +12,7 @@
             initialize: function (options) {
                 console.log('Login page initialising');
                 this.login_tokens = options.login_tokens;
-                console.log('this.login_tokens is:', this.login_tokens);
+                console.log('this.login_tokens is:' + JSON.stringify(this.login_tokens));
                 this.listenTo(this.login_tokens, "all", this.render);
                     _.bindAll(this);
                 },
