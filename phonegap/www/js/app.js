@@ -100,19 +100,20 @@
                     'success': function(data, textStatus, jqXHR) {
                         var cookieHeader = jqXHR.getResponseHeader('Set-Cookie'),
                             sessionID = extractSessionIDFromCookieHeader(cookieHeader),
-                            result = data['result'];
+                            result = data.result;
+                        console.log(cookieHeader);
                         $.mobile.loading('hide');
                         if (! sessionID) {
                             alert("Couldn't find the session ID in the response");
                         }
                         var newLoginToken = new SPOKE.LoginToken(
-                            {'instance': result['instance'],
-                             'user': result['user'],
+                            {'instance': result.instance,
+                             'user': result.user,
                              'cookie': sessionID,
                              'three_word_token': result['mobile-token']});
                         SPOKE.login_tokens.add(newLoginToken);
                         SPOKE.instanceURL = 'http://' +
-                            result['instance']['label'] +
+                            result.instance.label +
                             "." +
                             SPOKE.config.baseHost;
 

@@ -1,4 +1,3 @@
-/* -*- mode: espresso; espresso-indent-level: 4; indent-tabs-mode: nil -*- */
 /**
  * Login token model
  * Models one of the three-word login tokens that has been previously used
@@ -24,12 +23,12 @@
             },
 
             authenticated: function () {
-                return ! (this.instance === null && this.user === null)
+                return ! (this.instance === null && this.user === null);
             },
 
             toString: function () {
                 if (this.authenticated()) {
-                    return this.get('instance')['label'] + " as " +
+                    return this.get('instance').label + " as " +
                         this.get('user');
                 } else {
                     return "[unused] " + this.three_word_token;
@@ -40,7 +39,7 @@
 
             refreshLocalStorage: function () {
                 this.localStorage = new Backbone.LocalStorage("LoginTokens");
-            },
+            }
 
         })
     });
