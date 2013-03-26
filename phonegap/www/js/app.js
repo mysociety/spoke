@@ -1,4 +1,3 @@
-/* -*- mode: espresso; espresso-indent-level: 4; indent-tabs-mode: nil -*- */
 /**
  * Spoke javascript main setup
  */
@@ -20,7 +19,7 @@
     });
 
     var extractSessionIDFromCookieHeader = function(s) {
-        var m = s.match(/sessionid=([0-9a-f]+)/);
+        var m = s.match(/s=([0-9a-f]+)/);
         if (m) {
             return m[1];
         } else {
@@ -39,7 +38,9 @@
                 router: new SPOKE.AppRouter(),
                 recordings: new SPOKE.RecordingsCollection(),
                 speakers: new SPOKE.SpeakersCollection(),
-                login_tokens: new SPOKE.LoginTokensCollection()
+                login_tokens: new SPOKE.LoginTokensCollection(),
+                currentLoginToken: null,
+                instanceUrl: null
             });
 
             // Extend SPOKE with Backbone event handling, so we can register
@@ -86,12 +87,13 @@
         },
 
         mobileLoginURL: function() {
-            return "http://" + SPOKE.config.baseHost + "/accounts/mobile-login";
+
         },
 
         mobileLoginOnSubmit: function() {
             $.mobile.loading('show');
-            $.ajax({'url': SPOKE.mobileLoginURL(),
+            console.log("Sending token to: " + SPOKE.config.mobileLoginUrl);
+            $.ajax({'url': SPOKE.config.mobileLoginUrl,
                     'type': 'POST',
                     'data': {
                         'login-token': $('#login-token').val()
@@ -111,8 +113,10 @@
                              'user': result.user,
                              'cookie': sessionID,
                              'three_word_token': result['mobile-token']});
+                        console.log("Login token created: " + JSON.stringify(newLoginToken));
                         SPOKE.login_tokens.add(newLoginToken);
-                        SPOKE.instanceURL = 'http://' +
+                        SPOKE.currentLoginToken = newLoginToken;
+                        SPOKE.instanceUrl = 'http://' +
                             result.instance.label +
                             "." +
                             SPOKE.config.baseHost;
@@ -126,10 +130,9 @@
                     'error': function(jqXHR, textStatus, errorThrown) {
                         $.mobile.loading('hide');
                         alert('Logging in failed');
-                    }});
-        },
-
-        instanceURL: null
+                    }
+            });
+        }
     });
 
     $.when(jqmReady, pgReady, firstPageReady).then(function () {

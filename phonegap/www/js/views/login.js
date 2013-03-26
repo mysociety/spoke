@@ -11,8 +11,8 @@
 
             initialize: function (options) {
                 console.log('Login page initialising');
-                console.log('this.login_tokens is:', this.login_tokens);
                 this.login_tokens = options.login_tokens;
+                console.log('this.login_tokens is:', this.login_tokens);
                 this.listenTo(this.login_tokens, "all", this.render);
                     _.bindAll(this);
                 },
