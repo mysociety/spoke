@@ -71,7 +71,6 @@
                 options.fileKey = 'audio'; // Form element name that'll be given to the server
                 options.fileName = path.split('/').pop(); // Filename on server, I think the server should decide this
                 options.chunkedMode = false;
-                console.log("Setting Cookie in header to: s=" + SPOKE.currentLoginToken.get('cookie'));
                 options.headers = {
                     'Cookie': 's=' + SPOKE.currentLoginToken.get('cookie')
                 }
@@ -87,7 +86,7 @@
 
                 // Other data to send (object of Key/Value pairs)
                 if(params) {
-                    console.log("Sending params: " + params);
+                    console.log("Sending params: " + JSON.stringify(params));
                     options.params = params;
                 }
 
