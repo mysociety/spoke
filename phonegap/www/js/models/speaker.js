@@ -1,6 +1,6 @@
 /**
  * Speaker model
- * Models a popit speaker
+ * Models a speaker
  */
 ;(function (SPOKE, Backbone, _, $) {
 	_.extend(SPOKE, {

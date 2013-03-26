@@ -28,21 +28,17 @@ describe('SPOKE.SpeakersView', function () {
     it("Should render the name of each speaker when there are speakers", function () {
         var speaker1 = new SPOKE.Speaker({
             name: "speaker1",
-            meta: {
-                api_url: "http://example.com/speaker/1"
-            }
+            id: 1
         });
         var speaker2 = new SPOKE.Speaker({
             name: "speaker2",
-            meta: {
-                api_url: "http://example.com/speaker/2"
-            }
+            id: 2
         });
         this.speakers.add(speaker1);
         this.speakers.add(speaker2);
         this.speakersView.render();
-        expect($('#stage')).toContainHtml('<li><a href="#" class="speaker" data-api-url="http://example.com/speaker/1">speaker1</a></li>');
-        expect($('#stage')).toContainHtml('<li><a href="#" class="speaker" data-api-url="http://example.com/speaker/2">speaker2</a></li>');
+        expect($('#stage')).toContainHtml('<li><a href="#" class="speaker" data-id="1">speaker1</a></li>');
+        expect($('#stage')).toContainHtml('<li><a href="#" class="speaker" data-id="2">speaker2</a></li>');
     });
 
     it("Should store the live recording, only whilst the recording is happening", function () {
@@ -64,15 +60,11 @@ describe('SPOKE.SpeakersView', function () {
         });
         var speaker1 = new SPOKE.Speaker({
             name: "speaker1",
-            meta: {
-                api_url: "http://example.com/speaker/1"
-            }
+            id: 1
         });
         var speaker2 = new SPOKE.Speaker({
             name: "speaker2",
-            meta: {
-                api_url: "http://example.com/speaker/2"
-            }
+            id: 2
         });
         this.speakers.add(speaker1);
         this.speakers.add(speaker2);
@@ -88,7 +80,7 @@ describe('SPOKE.SpeakersView', function () {
         expect(this.speakersView.liveRecording.get("speakers")).toEqual([
             {
                 timestamp: jasmine.any(Number),
-                speaker: "http://example.com/speaker/1"
+                speaker: "1"
             }
         ]);
 
@@ -97,11 +89,11 @@ describe('SPOKE.SpeakersView', function () {
         expect(this.speakersView.liveRecording.get("speakers")).toEqual([
             {
                 timestamp: jasmine.any(Number),
-                speaker: "http://example.com/speaker/1"
+                speaker: "1"
             },
             {
                 timestamp: jasmine.any(Number),
-                speaker: "http://example.com/speaker/2"
+                speaker: "2"
             }
         ]);
 

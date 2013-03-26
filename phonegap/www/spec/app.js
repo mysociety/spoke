@@ -75,12 +75,6 @@ describe('SPOKE', function () {
         expect(recordingsCollection.fetch).toHaveBeenCalled();
     });
 
-    it("Should create a speakers collection when it's initialised and fetch() it", function () {
-        SPOKE.initialise();
-        expect(SPOKE.speakers).toBeDefined();
-        expect(speakersCollection.fetch).toHaveBeenCalled();
-    });
-
     it("Should fetch collections and reset localStorage when a resume event happens", function () {
         SPOKE.initialise();
         $(document).trigger('resume');

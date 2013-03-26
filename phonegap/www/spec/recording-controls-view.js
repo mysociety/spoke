@@ -51,9 +51,7 @@ describe('SPOKE.RecordingControlsView', function () {
     it("Should create a recording file when the first speaker is clicked, but not for subsequent clicks", function () {
         var speaker1 = new SPOKE.Speaker({
             name: "speaker1",
-            meta: {
-                api_url: "http://example.com/speaker/1"
-            }
+            id: 1
         });
         speakers.add(speaker1);
         spyOn(SPOKE.files, "createFile").andReturn($.Deferred());
@@ -74,9 +72,7 @@ describe('SPOKE.RecordingControlsView', function () {
         var fakeCreatingFile = $.Deferred();
         var speaker1 = new SPOKE.Speaker({
             name: "speaker1",
-            meta: {
-                api_url: "http://example.com/speaker/1"
-            }
+            id: 1
         });
         speakers.add(speaker1);
 
@@ -93,9 +89,7 @@ describe('SPOKE.RecordingControlsView', function () {
     it("Should show a timer and a stop button, and hide the title when recording starts", function () {
         var speaker1 = new SPOKE.Speaker({
             name: "speaker1",
-            meta: {
-                api_url: "http://example.com/speaker/1"
-            }
+            id: 1
         });
 
         speakers.add(speaker1);
@@ -111,9 +105,7 @@ describe('SPOKE.RecordingControlsView', function () {
         var fakeCreatingFile = $.Deferred();
         var speaker1 = new SPOKE.Speaker({
             name: "speaker1",
-            meta: {
-                api_url: "http://example.com/speaker/1"
-            }
+            id: 1
         });
         var media = jasmine.createSpyObj('media', ['startRecord', 'stopRecord']);
         var expectedRecording = {
@@ -149,9 +141,7 @@ describe('SPOKE.RecordingControlsView', function () {
         var fakeCreatingFile = $.Deferred();
         var speaker1 = new SPOKE.Speaker({
             name: "speaker1",
-            meta: {
-                api_url: "http://example.com/speaker/1"
-            }
+            id: 1
         });
         var media = jasmine.createSpyObj('media', ['startRecord', 'stopRecord']);
         var expectedRecording = {
@@ -176,9 +166,7 @@ describe('SPOKE.RecordingControlsView', function () {
         var fakeCreatingFile = $.Deferred();
         var speaker1 = new SPOKE.Speaker({
             name: "speaker1",
-            meta: {
-                api_url: "http://example.com/speaker/1"
-            }
+            id: 1
         });
         var media = jasmine.createSpyObj('media', ['startRecord', 'stopRecord']);
         var expectedRecording = {
@@ -203,9 +191,7 @@ describe('SPOKE.RecordingControlsView', function () {
         var fakeCreatingFile = $.Deferred();
         var speaker1 = new SPOKE.Speaker({
             name: "speaker1",
-            meta: {
-                api_url: "http://example.com/speaker/1"
-            }
+            id: 1
         });
         var media = jasmine.createSpyObj('media', ['startRecord', 'stopRecord']);
         var expectedRecording = {

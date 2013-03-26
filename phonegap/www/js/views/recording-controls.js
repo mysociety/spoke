@@ -95,7 +95,7 @@
                     // because although the speakers view keeps track of speakers, it
                     // won't add this one to the recording object because we haven't
                     // created it yet!
-                    speaker = $(e.target).attr("data-api-url");
+                    speaker = $(e.target).attr("data-id");
 
                     // startRecording wraps the phonegap media creation api in
                     // a promise and returns it, it also creates a new recording
