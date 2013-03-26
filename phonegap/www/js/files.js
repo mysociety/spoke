@@ -59,8 +59,9 @@
 
             // Upload a file to the Spoke server
             uploadFile: function (path, params, progress) {
+                var uploadUrl = SPOKE.instanceURL + '/api/v0.1/recording/';
 
-                console.log('Uploading file: ' + path);
+                console.log('Uploading file: ' + path + " to: " + uploadUrl);
 
                 var uploadingFile = $.Deferred(),
                     options = new FileUploadOptions(),
@@ -88,10 +89,10 @@
                 transfer = new FileTransfer();
                 transfer.onprogress = progress;
                 transfer.upload(path,
-				SPOKE.instanceURL + '/api/v0.1/recording/',
-				uploadingFile.resolve,
-				uploadingFile.reject,
-				options);
+                    uploadUrl,
+                    uploadingFile.resolve,
+                    uploadingFile.reject,
+                    options);
 
                 return uploadingFile;
             },

@@ -15,7 +15,7 @@
             routes:{
                 "": "login",
                 "home": "home",
-                "recording": "recording",
+                "recording": "recording"
             },
 
             home: function () {
