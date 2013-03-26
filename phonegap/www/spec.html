@@ -17,18 +17,20 @@
 
         <!-- The login page -->
         <script type="text/template" id="login-template">
+            <div data-role="header">
+                <h1>Login</h1>
+            </div>
             <div data-role="content">
-                <h2>Spoke Login</h2>
-                <form action="<%= SPOKE.mobileLoginURL() %>" method="post" data-ajax="false" onsubmit="SPOKE.mobileLoginOnSubmit(); return false">
+                <form id="login-form" action="#" method="post" data-ajax="false" onsubmit="SPOKE.mobileLoginOnSubmit(); return false">
                     <label for="text-3">Enter your 3-word login token:</label>
                     <input type="text" data-clear-btn="true" name="login-token" id="login-token" value=""></input>
-                    <button aria-disabled="false" class="ui-btn-hidden" type="submit" data-theme="b" name="submit" value="submit-value">Submit</button></div>
+                    <button aria-disabled="false" class="ui-btn-hidden" type="submit" data-theme="b" name="submit" value="submit-value">Submit</button>
                 </form>
                 <% if (!login_tokens.isEmpty()) { %>
                     <p>Or choose from a previous login:</p>
                     <ul data-role="listview" data-inset="true" id="login-tokens">
                         <% login_tokens.each(function(login_token) { %>
-                            <li><%= login_token.toString() %></li>
+                            <li><a href='#' data-token="<%= login_token.get('three_word_token') %>"><%= login_token.toString() %></a></li>
                         <% }); %>
                     </ul>
                 <% } %>
@@ -37,6 +39,11 @@
 
         <!-- Home Page -->
         <script type="text/template" id="home-template">
+            <div data-role="header">
+                <a href="#" data-icon="gear">Login</a>
+                <h1>Home</h1>
+            </div>
+
             <div data-role="content">
                 <p>
                     <a href="#recording" id="record-button" data-role="button" data-icon="plus">Record a new speech</a>
@@ -70,7 +77,7 @@
         <script type="text/template" id="recording-controls-template">
 
             <div data-role="header">
-                <a href="#" data-icon="home">Home</a>
+                <a href="#home" data-icon="home">Home</a>
                 <h1>Recording</h1>
             </div>
 
@@ -125,6 +132,8 @@
             </ul>
         </script>
 
+        <!-- Scripts -->
+
         <!-- Global namespaced object which all of our custom functions will go into -->
         <script type="text/javascript">
             window.SPOKE = window.SPOKE || {};
@@ -153,6 +162,7 @@
         <!-- Models -->
         <script src="js/models/recording.js"></script>
         <script src="js/models/speaker.js"></script>
+        <script src="js/models/login_token.js"></script>
 
         <!-- Collections -->
         <script src="js/collections/recordings.js"></script>
