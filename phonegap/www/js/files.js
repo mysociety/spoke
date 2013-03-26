@@ -59,9 +59,10 @@
 
             // Upload a file to the Spoke server
             uploadFile: function (path, params, progress) {
-                var uploadUrl = SPOKE.instanceURL + '/api/v0.1/recording/';
+                var uploadUrl = SPOKE.instanceUrl + SPOKE.config.apiPath;
 
                 console.log('Uploading file: ' + path + " to: " + uploadUrl);
+                console.log('Using login token: ' + JSON.stringify(SPOKE.currentLoginToken) + ' to authenticate');
 
                 var uploadingFile = $.Deferred(),
                     options = new FileUploadOptions(),
@@ -70,6 +71,10 @@
                 options.fileKey = 'audio'; // Form element name that'll be given to the server
                 options.fileName = path.split('/').pop(); // Filename on server, I think the server should decide this
                 options.chunkedMode = false;
+                console.log("Setting Cookie in header to: s=" + SPOKE.currentLoginToken.get('cookie'));
+                options.headers = {
+                    'Cookie': 's=' + SPOKE.currentLoginToken.get('cookie')
+                }
                 try {
                    options.mimeType = getMimeType(path);
                 }

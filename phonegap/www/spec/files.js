@@ -79,8 +79,8 @@ describe('SPOKE.files', function () {
         }
         window.device = {};
 
-        // Set instanceURL to something we know
-        SPOKE.instanceURL = "http://" + SPOKE.config.baseHost;
+        // Set instanceUrl to something we know
+        SPOKE.instanceUrl = "http://" + SPOKE.config.baseHost;
 
     });
 
