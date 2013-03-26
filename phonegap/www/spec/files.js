@@ -82,6 +82,14 @@ describe('SPOKE.files', function () {
         // Set instanceUrl to something we know
         SPOKE.instanceUrl = "http://" + SPOKE.config.baseHost;
 
+        // Create a fake loginToken for us to send
+        SPOKE.currentLoginToken = new SPOKE.LoginToken({
+            'instance': 'dummy',
+            'user': 'test',
+            'cookie': 'abcde12345',
+            'three_word_token': 'horse battery staple'
+        });
+
     });
 
     afterEach(function() {
@@ -229,7 +237,10 @@ describe('SPOKE.files', function () {
                 fileName : mockFile.name,
                 chunkedMode : false,
                 mimeType : 'audio/3gpp',
-                params : params
+                params : params,
+                headers : {
+                    'Cookie': 's=' + SPOKE.currentLoginToken.get('cookie')
+                }
             };
 
         runs(function () {

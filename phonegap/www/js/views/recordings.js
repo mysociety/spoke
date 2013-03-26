@@ -99,7 +99,9 @@
 
                         // result.response contains the server response if we want
                         // to do anything with it
-                        console.log('Result response is: ' + JSON.stringify(result.response));
+                        if(!_.isUndefined(result)) {
+                            console.log('Result response is: ' + JSON.stringify(result.response));
+                        }
                         console.log('File: ' + JSON.stringify(recording.toJSON()) + ' successfully uploaded.');
 
                         // Update the percentage
