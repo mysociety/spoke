@@ -26,8 +26,18 @@
                 return this;
             },
 
+            events: {
+                "click #login-tokens a": "login_using_token"
+            },
+
             destroy: function () {
                 this.remove();
+            },
+
+            login_using_token: function(e) {
+                var token = $(e.target).attr('data-token');
+                $("#login-token").val(token);
+                $("#login-form").submit();
             }
         })
     });
