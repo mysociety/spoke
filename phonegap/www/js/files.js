@@ -73,7 +73,7 @@
                 options.chunkedMode = false;
                 options.headers = {
                     'Cookie': 's=' + SPOKE.currentLoginToken.get('cookie')
-                }
+                };
                 try {
                    options.mimeType = getMimeType(path);
                 }

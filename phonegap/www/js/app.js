@@ -86,10 +86,6 @@
             Backbone.history.stop();
         },
 
-        mobileLoginURL: function() {
-
-        },
-
         mobileLoginOnSubmit: function() {
             $.mobile.loading('show');
             console.log("Sending token to: " + SPOKE.config.mobileLoginUrl);
@@ -108,21 +104,17 @@
                         if (! sessionID) {
                             alert("Couldn't find the session ID in the response");
                         }
-                        var newLoginToken = new SPOKE.LoginToken(
+                        var newLoginToken = SPOKE.login_tokens.create(
                             {'instance': result.instance,
                              'user': result.user,
                              'cookie': sessionID,
                              'three_word_token': result['mobile-token']});
                         console.log("Login token created: " + JSON.stringify(newLoginToken));
-                        SPOKE.login_tokens.add(newLoginToken);
                         SPOKE.currentLoginToken = newLoginToken;
                         SPOKE.instanceUrl = 'http://' +
                             result.instance.label +
                             "." +
                             SPOKE.config.baseHost;
-
-                        // FIXME: not working for the moment:
-                        // SPOKE.login_tokens.sync();
 
                         // Switch to showing the home page:
                         SPOKE.router.home();
