@@ -4,12 +4,15 @@
  * secret keys can go here
  */
 (function(SPOKE, _) {
-	_.extend(SPOKE, {
-		config: {
-			hostingUrl: 'http://example.org',
-			popItUrl: 'http://example.popit.mysociety.org',
-			filesDirectory: 'spoke'
-		}
-	});
-	SPOKE.config.apiUrl = SPOKE.config.hostingUrl + "/api/v0.1/recording/";
+    _.extend(SPOKE, {
+        config: {
+            baseHost: 'example.org',
+            popItUrl: 'http://example.popit.mysociety.org',
+            filesDirectory: 'spoke',
+            apiPath: '/api/v0.1/recording/',
+            mobileLoginPath: '/accounts/mobile-login'
+        }
+    });
+    SPOKE.config.apiUrl = "http://" + SPOKE.config.baseHost + SPOKE.config.apiPath;
+    SPOKE.config.mobileLoginUrl = "http://" + SPOKE.config.baseHost + SPOKE.config.mobileLoginPath;
 })(SPOKE, _);
