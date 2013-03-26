@@ -47,7 +47,7 @@
                 e.preventDefault();
 
                 if(!_.isNull(this.liveRecording)) {
-                    var speaker = $(e.target).attr("data-api-url");
+                    var speaker = $(e.target).attr("data-id");
                     console.log("Adding speaker: " + speaker + " to live recording");
                     this.liveRecording.addSpeaker(speaker);
                 }

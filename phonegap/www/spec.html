@@ -107,7 +107,7 @@
                     <li>There are no speakers yet</li>
                 <% } else { %>
                     <% speakers.each(function(speaker) { %>
-                        <li><a href="#" class="speaker" data-api-url="<%= speaker.get("meta").api_url %>"><%= speaker.get("name") %></a></li>
+                        <li><a href="#" class="speaker" data-id="<%= speaker.get("id") %>"><%= speaker.get("name") %></a></li>
                     <% }); %>
                 <% } %>
             </ul>

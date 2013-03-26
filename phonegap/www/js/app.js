@@ -55,7 +55,7 @@
             // App resume events
             $(document).on('resume', function() {
                 console.log("App is being resumed");
-                SPOKE.speakers.fetch({error: function() { console.log(arguments); }});
+                SPOKE.speakers.fetch({error: function() { console.log(arguments); }}); // XXX Does this need changing now it needs instanceUrl?
                 SPOKE.recordings.refreshLocalStorage();
                 SPOKE.recordings.fetch({error: function() { console.log(arguments); }});
                 SPOKE.login_tokens.refreshLocalStorage();
@@ -63,7 +63,6 @@
             });
 
             // Fetch initial data
-            SPOKE.speakers.fetch({error: function() { console.log(arguments); }});
             SPOKE.recordings.fetch({error: function() { console.log(arguments); }});
             SPOKE.login_tokens.fetch({error: function() { console.log(arguments); }});
 
@@ -115,6 +114,9 @@
                             result.instance.label +
                             "." +
                             SPOKE.config.baseHost;
+
+                        SPOKE.speakers.url = SPOKE.instanceUrl + '/api/v0.1/speaker/?format=json';
+                        SPOKE.speakers.fetch({error: function() { console.log(arguments); }});
 
                         // Switch to showing the home page:
                         SPOKE.router.home();

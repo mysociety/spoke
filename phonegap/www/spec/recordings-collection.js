@@ -20,8 +20,8 @@ describe('SPOKE.RecordingsCollection', function () {
             {name: "2.wav"}
         ];
         var fakeGettingFilesResult = $.Deferred();
-        var model1 = new SPOKE.Recording({name: "1.wav", path: "/1.wav", speaker: "http://example.com/speaker/1"});
-        var model2 = new SPOKE.Recording({name: "2.wav", path: "/2.wav", speaker: "http://example.com/speaker/2"});
+        var model1 = new SPOKE.Recording({name: "1.wav", path: "/1.wav", speaker: "1"});
+        var model2 = new SPOKE.Recording({name: "2.wav", path: "/2.wav", speaker: "2"});
 
         spyOn(SPOKE.files, 'getDirectoryEntries').andReturn(fakeGettingFilesResult);
         spyOn(model1, 'destroy');

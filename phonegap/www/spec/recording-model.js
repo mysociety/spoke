@@ -23,7 +23,7 @@ describe('SPOKE.Recording', function () {
     });
 
     it("Should add speakers to it's internal list when addSpeaker is called", function () {
-        var fakeSpeaker = "http://www.example.com/speaker/123";
+        var fakeSpeaker = "123";
 
         expect(this.recording.get("speakers")).toBeUndefined();
 

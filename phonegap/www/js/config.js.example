@@ -7,7 +7,6 @@
     _.extend(SPOKE, {
         config: {
             baseHost: 'example.org',
-            popItUrl: 'http://example.popit.mysociety.org',
             filesDirectory: 'spoke',
             apiPath: '/api/v0.1/recording/',
             mobileLoginPath: '/accounts/mobile-login'
