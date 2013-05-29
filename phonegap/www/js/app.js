@@ -103,6 +103,20 @@
                         if (! sessionID) {
                             alert("Couldn't find the session ID in the response");
                         }
+
+                        console.log("Removing old tokens");
+                        _.each(
+                            SPOKE.login_tokens.filter(function(m) {
+                                if (m.get('user') == result.user && m.get('instance').label == result.instance.label) {
+                                    return true;
+                                }
+                                return false;
+                            }),
+                            function(m) {
+                                m.destroy();
+                            }
+                        );
+
                         var newLoginToken = SPOKE.login_tokens.create(
                             {'instance': result.instance,
                              'user': result.user,

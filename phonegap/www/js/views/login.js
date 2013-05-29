@@ -14,8 +14,8 @@
                 this.login_tokens = options.login_tokens;
                 console.log('this.login_tokens is:' + JSON.stringify(this.login_tokens));
                 this.listenTo(this.login_tokens, "all", this.render);
-                    _.bindAll(this);
-                },
+                _.bindAll(this);
+            },
 
             render: function () {
                 console.log('Login page rendering');
